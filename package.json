@@ -2,7 +2,7 @@
   "name": "airports-api",
   "version": "1.0.0",
   "description": "A simple API for returning data about global airports, sourced from Duffel",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
