@@ -22,7 +22,7 @@ app.get('/airports', async (req, res) => {
     // contains many airports - just to avoid hitting the rate limit and
     // exploding. The Duffel library doesn't make that easy to handle right
     // now!
-    await sleep(5);
+    await sleep(10);
   }
 
   res.set('Content-Type', 'application/json');
