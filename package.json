@@ -9,7 +9,7 @@
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
   "engines": {
-    "node": "16.x"
+    "node": "14.x"
   },
   "dependencies": {
     "@duffel/api": "^1.8.2",
