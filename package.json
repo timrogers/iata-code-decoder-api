@@ -1,0 +1,19 @@
+{
+  "name": "airports-api",
+  "version": "1.0.0",
+  "description": "A simple API for returning data about global airports, sourced from Duffel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Rogers <me@timrogers.co.uk>",
+  "license": "MIT",
+  "engines": {
+    "node": "16.x"
+  },
+  "dependencies": {
+    "@duffel/api": "^1.8.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3"
+  }
+}
