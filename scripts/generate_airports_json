@@ -1,0 +1,36 @@
+#!/usr/bin/node
+
+require('dotenv').config()
+const { promises: fs } = require('fs');
+const path = require('path');
+const { Duffel } = require('@duffel/api');
+
+const OUTPUT_PATH = path.join(__dirname, '../', 'public', 'airports.json');
+
+const duffel = new Duffel({
+  token: process.env.DUFFEL_ACCESS_TOKEN
+});
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const fetchAndWriteAirports = async () => {
+  let airports = [];
+
+  for await (const airportResponse of duffel.airports.listWithGenerator()) {
+    console.log(`Loaded airport ${airportResponse.data.iata_code} ✅`);
+    
+    airports.push(airportResponse.data);
+
+    // We artificially sleep after each airport - even though each response
+    // contains many airports - just to avoid hitting the rate limit and
+    // exploding. The Duffel library doesn't make that easy to handle right
+    // now!
+    await sleep(10);
+  }
+
+  await fs.writeFile(OUTPUT_PATH, JSON.stringify(airports));
+}
+
+fetchAndWriteAirports()
+  .then(() => console.log(`Wrote airports data to ${OUTPUT_PATH}`))
+  .catch(console.error);
