@@ -2,7 +2,7 @@ export interface City {
   name: string;
   id: string;
   iata_code: string;
-  iata_country_code: string
+  iata_country_code: string;
 }
 
 export interface Airport {
@@ -15,5 +15,5 @@ export interface Airport {
   iata_code: string;
   iata_country_code: string;
   city_name: string;
-  city: City
+  city: City;
 }
