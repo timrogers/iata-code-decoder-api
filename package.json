@@ -8,9 +8,10 @@
     "start": "node src/index.js",
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "build": "tsc",
-    "prettier-format": "prettier src/**/*.ts --write",
-    "lint": "eslint . --ext .ts",
-    "lint-and-fix": "eslint . --ext .ts --fix"
+    "prettier": "prettier src/**/*.ts",
+    "prettier-fix": "prettier src/**/*.ts --write",
+    "eslint": "eslint . --ext .ts",
+    "eslint-fix": "eslint . --ext .ts --fix"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
