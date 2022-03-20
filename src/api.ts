@@ -20,8 +20,11 @@ app.use(morgan('tiny'));
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
+  iataCodeLength: number,
 ): Keyable | undefined => {
-  if (partialIataCode.length > 3) {
+  console.log(objects);
+
+  if (partialIataCode.length > iataCodeLength) {
     return [];
   } else {
     return objects.filter((object) =>
@@ -38,7 +41,7 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const airports = filterObjectsByPartialIataCode(AIRPORTS, query);
+    const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
     res.json({ data: airports });
   }
 });
@@ -51,7 +54,7 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const airlines = filterObjectsByPartialIataCode(AIRLINES, query);
+    const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
 
     res.json({
       data: airlines,
@@ -67,7 +70,7 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query);
+    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
     res.json({ data: aircraft });
   }
 });
