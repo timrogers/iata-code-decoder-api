@@ -1,7 +1,9 @@
-const camelToSnakeCase = (string: string): string =>
-  string.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+const snakeCaseToCamelCase = (string: string): string =>
+  string.replace(/(_[a-z])/gi, ($1) =>
+    $1.toUpperCase().replace('-', '').replace('_', ''),
+  );
 
-export const snakifyKeys = (object: object): object =>
+export const cameliseKeys = (object: object): object =>
   Object.fromEntries(
-    Object.entries(object).map(([key, value]) => [camelToSnakeCase(key), value]),
+    Object.entries(object).map(([key, value]) => [snakeCaseToCamelCase(key), value]),
   );

@@ -1,33 +1,74 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
-import { AIRPORTS, getAirportByIataCode } from './airports';
+import { AIRPORTS } from './airports';
+import { AIRLINES } from './airlines';
+import { AIRCRAFT } from './aircraft';
+import { Keyable } from './types';
 const app = express();
 
+const QUERY_MUST_BE_PROVIDED_ERROR = {
+  data: {
+    error: 'A search query must be provided via the `query` querystring parameter',
+  },
+};
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 
 app.use(compression());
 app.use(morgan('tiny'));
 
+const filterObjectsByPartialIataCode = (
+  objects: Keyable[],
+  partialIataCode: string,
+): Keyable | undefined => {
+  if (partialIataCode.length > 3) {
+    return [];
+  } else {
+    return objects.filter((object) =>
+      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
+    );
+  }
+};
+
 app.get('/airports', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  res.json({ data: AIRPORTS });
+  if (req.query.query === undefined) {
+    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
+  } else {
+    const query = req.query.query as string;
+    const airports = filterObjectsByPartialIataCode(AIRPORTS, query);
+    res.json({ data: airports });
+  }
 });
 
-app.get('/airports/:iataCode', async (req: Request, res: Response): Promise<void> => {
-  const { iataCode } = req.params;
-
-  const airport = getAirportByIataCode(iataCode);
-
+app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  if (airport) {
-    res.json({ data: airport });
+  if (req.query.query === undefined) {
+    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
-    res.status(404).json({ data: { error: 'Not found' } });
+    const query = req.query.query as string;
+    const airlines = filterObjectsByPartialIataCode(AIRLINES, query);
+
+    res.json({
+      data: airlines,
+    });
+  }
+});
+
+app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
+  res.header('Content-Type', 'application/json');
+  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+
+  if (req.query.query === undefined) {
+    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
+  } else {
+    const query = req.query.query as string;
+    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query);
+    res.json({ data: aircraft });
   }
 });
 

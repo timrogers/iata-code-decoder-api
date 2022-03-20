@@ -5,7 +5,7 @@ const { promises: fs } = require('fs');
 const path = require('path');
 const { Duffel } = require('@duffel/api');
 
-const OUTPUT_PATH = path.join(__dirname, '../', 'data', 'airports.json');
+const OUTPUT_PATH = path.join(__dirname, '../', 'data', 'aircraft.json');
 
 const duffel = new Duffel({
   token: process.env.DUFFEL_ACCESS_TOKEN
@@ -13,13 +13,13 @@ const duffel = new Duffel({
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const fetchAndWriteAirports = async () => {
-  let airports = [];
+const fetchAndWriteAircraft = async () => {
+  let aircraft = [];
 
-  for await (const airportResponse of duffel.airports.listWithGenerator()) {
-    console.log(`Loaded airport ${airportResponse.data.iata_code} ✅`);
+  for await (const aircraftResponse of duffel.aircraft.listWithGenerator()) {
+    console.log(`Loaded aircraft ${aircraftResponse.data.iata_code} ✅`);
     
-    airports.push(airportResponse.data);
+    aircraft.push(aircraftResponse.data);
 
     // We artificially sleep after each airport - even though each response
     // contains many airports - just to avoid hitting the rate limit and
@@ -28,9 +28,9 @@ const fetchAndWriteAirports = async () => {
     await sleep(10);
   }
 
-  await fs.writeFile(OUTPUT_PATH, JSON.stringify(airports));
+  await fs.writeFile(OUTPUT_PATH, JSON.stringify(aircraft));
 }
 
-fetchAndWriteAirports()
-  .then(() => console.log(`Wrote airports data to ${OUTPUT_PATH}`))
+fetchAndWriteAircraft()
+  .then(() => console.log(`Wrote aircraft data to ${OUTPUT_PATH}`))
   .catch(console.error);

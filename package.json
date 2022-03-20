@@ -4,7 +4,9 @@
   "description": "A simple API for returning data about global airports, sourced from Duffel",
   "main": "server.js",
   "scripts": {
-    "generate": "node scripts/generate_airports_json",
+    "generate-airports": "node scripts/generate_airports_json",
+    "generate-airlines": "node scripts/generate_airlines_json",
+    "generate-aircraft": "node scripts/generate_aircraft_json",
     "start": "node src/index.js",
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "build": "tsc",

@@ -1,0 +1,21 @@
+name: Update airport data
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: 'npm'
+      - run: npm install
+      - run: npm run generate-airports
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        commit_message: Add latest airport data from Duffel
+        file_pattern: data/airports.json
