@@ -19,6 +19,9 @@ const fetchAndWriteAirports = async () => {
   for await (const airportResponse of duffel.airports.listWithGenerator()) {
     console.log(`Loaded airport ${airportResponse.data.iata_code} ✅`);
     
+    // `airportResponse` can contain properties that aren't defined in the
+    // `Airline` type. If this is the case, they'll still be included in our
+    // list and written to the file.
     airports.push(airportResponse.data);
 
     // We artificially sleep after each airport - even though each response
