@@ -1,6 +1,6 @@
-import { Airline, Keyable } from './types';
-import AIRLINES_DATA from './../data/airlines.json';
-import { cameliseKeys } from './utils';
+import { Airline, Keyable } from './types.js';
+import AIRLINES_DATA from './../data/airlines.json' assert { type: 'json' };
+import { cameliseKeys } from './utils.js';
 
 // We want to filter out airlines returned by the Duffel API with no IATA code,
 // since these aren't useful for IATA code decoding

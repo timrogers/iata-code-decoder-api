@@ -1,6 +1,6 @@
-import { Aircraft } from './types';
-import AIRCRAFT_DATA from './../data/aircraft.json';
-import { cameliseKeys } from './utils';
+import { Aircraft } from './types.js';
+import AIRCRAFT_DATA from './../data/aircraft.json' assert { type: 'json' };
+import { cameliseKeys } from './utils.js';
 import { Aircraft as DuffelAircraft } from '@duffel/api';
 
 const aircraftDataToAircraft = (aircraft: DuffelAircraft): Aircraft =>

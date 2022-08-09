@@ -1,8 +1,9 @@
 {
     "extends": "@tsconfig/node16/tsconfig.json",
     "compilerOptions": {
-        "resolveJsonModule": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "target": "ES6",
+        "module": "esnext"
     },
     "include": ["src"],
     "exclude": ["node_modules"]
