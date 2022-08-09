@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
-import { AIRPORTS } from './airports';
-import { AIRLINES } from './airlines';
-import { AIRCRAFT } from './aircraft';
-import { Keyable } from './types';
+import { AIRPORTS } from './airports.js';
+import { AIRLINES } from './airlines.js';
+import { AIRCRAFT } from './aircraft.js';
+import { Keyable } from './types.js';
 const app = express();
 
 const QUERY_MUST_BE_PROVIDED_ERROR = {

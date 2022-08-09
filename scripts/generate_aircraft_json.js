@@ -1,9 +1,15 @@
 #!/usr/bin/node
 
-require('dotenv').config()
-const { promises: fs } = require('fs');
-const path = require('path');
-const { Duffel } = require('@duffel/api');
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+import path from 'path'
+import { fileURLToPath } from 'url';
+import fs from 'fs/promises'
+import { Duffel } from '@duffel/api'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const OUTPUT_PATH = path.join(__dirname, '../', 'data', 'aircraft.json');
 
