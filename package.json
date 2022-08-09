@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "A simple API, written in Node.js with the Express framework, which allows you to identify airports, airlines and aircraft by their IATA code",
   "scripts": {
-    "generate-airports": "node scripts/generate_airports_json",
-    "generate-airlines": "node scripts/generate_airlines_json",
-    "generate-aircraft": "node scripts/generate_aircraft_json",
+    "generate-airports": "node scripts/generate_airports_json.js",
+    "generate-airlines": "node scripts/generate_airlines_json.js",
+    "generate-aircraft": "node scripts/generate_aircraft_json.js",
     "start": "node src/index.js",
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "build": "tsc",
