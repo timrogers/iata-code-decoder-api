@@ -8,7 +8,7 @@
     "generate-airlines": "node scripts/generate_airlines_json.js",
     "generate-aircraft": "node scripts/generate_aircraft_json.js",
     "start": "node src/index.js",
-    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./src/index.ts",
     "build": "tsc",
     "prettier": "prettier src/**/*.ts",
     "prettier-fix": "prettier src/**/*.ts --write",
@@ -38,9 +38,9 @@
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.19",
     "prettier": "2.7.1",
     "ts-node": "^10.9.1",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^4.7.4"
   },
   "repository": "timrogers/iata-code-decoder-api"
