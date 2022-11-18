@@ -22,8 +22,6 @@ const filterObjectsByPartialIataCode = (
   partialIataCode: string,
   iataCodeLength: number,
 ): Keyable | undefined => {
-  console.log(objects);
-
   if (partialIataCode.length > iataCodeLength) {
     return [];
   } else {
