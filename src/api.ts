@@ -35,7 +35,7 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  if (req.query.query === undefined) {
+  if (req.query.query === undefined || req.query.query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
@@ -48,7 +48,7 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  if (req.query.query === undefined) {
+  if (req.query.query === undefined || req.query.query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
@@ -64,7 +64,7 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  if (req.query.query === undefined) {
+  if (req.query.query === undefined || req.query.query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
