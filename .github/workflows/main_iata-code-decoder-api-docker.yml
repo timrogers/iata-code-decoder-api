@@ -27,7 +27,7 @@ jobs:
         password: ${{ secrets.AzureAppService_ContainerPassword_98d63c73200644f781c4c5f05574fe55 }}
 
     - name: Build and push container image to registry
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         push: true
         tags: timrogers.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_d375f23299f749d4b84d836826192fb9 }}/iata-code-decoder-api:${{ github.sha }}
