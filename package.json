@@ -27,7 +27,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "@duffel/api": "^2.3.2",
+    "@duffel/api": "^2.3.4",
     "@tsconfig/node16": "^16.1.0",
     "@types/compression": "^1.7.2",
     "@types/express": "^4.17.17",
