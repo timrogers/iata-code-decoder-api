@@ -20,6 +20,19 @@ jobs:
           DUFFEL_ACCESS_TOKEN: ${{ secrets.DUFFEL_ACCESS_TOKEN }}
         run: npm run generate-airlines
       - uses: stefanzweifel/git-auto-commit-action@v5
+        name: Commit and push any updates to airline data
+        id: commit
         with:
           commit_message: Add latest airline data from Duffel
           file_pattern: data/airlines.json
+      - name: Trigger deploy if airline data changed
+        uses: actions/github-script@v5
+        if: steps.commit.outputs.changes_detected == 'true'
+        with:
+          script: |
+            await github.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'main_iata-code-decoder-api-docker.yml',
+              ref: 'main'
+            });
