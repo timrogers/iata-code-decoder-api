@@ -5,4 +5,6 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, (): void => console.log(`✈️  Airports API running on port ${PORT}`));
+app.listen(PORT, (): void =>
+  console.log(`✈️  IATA Code Decoder API running on port ${PORT}`),
+);
