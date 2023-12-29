@@ -31,6 +31,15 @@ const filterObjectsByPartialIataCode = (
   }
 };
 
+app.get('/health', async (req: Request, res: Response): Promise<void> => {
+  res.header('Content-Type', 'application/json');
+  res.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.header('Pragma', 'no-cache');
+  res.header('Expires', '0');
+
+  res.status(200).json({ success: true });
+});
+
 app.get('/airports', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
