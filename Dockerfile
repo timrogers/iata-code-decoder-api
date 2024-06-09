@@ -9,4 +9,5 @@ COPY . .
 
 EXPOSE 4000
 ENV PORT 4000
-CMD ["npm", "run", "dev"]
+RUN npm run build
+CMD ["npm", "start"]
