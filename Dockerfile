@@ -1,4 +1,4 @@
-FROM node:18.13-alpine3.17
+FROM node:20.14
 WORKDIR /usr/src/app
 
 COPY package*.json ./
@@ -9,4 +9,5 @@ COPY . .
 
 EXPOSE 4000
 ENV PORT 4000
-CMD ["npm", "run", "dev"]
+RUN npm run build
+CMD ["npm", "start"]
