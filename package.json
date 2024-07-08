@@ -40,7 +40,7 @@
     "nodemon": "^3.1.3",
     "prettier": "3.3.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "repository": "timrogers/iata-code-decoder-api"
 }
