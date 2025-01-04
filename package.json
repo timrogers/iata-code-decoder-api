@@ -12,8 +12,8 @@
     "build": "tsc",
     "prettier": "prettier src/**/*.ts",
     "prettier-fix": "prettier src/**/*.ts --write",
-    "eslint": "eslint . --ext .ts",
-    "eslint-fix": "eslint . --ext .ts --fix"
+    "eslint": "eslint .",
+    "eslint-fix": "eslint . --fix"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
@@ -28,13 +28,15 @@
   },
   "devDependencies": {
     "@duffel/api": "^4.0.0",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.17.0",
     "@types/compression": "^1.7.5",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "nodemon": "^3.1.9",
