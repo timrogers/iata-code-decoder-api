@@ -2,6 +2,29 @@
 
 A simple API, written in Node.js with the Express framework, which allows you to identify airports, airlines and aircraft by their IATA code.
 
+## 📖 API Documentation
+
+This API is fully documented using OpenAPI 3.0.3 specification:
+
+- **Interactive Documentation**: [Swagger UI](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/timrogers/iata-code-decoder-api/main/openapi.yaml)
+- **Specification Files**: 
+  - [YAML format](openapi.yaml) - Human-readable
+  - [JSON format](openapi.json) - Machine-readable
+- **Documentation**: [docs/README.md](docs/README.md)
+
+### Quick Start
+
+```bash
+# Search airports by IATA code
+curl "https://iata-code-decoder-api.herokuapp.com/airports?query=LHR"
+
+# Search airlines by IATA code  
+curl "https://iata-code-decoder-api.herokuapp.com/airlines?query=BA"
+
+# Search aircraft by IATA code
+curl "https://iata-code-decoder-api.herokuapp.com/aircraft?query=737"
+```
+
 This is used by my [IATA Code Decoder extension](https://github.com/timrogers/raycast-iata-code-decoder) for [Raycast](https://raycast.com).
 
 The data in the API is cached version of the airport, airline and aircraft data from the [Duffel](https://duffel.com) API. We use a cached copy for speed because the Duffel API does not allow you to view all records in one response - you can only see up to 200 at a time.

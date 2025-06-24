@@ -1,0 +1,462 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "IATA Code Decoder API",
+    "description": "A simple API, written in Node.js with the Express framework, which allows you to identify airports, airlines and aircraft by their IATA code",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Tim Rogers",
+      "email": "me@timrogers.co.uk"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/timrogers/iata-code-decoder-api/blob/main/LICENSE.md"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://iata-code-decoder-api.herokuapp.com",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Returns the health status of the API",
+        "operationId": "getHealth",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "API is healthy",
+            "headers": {
+              "Cache-Control": {
+                "description": "Cache control header",
+                "schema": {
+                  "type": "string",
+                  "example": "no-store, no-cache, must-revalidate, private"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "required": ["success"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/airports": {
+      "get": {
+        "summary": "Search airports by IATA code",
+        "description": "Search for airports by providing a partial or complete IATA code. IATA airport codes are 3 characters long.",
+        "operationId": "searchAirports",
+        "tags": ["Airports"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "Partial or complete IATA airport code to search for (case-insensitive)",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 3,
+              "example": "LHR"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with matching airports",
+            "headers": {
+              "Cache-Control": {
+                "description": "Cache control header",
+                "schema": {
+                  "type": "string",
+                  "example": "public, max-age=86400"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Airport"
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/airlines": {
+      "get": {
+        "summary": "Search airlines by IATA code",
+        "description": "Search for airlines by providing a partial or complete IATA code. IATA airline codes are 2 characters long.",
+        "operationId": "searchAirlines",
+        "tags": ["Airlines"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "Partial or complete IATA airline code to search for (case-insensitive)",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2,
+              "example": "BA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with matching airlines",
+            "headers": {
+              "Cache-Control": {
+                "description": "Cache control header",
+                "schema": {
+                  "type": "string",
+                  "example": "public, max-age=86400"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Airline"
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/aircraft": {
+      "get": {
+        "summary": "Search aircraft by IATA code",
+        "description": "Search for aircraft by providing a partial or complete IATA code. IATA aircraft codes are typically 3 characters long.",
+        "operationId": "searchAircraft",
+        "tags": ["Aircraft"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "Partial or complete IATA aircraft code to search for (case-insensitive)",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 3,
+              "example": "737"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with matching aircraft",
+            "headers": {
+              "Cache-Control": {
+                "description": "Cache control header",
+                "schema": {
+                  "type": "string",
+                  "example": "public, max-age=86400"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Aircraft"
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Airport": {
+        "type": "object",
+        "description": "An airport with its details",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the airport",
+            "example": "apt_00009VMFAGfODJXvCGN3wY"
+          },
+          "iataCode": {
+            "type": "string",
+            "description": "3-letter IATA airport code",
+            "pattern": "^[A-Z]{3}$",
+            "example": "LHR"
+          },
+          "icaoCode": {
+            "type": "string",
+            "description": "4-letter ICAO airport code",
+            "pattern": "^[A-Z]{4}$",
+            "example": "EGLL"
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name of the airport",
+            "example": "London Heathrow Airport"
+          },
+          "cityName": {
+            "type": "string",
+            "description": "Name of the city where the airport is located",
+            "example": "London"
+          },
+          "iataCountryCode": {
+            "type": "string",
+            "description": "2-letter IATA country code",
+            "pattern": "^[A-Z]{2}$",
+            "example": "GB"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Latitude coordinate of the airport",
+            "minimum": -90,
+            "maximum": 90,
+            "example": 51.4706
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Longitude coordinate of the airport",
+            "minimum": -180,
+            "maximum": 180,
+            "example": -0.4619
+          },
+          "time_zone": {
+            "type": "string",
+            "description": "Time zone of the airport",
+            "example": "Europe/London"
+          },
+                     "city": {
+             "allOf": [
+               {
+                 "$ref": "#/components/schemas/City"
+               }
+             ],
+             "nullable": true,
+             "description": "City information (may be null)"
+           }
+        },
+        "required": [
+          "id",
+          "iataCode",
+          "icaoCode",
+          "name",
+          "cityName",
+          "iataCountryCode",
+          "latitude",
+          "longitude",
+          "time_zone",
+          "city"
+        ]
+      },
+      "City": {
+        "type": "object",
+        "description": "A city where an airport is located",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the city",
+            "example": "cty_00009VMFAIyWZdL8h1M3zU"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the city",
+            "example": "London"
+          },
+          "iataCode": {
+            "type": "string",
+            "description": "IATA code for the city",
+            "example": "LON"
+          },
+          "iataCountryCode": {
+            "type": "string",
+            "description": "2-letter IATA country code",
+            "pattern": "^[A-Z]{2}$",
+            "example": "GB"
+          }
+        },
+        "required": ["id", "name", "iataCode", "iataCountryCode"]
+      },
+      "Airline": {
+        "type": "object",
+        "description": "An airline with its details",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the airline",
+            "example": "arl_00009VME7DBKeMags5CliQ"
+          },
+          "iataCode": {
+            "type": "string",
+            "description": "2-letter IATA airline code",
+            "pattern": "^[A-Z0-9]{2}$",
+            "example": "BA"
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name of the airline",
+            "example": "British Airways"
+          },
+                     "logo_symbol_url": {
+             "type": "string",
+             "format": "uri",
+             "nullable": true,
+             "description": "URL to the airline's logo symbol"
+           },
+           "logo_lockup_url": {
+             "type": "string",
+             "format": "uri", 
+             "nullable": true,
+             "description": "URL to the airline's logo lockup"
+           },
+           "conditions_of_carriage_url": {
+             "type": "string",
+             "format": "uri",
+             "nullable": true,
+             "description": "URL to the airline's conditions of carriage"
+           }
+        },
+        "required": ["id", "iataCode", "name"]
+      },
+      "Aircraft": {
+        "type": "object",
+        "description": "An aircraft model with its details",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the aircraft",
+            "example": "arc_00009VMF8AhBTmADP77oj0"
+          },
+          "iataCode": {
+            "type": "string",
+            "description": "IATA aircraft type code",
+            "example": "738"
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name/model of the aircraft",
+            "example": "Boeing 737-800"
+          }
+        },
+        "required": ["id", "iataCode", "name"]
+      },
+      "Error": {
+        "type": "object",
+        "description": "Error response",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "description": "Error message",
+                "example": "A search query must be provided via the `query` querystring parameter"
+              }
+            },
+            "required": ["error"]
+          }
+        },
+        "required": ["data"]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Health check operations"
+    },
+    {
+      "name": "Airports",
+      "description": "Airport search operations"
+    },
+    {
+      "name": "Airlines",
+      "description": "Airline search operations"
+    },
+    {
+      "name": "Aircraft",
+      "description": "Aircraft search operations"
+    }
+  ]
+}
