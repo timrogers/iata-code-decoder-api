@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
+import helmet from 'helmet';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
@@ -13,6 +14,68 @@ const QUERY_MUST_BE_PROVIDED_ERROR = {
   },
 };
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+
+// Configure security headers with helmet
+app.use(helmet({
+  // Content Security Policy - restrictive for API
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'none'"],
+      frameAncestors: ["'none'"],
+    },
+  },
+  // Cross Origin Embedder Policy
+  crossOriginEmbedderPolicy: { policy: "require-corp" },
+  // Cross Origin Opener Policy
+  crossOriginOpenerPolicy: { policy: "same-origin" },
+  // Cross Origin Resource Policy
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  // DNS Prefetch Control
+  dnsPrefetchControl: { allow: false },
+  // Frameguard (X-Frame-Options)
+  frameguard: { action: 'deny' },
+  // Hide Powered By header
+  hidePoweredBy: true,
+  // HTTP Strict Transport Security
+  hsts: {
+    maxAge: 31536000, // 1 year
+    includeSubDomains: true,
+    preload: true
+  },
+  // IE No Open
+  ieNoOpen: true,
+  // X-Content-Type-Options
+  noSniff: true,
+  // Origin Agent Cluster
+  originAgentCluster: true,
+  // Permissions Policy
+  permittedCrossDomainPolicies: false,
+  // Referrer Policy
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  // X-XSS-Protection
+  xssFilter: true,
+}));
+
+// Additional security headers not covered by helmet
+app.use((req, res, next) => {
+  // Permissions Policy - disable all potentially sensitive features for API
+  res.setHeader('Permissions-Policy', [
+    'accelerometer=()',
+    'camera=()',
+    'geolocation=()',
+    'gyroscope=()',
+    'magnetometer=()',
+    'microphone=()',
+    'payment=()',
+    'usb=()',
+    'interest-cohort=()'
+  ].join(', '));
+  
+  // X-Robots-Tag for API endpoints
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex');
+  
+  next();
+});
 
 app.use(compression());
 app.use(morgan('tiny'));
