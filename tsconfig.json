@@ -2,10 +2,14 @@
     "compilerOptions": {
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "target": "ES6",
+        "target": "ES2020",
         "module": "ESNext",
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "types": ["jest", "node"],
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "skipLibCheck": true
     },
-    "include": ["src"],
-    "exclude": ["node_modules"]
+    "include": ["src", "**/*.test.ts"],
+    "exclude": ["node_modules", "dist"]
   }
