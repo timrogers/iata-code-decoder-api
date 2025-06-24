@@ -1,6 +1,6 @@
-import { Airport } from './types.js';
-import AIRPORTS_DATA from './../data/airports.json' with { type: 'json' };
-import { cameliseKeys } from './utils.js';
+import { Airport } from './types';
+import AIRPORTS_DATA from './../data/airports.json' assert { type: 'json' };
+import { cameliseKeys } from './utils';
 
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
