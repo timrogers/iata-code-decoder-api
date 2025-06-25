@@ -1,0 +1,19 @@
+✈️  IATA Code Decoder API running on port 3000
+GET /airlines?query=AA 200 420 - 1.655 ms
+node:_http_outgoing:699
+    throw new ERR_HTTP_HEADERS_SENT('set');
+    ^
+
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:699:11)
+    at ServerResponse.<anonymous> (file:///workspace/src/api.js:38:13)
+    at ServerResponse.emit (node:events:530:35)
+    at onFinish (node:_http_outgoing:1081:10)
+    at callback (node:internal/streams/writable:766:21)
+    at afterWrite (node:internal/streams/writable:710:5)
+    at afterWriteTick (node:internal/streams/writable:696:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}
+
+Node.js v22.16.0

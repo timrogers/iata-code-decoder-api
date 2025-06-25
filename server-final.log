@@ -1,0 +1,9 @@
+✈️  IATA Code Decoder API running on port 3000
+GET /airports?query=LAX 200 367 - 1.577 ms
+GET /airports?query=LAX 200 367 - 0.375 ms
+GET /airports?query=JFK 200 361 - 0.323 ms
+GET /airlines?query=UA 200 393 - 0.420 ms
+GET /aircraft?query=A38 200 110 - 0.364 ms
+GET /stats 200 116 - 0.493 ms
+HEAD /airports?query=LAX 200 367 - 0.233 ms
+GET /airports?query=L 200 12515 - 0.448 ms
