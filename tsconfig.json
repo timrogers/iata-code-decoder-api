@@ -2,10 +2,11 @@
     "compilerOptions": {
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "target": "ES6",
-        "module": "ESNext",
+        "allowSyntheticDefaultImports": true,
+        "target": "ES2022",
+        "module": "esnext",
         "moduleResolution": "Node"
     },
-    "include": ["src"],
+    "include": ["src", "__tests__"],
     "exclude": ["node_modules"]
-  }
+}

@@ -17,11 +17,17 @@ const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 app.use(compression());
 app.use(morgan('tiny'));
 
+const normalizeQueryParam = (param: any): string | undefined => {
+  if (param === undefined) return undefined;
+  if (Array.isArray(param)) return String(param[0]); // Take the first value if multiple and convert to string
+  return String(param);
+};
+
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
   iataCodeLength: number,
-): Keyable | undefined => {
+): Keyable[] => {
   if (partialIataCode.length > iataCodeLength) {
     return [];
   } else {
@@ -44,10 +50,11 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  if (req.query.query === undefined || req.query.query === '') {
+  const query = normalizeQueryParam(req.query.query);
+  
+  if (query === undefined || query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
-    const query = req.query.query as string;
     const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
     res.json({ data: airports });
   }
@@ -57,10 +64,11 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  if (req.query.query === undefined || req.query.query === '') {
+  const query = normalizeQueryParam(req.query.query);
+
+  if (query === undefined || query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
-    const query = req.query.query as string;
     const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
 
     res.json({
@@ -73,10 +81,11 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-  if (req.query.query === undefined || req.query.query === '') {
+  const query = normalizeQueryParam(req.query.query);
+
+  if (query === undefined || query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
-    const query = req.query.query as string;
     const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
     res.json({ data: aircraft });
   }
