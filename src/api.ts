@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
+import fs from 'fs';
+import path from 'path';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
@@ -38,6 +40,31 @@ app.get('/health', async (req: Request, res: Response): Promise<void> => {
   res.header('Expires', '0');
 
   res.status(200).json({ success: true });
+});
+
+app.get('/openapi.yaml', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const openapiPath = path.resolve('openapi.yaml');
+    const openapiContent = fs.readFileSync(openapiPath, 'utf8');
+    
+    res.header('Content-Type', 'application/x-yaml');
+    res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+    res.send(openapiContent);
+  } catch (error) {
+    res.status(404).json({
+      data: {
+        error: 'OpenAPI specification not found',
+      },
+    });
+  }
+});
+
+app.get('/docs', async (req: Request, res: Response): Promise<void> => {
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const swaggerUIUrl = `https://petstore.swagger.io/?url=${baseUrl}/openapi.yaml`;
+  
+  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  res.redirect(swaggerUIUrl);
 });
 
 app.get('/airports', async (req: Request, res: Response): Promise<void> => {

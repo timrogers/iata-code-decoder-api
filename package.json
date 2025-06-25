@@ -13,7 +13,9 @@
     "prettier": "prettier src/**/*.ts",
     "prettier-fix": "prettier src/**/*.ts --write",
     "eslint": "eslint .",
-    "eslint-fix": "eslint . --fix"
+    "eslint-fix": "eslint . --fix",
+    "openapi:generate-json": "js-yaml openapi.yaml > openapi.json",
+    "docs:serve": "npx @redocly/cli preview-docs openapi.yaml"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
@@ -39,8 +41,10 @@
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "js-yaml": "^4.1.0",
     "nodemon": "^3.1.9",
     "prettier": "3.4.2",
+    "redoc-cli": "^0.13.21",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
