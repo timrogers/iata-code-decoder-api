@@ -38,3 +38,56 @@ export interface Keyable {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
+
+// Filter interfaces for comprehensive filtering
+export interface BaseFilters {
+  limit?: number;
+  offset?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface AirportFilters extends BaseFilters {
+  query?: string;
+  iataCode?: string;
+  icaoCode?: string;
+  name?: string;
+  cityName?: string;
+  country?: string;
+  iataCountryCode?: string;
+  timezone?: string;
+  minLatitude?: number;
+  maxLatitude?: number;
+  minLongitude?: number;
+  maxLongitude?: number;
+  hasIcaoCode?: boolean;
+  hasCity?: boolean;
+}
+
+export interface AirlineFilters extends BaseFilters {
+  query?: string;
+  iataCode?: string;
+  name?: string;
+}
+
+export interface AircraftFilters extends BaseFilters {
+  query?: string;
+  iataCode?: string;
+  name?: string;
+  manufacturer?: string;
+}
+
+export interface FilteredResponse<T> {
+  data: T[];
+  pagination: {
+    total: number;
+    limit: number;
+    offset: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
+  };
+  filters: {
+    applied: Keyable;
+    available: string[];
+  };
+}
