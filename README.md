@@ -8,6 +8,118 @@ The data in the API is cached version of the airport, airline and aircraft data 
 
 The cached data is updated regularly thanks to the power of GitHub Actions 👼
 
+## Getting started
+
+First, clone the repository:
+
+```shell
+git clone https://github.com/timrogers/iata-code-decoder-api.git
+cd iata-code-decoder-api
+```
+
+Then install the dependencies:
+
+```shell
+npm install
+```
+
+Then build the TypeScript code:
+
+```shell
+npm run build
+```
+
+You'll then be ready to start the server:
+
+```shell
+npm start
+```
+
+The server will run on port 3000, or the port defined by the `PORT` environment variable.
+
+## Development
+
+To run the API in development mode with auto-reloading when changes are made, run:
+
+```shell
+npm run dev
+```
+
+## Testing
+
+This project includes a comprehensive test suite for ensuring API reliability and correctness.
+
+### Running Tests
+
+The project includes multiple testing options:
+
+#### Manual Integration Tests (Recommended)
+```shell
+npm run test:manual
+```
+
+This runs a custom integration test suite that validates all API endpoints without complex configuration issues.
+
+#### Jest Tests (Advanced)
+```shell
+npm test                 # Run all tests
+npm run test:watch       # Run tests in watch mode
+npm run test:coverage    # Run tests with coverage report
+npm run test:ci          # Run tests for CI/CD
+```
+
+### Test Coverage
+
+The test suite covers:
+- ✅ All API endpoints (`/health`, `/airports`, `/airlines`, `/aircraft`)
+- ✅ Error handling and validation
+- ✅ Data integrity and structure
+- ✅ Performance requirements
+- ✅ Edge cases and malformed inputs
+- ✅ Utility functions and data loading
+
+### Test Documentation
+
+For detailed information about the test suite, see [TEST_DOCUMENTATION.md](TEST_DOCUMENTATION.md).
+
+## API Usage
+
+### Health Check
+
+```
+GET /health
+```
+
+### Search Airports
+
+```
+GET /airports?query=LAX
+```
+
+### Search Airlines
+
+```
+GET /airlines?query=AA
+```
+
+### Search Aircraft
+
+```
+GET /aircraft?query=737
+```
+
+## API
+
+The API documentation is available at https://iata-code-decoder-api.duffel.com/docs.
+
+## Contributing
+
+Bug reports and pull requests are welcome on [GitHub](https://github.com/timrogers/iata-code-decoder-api).
+
+## License
+
+The package is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
 ## Usage
 
 ## Running locally with Node

@@ -1,3 +1,7 @@
-.env
 node_modules/
+dist/
+.env
+coverage/
+*.log
+.nyc_output/
 src/**/*.js
