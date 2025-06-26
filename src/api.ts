@@ -1,6 +1,10 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import path from 'path';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
@@ -16,6 +20,30 @@ const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 
 app.use(compression());
 app.use(morgan('tiny'));
+
+// Load OpenAPI specification
+const openApiSpec = yaml.load(
+  fs.readFileSync(path.join(process.cwd(), 'openapi.yaml'), 'utf8')
+) as object;
+
+// Serve OpenAPI specification
+app.get('/openapi.json', async (req: Request, res: Response): Promise<void> => {
+  res.header('Content-Type', 'application/json');
+  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  res.json(openApiSpec);
+});
+
+app.get('/openapi.yaml', async (req: Request, res: Response): Promise<void> => {
+  res.header('Content-Type', 'text/yaml');
+  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  res.sendFile(path.join(process.cwd(), 'openapi.yaml'));
+});
+
+// Serve Swagger UI documentation
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec, {
+  customSiteTitle: 'IATA Code Decoder API Documentation',
+  customCss: '.swagger-ui .topbar { display: none }',
+}));
 
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],

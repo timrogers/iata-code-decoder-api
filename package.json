@@ -24,7 +24,8 @@
     "compression": "^1.8.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@duffel/api": "^4.2.1",
@@ -34,11 +35,13 @@
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "js-yaml": "^4.1.0",
     "nodemon": "^3.1.9",
     "prettier": "3.4.2",
     "ts-node": "^10.9.2",

@@ -1,0 +1,331 @@
+openapi: 3.0.0
+info:
+  title: IATA Code Decoder API
+  description: A simple API that allows you to identify airports, airlines and aircraft by their IATA code
+  version: 1.0.0
+  contact:
+    name: Tim Rogers
+    email: me@timrogers.co.uk
+  license:
+    name: MIT
+    url: https://github.com/timrogers/iata-code-decoder-api/blob/main/LICENSE.md
+
+servers:
+  - url: https://api.example.com
+    description: Production server
+  - url: http://localhost:3000
+    description: Development server
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Returns the health status of the API
+      tags:
+        - Health
+      responses:
+        '200':
+          description: API is healthy
+          headers:
+            Cache-Control:
+              description: Cache control header
+              schema:
+                type: string
+                example: no-store, no-cache, must-revalidate, private
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                required:
+                  - success
+
+  /airports:
+    get:
+      summary: Search airports by IATA code
+      description: Search for airports by partial or complete IATA code (3 characters)
+      tags:
+        - Airports
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Partial or complete IATA airport code to search for
+          schema:
+            type: string
+            maxLength: 3
+            example: "LAX"
+      responses:
+        '200':
+          description: Successful search results
+          headers:
+            Cache-Control:
+              description: Cache control header
+              schema:
+                type: string
+                example: public, max-age=86400
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Airport'
+                required:
+                  - data
+        '400':
+          description: Bad request - missing query parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /airlines:
+    get:
+      summary: Search airlines by IATA code
+      description: Search for airlines by partial or complete IATA code (2 characters)
+      tags:
+        - Airlines
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Partial or complete IATA airline code to search for
+          schema:
+            type: string
+            maxLength: 2
+            example: "AA"
+      responses:
+        '200':
+          description: Successful search results
+          headers:
+            Cache-Control:
+              description: Cache control header
+              schema:
+                type: string
+                example: public, max-age=86400
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Airline'
+                required:
+                  - data
+        '400':
+          description: Bad request - missing query parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /aircraft:
+    get:
+      summary: Search aircraft by IATA code
+      description: Search for aircraft by partial or complete IATA code (3 characters)
+      tags:
+        - Aircraft
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Partial or complete IATA aircraft code to search for
+          schema:
+            type: string
+            maxLength: 3
+            example: "737"
+      responses:
+        '200':
+          description: Successful search results
+          headers:
+            Cache-Control:
+              description: Cache control header
+              schema:
+                type: string
+                example: public, max-age=86400
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Aircraft'
+                required:
+                  - data
+        '400':
+          description: Bad request - missing query parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Airport:
+      type: object
+      description: Airport information including location and codes
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the airport
+          example: "5128581"
+        name:
+          type: string
+          description: Full name of the airport
+          example: "Los Angeles International Airport"
+        iataCode:
+          type: string
+          description: 3-letter IATA airport code
+          pattern: "^[A-Z]{3}$"
+          example: "LAX"
+        icaoCode:
+          type: string
+          description: 4-letter ICAO airport code
+          pattern: "^[A-Z]{4}$"
+          example: "KLAX"
+        iataCountryCode:
+          type: string
+          description: 2-letter IATA country code
+          pattern: "^[A-Z]{2}$"
+          example: "US"
+        cityName:
+          type: string
+          description: Name of the city where the airport is located
+          example: "Los Angeles"
+        latitude:
+          type: number
+          format: double
+          description: Latitude coordinate of the airport
+          example: 33.9425
+        longitude:
+          type: number
+          format: double
+          description: Longitude coordinate of the airport
+          example: -118.408056
+        time_zone:
+          type: string
+          description: Time zone of the airport location
+          example: "America/Los_Angeles"
+        city:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/City'
+      required:
+        - id
+        - name
+        - iataCode
+        - icaoCode
+        - iataCountryCode
+        - cityName
+        - latitude
+        - longitude
+        - time_zone
+        - city
+
+    City:
+      type: object
+      description: City information
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the city
+          example: "5368361"
+        name:
+          type: string
+          description: Name of the city
+          example: "Los Angeles"
+        iataCode:
+          type: string
+          description: 3-letter IATA city code
+          pattern: "^[A-Z]{3}$"
+          example: "LAX"
+        iataCountryCode:
+          type: string
+          description: 2-letter IATA country code
+          pattern: "^[A-Z]{2}$"
+          example: "US"
+      required:
+        - id
+        - name
+        - iataCode
+        - iataCountryCode
+
+    Airline:
+      type: object
+      description: Airline information
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the airline
+          example: "24"
+        name:
+          type: string
+          description: Full name of the airline
+          example: "American Airlines"
+        iataCode:
+          type: string
+          description: 2-letter IATA airline code
+          pattern: "^[A-Z]{2}$"
+          example: "AA"
+      required:
+        - id
+        - name
+        - iataCode
+
+    Aircraft:
+      type: object
+      description: Aircraft information
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the aircraft
+          example: "1"
+        name:
+          type: string
+          description: Full name/model of the aircraft
+          example: "Boeing 737-800"
+        iataCode:
+          type: string
+          description: 3-letter IATA aircraft code
+          pattern: "^[A-Z0-9]{3}$"
+          example: "738"
+      required:
+        - id
+        - name
+        - iataCode
+
+    ErrorResponse:
+      type: object
+      description: Error response format
+      properties:
+        data:
+          type: object
+          properties:
+            error:
+              type: string
+              description: Error message describing what went wrong
+              example: "A search query must be provided via the `query` querystring parameter"
+          required:
+            - error
+      required:
+        - data
+
+tags:
+  - name: Health
+    description: Health check endpoints
+  - name: Airports
+    description: Airport search operations
+  - name: Airlines
+    description: Airline search operations
+  - name: Aircraft
+    description: Aircraft search operations

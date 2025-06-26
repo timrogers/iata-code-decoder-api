@@ -10,6 +10,30 @@ The cached data is updated regularly thanks to the power of GitHub Actions 👼
 
 ## Usage
 
+### API Documentation
+
+The API includes comprehensive OpenAPI 3.0 specification and interactive documentation:
+
+- **Interactive Documentation**: Visit `/docs` to explore the API with Swagger UI
+- **OpenAPI Specification (JSON)**: Available at `/openapi.json`
+- **OpenAPI Specification (YAML)**: Available at `/openapi.yaml`
+
+The API provides the following endpoints:
+
+- `GET /health` - Health check endpoint
+- `GET /airports?query={code}` - Search airports by IATA code (3 characters)
+- `GET /airlines?query={code}` - Search airlines by IATA code (2 characters)  
+- `GET /aircraft?query={code}` - Search aircraft by IATA code (3 characters)
+
+All search endpoints require a `query` parameter and return results in the format:
+```json
+{
+  "data": [
+    // Array of matching results
+  ]
+}
+```
+
 ## Running locally with Node
 
 1. Make sure you're running Node.js v18 (v18.7.0 is recommended).
