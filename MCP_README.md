@@ -29,22 +29,7 @@ The server provides three tools:
 
 ### Running the MCP Server
 
-#### Stdio Transport (Command Line)
-
-To start the MCP server with stdio transport:
-
-```bash
-npm run mcp-server
-```
-
-The server runs on stdio and will output a message when ready:
-```
-IATA Code Decoder MCP Server running on stdio
-```
-
-#### HTTP Transport (Remote Server)
-
-The MCP server is also available over HTTP through the existing web server. When you start the web server:
+The MCP server is available over HTTP through the web server. Start the web server:
 
 ```bash
 npm start
@@ -64,20 +49,8 @@ The MCP server becomes available at the `/mcp` endpoint alongside the existing R
 
 ### Using with MCP Clients
 
-This server can be used with any MCP-compatible client in two ways:
+This server can be used with any MCP-compatible client via HTTP transport:
 
-#### 1. Stdio Transport
-For local command-line usage and development:
-```json
-{
-  "command": "npm",
-  "args": ["run", "mcp-server"],
-  "cwd": "/path/to/iata-code-decoder-api"
-}
-```
-
-#### 2. HTTP Transport  
-For remote usage and web applications:
 ```
 POST http://your-server.com/mcp
 ```

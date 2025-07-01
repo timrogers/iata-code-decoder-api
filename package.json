@@ -9,7 +9,7 @@
     "generate-aircraft": "node scripts/generate_aircraft_json.js",
     "start": "node src/index.js",
     "dev": "nodemon -I --exec node --loader ts-node/esm ./src/index.ts",
-    "mcp-server": "node --loader ts-node/esm ./src/mcp-server.ts",
+
     "build": "tsc",
     "prettier": "prettier src/**/*.ts",
     "prettier-fix": "prettier src/**/*.ts --write",
