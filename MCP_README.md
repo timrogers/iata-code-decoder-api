@@ -29,7 +29,9 @@ The server provides three tools:
 
 ### Running the MCP Server
 
-To start the MCP server:
+#### Stdio Transport (Command Line)
+
+To start the MCP server with stdio transport:
 
 ```bash
 npm run mcp-server
@@ -40,9 +42,47 @@ The server runs on stdio and will output a message when ready:
 IATA Code Decoder MCP Server running on stdio
 ```
 
+#### HTTP Transport (Remote Server)
+
+The MCP server is also available over HTTP through the existing web server. When you start the web server:
+
+```bash
+npm start
+```
+
+The MCP server becomes available at the `/mcp` endpoint alongside the existing REST API endpoints.
+
+**MCP over HTTP Endpoints:**
+- `POST /mcp` - Client-to-server communication (tool calls, etc.)
+- `GET /mcp` - Server-to-client notifications via Server-Sent Events (SSE)
+- `DELETE /mcp` - Session termination
+
+**Session Management:**
+- Include `mcp-session-id` header for established sessions
+- New sessions are created automatically on first `initialize` request
+- Sessions are cleaned up automatically when connections close
+
 ### Using with MCP Clients
 
-This server can be used with any MCP-compatible client. The server implements the MCP protocol and communicates via stdin/stdout.
+This server can be used with any MCP-compatible client in two ways:
+
+#### 1. Stdio Transport
+For local command-line usage and development:
+```json
+{
+  "command": "npm",
+  "args": ["run", "mcp-server"],
+  "cwd": "/path/to/iata-code-decoder-api"
+}
+```
+
+#### 2. HTTP Transport  
+For remote usage and web applications:
+```
+POST http://your-server.com/mcp
+```
+
+The HTTP transport supports session management and server-to-client notifications, making it suitable for production deployments and web-based AI applications.
 
 Example tool calls:
 - Look up Heathrow Airport: `lookup_airport` with query "LHR"
