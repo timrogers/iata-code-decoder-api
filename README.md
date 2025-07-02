@@ -25,7 +25,7 @@ The cached data is updated regularly thanks to the power of GitHub Actions 👼
 
 1. Build the Docker image with `docker build . -t timrogers/iata-code-decoder-api`
 2. Start a container using your built Docker image by running `docker run -d -p 4000:4000 timrogers/iata-code-decoder-api`
-3. Hit <https://localhost:4000/airports?query=LHR> in your browser. You'll see information about Heathrow airport 🥳
+3. Hit <http://localhost:4000/airports?query=LHR> in your browser. You'll see information about Heathrow airport 🥳
 4. To stop your container - because you're done or because you want to rebuild from step 1, run `docker kill` with the container ID returned from `docker run`.
 
 ### Updating cached data
