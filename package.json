@@ -9,7 +9,6 @@
     "generate-aircraft": "node scripts/generate_aircraft_json.js",
     "start": "node src/index.js",
     "dev": "nodemon -I --exec node --loader ts-node/esm ./src/index.ts",
-
     "build": "tsc",
     "prettier": "prettier src/**/*.ts",
     "prettier-fix": "prettier src/**/*.ts --write",
@@ -19,7 +18,7 @@
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.3",
