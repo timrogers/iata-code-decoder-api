@@ -27,7 +27,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "@duffel/api": "^4.2.1",
+    "@duffel/api": "^4.14.0",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.22.0",
     "@types/compression": "^1.7.5",
