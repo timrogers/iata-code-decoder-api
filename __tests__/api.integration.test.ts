@@ -2,6 +2,26 @@ import request from 'supertest';
 import { spawn, ChildProcess } from 'child_process';
 import { setTimeout } from 'timers/promises';
 
+interface Airport {
+  iataCode: string;
+  name: string;
+  id: string;
+  latitude: number;
+  longitude: number;
+}
+
+interface Airline {
+  iataCode: string;
+  name: string;
+  id: string;
+}
+
+interface Aircraft {
+  iataCode: string;
+  name: string;
+  id: string;
+}
+
 describe('IATA Code Decoder API - Integration Tests', () => {
   let serverProcess: ChildProcess;
   const baseURL = 'http://localhost:4001'; // Use a different port for testing
@@ -28,12 +48,13 @@ describe('IATA Code Decoder API - Integration Tests', () => {
   // Health endpoint tests
   describe('GET /health', () => {
     it('should return 200 with success: true', async () => {
-      const response = await request(baseURL)
-        .get('/health')
-        .expect(200);
+      const response = await request(baseURL).get('/health').expect(200);
 
       expect(response.body).toEqual({ success: true });
-      expect(response.headers).toHaveProperty('cache-control', 'no-store, no-cache, must-revalidate, private');
+      expect(response.headers).toHaveProperty(
+        'cache-control',
+        'no-store, no-cache, must-revalidate, private',
+      );
       expect(response.headers).toHaveProperty('pragma', 'no-cache');
       expect(response.headers).toHaveProperty('expires', '0');
     });
@@ -42,16 +63,14 @@ describe('IATA Code Decoder API - Integration Tests', () => {
   // Airports endpoint tests
   describe('GET /airports', () => {
     it('should return airports matching query "AAH"', async () => {
-      const response = await request(baseURL)
-        .get('/airports?query=AAH')
-        .expect(200);
+      const response = await request(baseURL).get('/airports?query=AAH').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
       expect(response.body.data.length).toBeGreaterThan(0);
-      
+
       // Check that all returned airports have IATA codes starting with "AAH" (case insensitive)
-      response.body.data.forEach((airport: any) => {
+      response.body.data.forEach((airport: Airport) => {
         expect(airport.iataCode.toLowerCase()).toMatch(/^aah/);
         expect(airport).toHaveProperty('name');
         expect(airport).toHaveProperty('id');
@@ -64,16 +83,14 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return airports matching partial query "AA"', async () => {
-      const response = await request(baseURL)
-        .get('/airports?query=AA')
-        .expect(200);
+      const response = await request(baseURL).get('/airports?query=AA').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
       expect(response.body.data.length).toBeGreaterThan(0);
-      
+
       // Check that all returned airports have IATA codes starting with "AA" (case insensitive)
-      response.body.data.forEach((airport: any) => {
+      response.body.data.forEach((airport: Airport) => {
         expect(airport.iataCode.toLowerCase()).toMatch(/^aa/);
       });
     });
@@ -91,9 +108,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return empty array for query longer than 3 characters', async () => {
-      const response = await request(baseURL)
-        .get('/airports?query=AAHHH')
-        .expect(200);
+      const response = await request(baseURL).get('/airports?query=AAHHH').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -101,9 +116,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return empty array for non-existent code', async () => {
-      const response = await request(baseURL)
-        .get('/airports?query=ZZZ')
-        .expect(200);
+      const response = await request(baseURL).get('/airports?query=ZZZ').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -111,9 +124,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return 400 when query parameter is missing', async () => {
-      const response = await request(baseURL)
-        .get('/airports')
-        .expect(400);
+      const response = await request(baseURL).get('/airports').expect(400);
 
       expect(response.body).toEqual({
         data: {
@@ -123,9 +134,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return 400 when query parameter is empty', async () => {
-      const response = await request(baseURL)
-        .get('/airports?query=')
-        .expect(400);
+      const response = await request(baseURL).get('/airports?query=').expect(400);
 
       expect(response.body).toEqual({
         data: {
@@ -138,16 +147,14 @@ describe('IATA Code Decoder API - Integration Tests', () => {
   // Airlines endpoint tests
   describe('GET /airlines', () => {
     it('should return airlines matching query "Q5"', async () => {
-      const response = await request(baseURL)
-        .get('/airlines?query=Q5')
-        .expect(200);
+      const response = await request(baseURL).get('/airlines?query=Q5').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
       expect(response.body.data.length).toBeGreaterThan(0);
-      
+
       // Check that all returned airlines have IATA codes starting with "Q5" (case insensitive)
-      response.body.data.forEach((airline: any) => {
+      response.body.data.forEach((airline: Airline) => {
         expect(airline.iataCode.toLowerCase()).toMatch(/^q5/);
         expect(airline).toHaveProperty('name');
         expect(airline).toHaveProperty('id');
@@ -158,16 +165,14 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return airlines matching partial query "Q"', async () => {
-      const response = await request(baseURL)
-        .get('/airlines?query=Q')
-        .expect(200);
+      const response = await request(baseURL).get('/airlines?query=Q').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
       expect(response.body.data.length).toBeGreaterThan(0);
-      
+
       // Check that all returned airlines have IATA codes starting with "Q" (case insensitive)
-      response.body.data.forEach((airline: any) => {
+      response.body.data.forEach((airline: Airline) => {
         expect(airline.iataCode.toLowerCase()).toMatch(/^q/);
       });
     });
@@ -185,9 +190,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return empty array for query longer than 2 characters', async () => {
-      const response = await request(baseURL)
-        .get('/airlines?query=Q5X')
-        .expect(200);
+      const response = await request(baseURL).get('/airlines?query=Q5X').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -195,9 +198,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return empty array for non-existent code', async () => {
-      const response = await request(baseURL)
-        .get('/airlines?query=!!')
-        .expect(200);
+      const response = await request(baseURL).get('/airlines?query=!!').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -205,9 +206,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return 400 when query parameter is missing', async () => {
-      const response = await request(baseURL)
-        .get('/airlines')
-        .expect(400);
+      const response = await request(baseURL).get('/airlines').expect(400);
 
       expect(response.body).toEqual({
         data: {
@@ -217,9 +216,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return 400 when query parameter is empty', async () => {
-      const response = await request(baseURL)
-        .get('/airlines?query=')
-        .expect(400);
+      const response = await request(baseURL).get('/airlines?query=').expect(400);
 
       expect(response.body).toEqual({
         data: {
@@ -232,16 +229,14 @@ describe('IATA Code Decoder API - Integration Tests', () => {
   // Aircraft endpoint tests
   describe('GET /aircraft', () => {
     it('should return aircraft matching query "AT5"', async () => {
-      const response = await request(baseURL)
-        .get('/aircraft?query=AT5')
-        .expect(200);
+      const response = await request(baseURL).get('/aircraft?query=AT5').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
       expect(response.body.data.length).toBeGreaterThan(0);
-      
+
       // Check that all returned aircraft have IATA codes starting with "AT5" (case insensitive)
-      response.body.data.forEach((aircraft: any) => {
+      response.body.data.forEach((aircraft: Aircraft) => {
         expect(aircraft.iataCode.toLowerCase()).toMatch(/^at5/);
         expect(aircraft).toHaveProperty('name');
         expect(aircraft).toHaveProperty('id');
@@ -252,16 +247,14 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return aircraft matching partial query "AT"', async () => {
-      const response = await request(baseURL)
-        .get('/aircraft?query=AT')
-        .expect(200);
+      const response = await request(baseURL).get('/aircraft?query=AT').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
       expect(response.body.data.length).toBeGreaterThan(0);
-      
+
       // Check that all returned aircraft have IATA codes starting with "AT" (case insensitive)
-      response.body.data.forEach((aircraft: any) => {
+      response.body.data.forEach((aircraft: Aircraft) => {
         expect(aircraft.iataCode.toLowerCase()).toMatch(/^at/);
       });
     });
@@ -279,9 +272,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return empty array for query longer than 3 characters', async () => {
-      const response = await request(baseURL)
-        .get('/aircraft?query=AT5X')
-        .expect(200);
+      const response = await request(baseURL).get('/aircraft?query=AT5X').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -289,9 +280,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return empty array for non-existent code', async () => {
-      const response = await request(baseURL)
-        .get('/aircraft?query=ZZZ')
-        .expect(200);
+      const response = await request(baseURL).get('/aircraft?query=ZZZ').expect(200);
 
       expect(response.body).toHaveProperty('data');
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -299,9 +288,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return 400 when query parameter is missing', async () => {
-      const response = await request(baseURL)
-        .get('/aircraft')
-        .expect(400);
+      const response = await request(baseURL).get('/aircraft').expect(400);
 
       expect(response.body).toEqual({
         data: {
@@ -311,9 +298,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
 
     it('should return 400 when query parameter is empty', async () => {
-      const response = await request(baseURL)
-        .get('/aircraft?query=')
-        .expect(400);
+      const response = await request(baseURL).get('/aircraft?query=').expect(400);
 
       expect(response.body).toEqual({
         data: {
