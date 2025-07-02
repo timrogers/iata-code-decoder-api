@@ -2,13 +2,10 @@ export default {
   preset: 'ts-jest/presets/default-esm',
   extensionsToTreatAsEsm: ['.ts'],
   testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
+  transform: {
+    '^.+\\.ts$': ['ts-jest', {
       useESM: true,
-    },
-  },
-  moduleNameMapping: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    }],
   },
   testMatch: ['**/__tests__/**/*.test.ts', '**/?(*.)+(spec|test).ts'],
   collectCoverageFrom: [
@@ -17,4 +14,5 @@ export default {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
+  testTimeout: 30000, // Increase timeout for integration tests
 };
