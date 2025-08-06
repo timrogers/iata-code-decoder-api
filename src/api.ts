@@ -94,6 +94,28 @@ const mcpTools: Tool[] = [
       required: ['query'],
     },
   },
+  {
+    name: 'search_aviation',
+    description:
+      'Search across all aviation data (airports, airlines, and aircraft) simultaneously. Perfect when you\'re not sure what type of aviation entity the user is referring to, or when they want comprehensive results. Examples: "777" could return Boeing 777 aircraft and any airports/airlines with "777", "British" could return British Airways and British airports.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description:
+            'Search term that could refer to any aviation entity - airport, airline, or aircraft code/name.',
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of results per category (default: 5, max: 10)',
+          minimum: 1,
+          maximum: 10,
+        },
+      },
+      required: ['query'],
+    },
+  },
 ];
 
 // Create MCP server function
@@ -219,6 +241,66 @@ function createMcpServer(): Server {
               {
                 type: 'text',
                 text: `Found ${aircraft.length} aircraft ${aircraft.length === 1 ? 'type' : 'types'} for "${query}":\n\n${responseText}`,
+              },
+            ],
+          };
+        }
+
+        case 'search_aviation': {
+          const searchLimit = Math.min(limit, 10);
+          const airports = searchObjects(AIRPORTS, query, 3, searchLimit);
+          const airlines = searchObjects(AIRLINES, query, 2, searchLimit);
+          const aircraft = searchObjects(AIRCRAFT, query, 3, searchLimit);
+
+          const totalResults = airports.length + airlines.length + aircraft.length;
+
+          if (totalResults === 0) {
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: `No aviation data found for query "${query}". Try searching with:\n- IATA codes (e.g., "LHR", "BA", "777")\n- Partial codes (e.g., "LH", "B", "77")\n- Names (e.g., "Heathrow", "British", "Boeing")`,
+                },
+              ],
+            };
+          }
+
+          let responseText = `Found ${totalResults} result${totalResults === 1 ? '' : 's'} across aviation data for "${query}":`;
+
+          if (airports.length > 0) {
+            responseText += `\n\n**Airports (${airports.length}):**\n`;
+            responseText += airports
+              .map((airport) => {
+                const cityInfo = airport.city
+                  ? ` in ${airport.cityName || airport.city.name}`
+                  : '';
+                const countryInfo = airport.iataCountryCode
+                  ? ` (${airport.iataCountryCode})`
+                  : '';
+                return `• ${airport.name}${cityInfo}${countryInfo} - IATA: ${airport.iataCode}`;
+              })
+              .join('\n');
+          }
+
+          if (airlines.length > 0) {
+            responseText += `\n\n**Airlines (${airlines.length}):**\n`;
+            responseText += airlines
+              .map((airline) => `• ${airline.name} - IATA: ${airline.iataCode}`)
+              .join('\n');
+          }
+
+          if (aircraft.length > 0) {
+            responseText += `\n\n**Aircraft (${aircraft.length}):**\n`;
+            responseText += aircraft
+              .map((plane) => `• ${plane.name} - IATA: ${plane.iataCode}`)
+              .join('\n');
+          }
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: responseText,
               },
             ],
           };
