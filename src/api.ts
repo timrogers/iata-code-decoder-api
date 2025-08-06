@@ -31,13 +31,20 @@ const mcpTools: Tool[] = [
   {
     name: 'lookup_airport',
     description:
-      'Look up airport information by IATA code (3-letter code like LHR, JFK, etc.)',
+      'Look up airport information by IATA code or search by name/location. Useful for finding airport details when users mention airport codes, city names, or need airport information for travel planning. Examples: "LHR" returns Heathrow, "JFK" returns John F. Kennedy, "Hea" returns airports starting with "Hea".',
     inputSchema: {
       type: 'object',
       properties: {
         query: {
           type: 'string',
-          description: 'The IATA airport code or partial code to search for',
+          description:
+            'The IATA airport code (e.g., "LHR", "JFK") or partial code/name to search for. Can be 1-3 characters.',
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 10, max: 50)',
+          minimum: 1,
+          maximum: 50,
         },
       },
       required: ['query'],
@@ -46,13 +53,20 @@ const mcpTools: Tool[] = [
   {
     name: 'lookup_airline',
     description:
-      'Look up airline information by IATA code (2-letter code like BA, AA, etc.)',
+      'Look up airline information by IATA code or search by name. Useful for identifying airlines when users mention airline codes or names. Examples: "BA" returns British Airways, "AA" returns American Airlines, "United" finds United Airlines.',
     inputSchema: {
       type: 'object',
       properties: {
         query: {
           type: 'string',
-          description: 'The IATA airline code or partial code to search for',
+          description:
+            'The IATA airline code (e.g., "BA", "AA") or partial code/name to search for. Can be 1-2 characters for codes.',
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 10, max: 50)',
+          minimum: 1,
+          maximum: 50,
         },
       },
       required: ['query'],
@@ -61,13 +75,20 @@ const mcpTools: Tool[] = [
   {
     name: 'lookup_aircraft',
     description:
-      'Look up aircraft information by IATA code (3-letter code like 777, A320, etc.)',
+      'Look up aircraft information by IATA code or search by name/model. Useful for identifying aircraft types when users mention plane models or codes. Examples: "777" returns Boeing 777, "A320" returns Airbus A320, "Boeing" finds Boeing aircraft.',
     inputSchema: {
       type: 'object',
       properties: {
         query: {
           type: 'string',
-          description: 'The IATA aircraft code or partial code to search for',
+          description:
+            'The IATA aircraft code (e.g., "777", "A320") or partial code/name to search for. Can be 1-3 characters for codes.',
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 10, max: 50)',
+          minimum: 1,
+          maximum: 50,
         },
       },
       required: ['query'],
@@ -99,71 +120,105 @@ function createMcpServer(): Server {
     const { name, arguments: args } = request.params;
 
     if (!args || typeof args !== 'object') {
-      throw new Error('Invalid arguments');
+      throw new Error('Invalid arguments provided');
     }
 
     const query = args.query as string;
-    if (!query || typeof query !== 'string') {
-      throw new Error('Query parameter is required and must be a string');
+    if (!query || typeof query !== 'string' || query.trim().length === 0) {
+      throw new Error('Query parameter is required and must be a non-empty string');
     }
+
+    const limit = Math.min(Math.max(parseInt(args.limit as string) || 10, 1), 50);
 
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+          const airports = searchObjects(AIRPORTS, query, 3, limit);
+
+          if (airports.length === 0) {
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: `No airports found for query "${query}". Try searching with:\n- 3-letter IATA codes (e.g., "LHR", "JFK")\n- Partial codes (e.g., "LH" for airports starting with LH)\n- Airport or city names (e.g., "Heathrow", "London")`,
+                },
+              ],
+            };
+          }
+
+          const responseText = airports
+            .map((airport) => {
+              const cityInfo = airport.city
+                ? ` in ${airport.cityName || airport.city.name}`
+                : '';
+              const countryInfo = airport.iataCountryCode
+                ? ` (${airport.iataCountryCode})`
+                : '';
+              return `• ${airport.name}${cityInfo}${countryInfo} - IATA: ${airport.iataCode}${airport.icaoCode ? `, ICAO: ${airport.icaoCode}` : ''}${airport.timeZone ? `, Timezone: ${airport.timeZone}` : ''}`;
+            })
+            .join('\n');
+
           return {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(
-                  {
-                    query,
-                    results: airports,
-                    count: airports.length,
-                  },
-                  null,
-                  2,
-                ),
+                text: `Found ${airports.length} airport${airports.length === 1 ? '' : 's'} for "${query}":\n\n${responseText}`,
               },
             ],
           };
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+          const airlines = searchObjects(AIRLINES, query, 2, limit);
+
+          if (airlines.length === 0) {
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: `No airlines found for query "${query}". Try searching with:\n- 2-letter IATA codes (e.g., "BA", "AA")\n- Partial codes (e.g., "B" for airlines starting with B)\n- Airline names (e.g., "British", "American")`,
+                },
+              ],
+            };
+          }
+
+          const responseText = airlines
+            .map((airline) => `• ${airline.name} - IATA: ${airline.iataCode}`)
+            .join('\n');
+
           return {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(
-                  {
-                    query,
-                    results: airlines,
-                    count: airlines.length,
-                  },
-                  null,
-                  2,
-                ),
+                text: `Found ${airlines.length} airline${airlines.length === 1 ? '' : 's'} for "${query}":\n\n${responseText}`,
               },
             ],
           };
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+          const aircraft = searchObjects(AIRCRAFT, query, 3, limit);
+
+          if (aircraft.length === 0) {
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: `No aircraft found for query "${query}". Try searching with:\n- 3-letter IATA codes (e.g., "777", "A320")\n- Partial codes (e.g., "77" for aircraft starting with 77)\n- Aircraft names (e.g., "Boeing", "Airbus")`,
+                },
+              ],
+            };
+          }
+
+          const responseText = aircraft
+            .map((plane) => `• ${plane.name} - IATA: ${plane.iataCode}`)
+            .join('\n');
+
           return {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(
-                  {
-                    query,
-                    results: aircraft,
-                    count: aircraft.length,
-                  },
-                  null,
-                  2,
-                ),
+                text: `Found ${aircraft.length} aircraft ${aircraft.length === 1 ? 'type' : 'types'} for "${query}":\n\n${responseText}`,
               },
             ],
           };
@@ -186,18 +241,55 @@ app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
 
-const filterObjectsByPartialIataCode = (
+// Enhanced search function that supports both IATA code and name-based search
+const searchObjects = (
   objects: Keyable[],
-  partialIataCode: string,
+  query: string,
   iataCodeLength: number,
+  limit: number = 10,
 ): Keyable[] => {
-  if (partialIataCode.length > iataCodeLength) {
-    return [];
-  } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
+  const queryLower = query.toLowerCase().trim();
+
+  // If query length matches IATA code length or is shorter, prioritize IATA code search
+  const iataMatches: Keyable[] = [];
+  const nameMatches: Keyable[] = [];
+
+  for (const object of objects) {
+    // Exact IATA code match (highest priority)
+    if (object.iataCode.toLowerCase() === queryLower) {
+      iataMatches.unshift(object);
+      continue;
+    }
+
+    // IATA code prefix match
+    if (
+      queryLower.length <= iataCodeLength &&
+      object.iataCode.toLowerCase().startsWith(queryLower)
+    ) {
+      iataMatches.push(object);
+      continue;
+    }
+
+    // Name-based search for longer queries or when IATA search doesn't fit
+    if (queryLower.length > 1) {
+      const nameToSearch = object.name?.toLowerCase() || '';
+      const cityNameToSearch = object.cityName?.toLowerCase() || '';
+
+      if (nameToSearch.includes(queryLower) || cityNameToSearch.includes(queryLower)) {
+        nameMatches.push(object);
+      }
+    }
   }
+
+  // Combine results with IATA matches first, then name matches
+  const allResults = [...iataMatches, ...nameMatches];
+
+  // Remove duplicates and limit results
+  const uniqueResults = allResults.filter(
+    (item, index, arr) => arr.findIndex((other) => other.id === item.id) === index,
+  );
+
+  return uniqueResults.slice(0, Math.min(limit, 50));
 };
 
 app.get('/health', async (req: Request, res: Response): Promise<void> => {
@@ -217,8 +309,16 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
-    res.json({ data: airports });
+    const limit = Math.min(Math.max(parseInt(req.query.limit as string) || 50, 1), 100);
+    const airports = searchObjects(AIRPORTS, query, 3, limit);
+    res.json({
+      data: airports,
+      meta: {
+        query,
+        count: airports.length,
+        limit,
+      },
+    });
   }
 });
 
@@ -230,10 +330,16 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+    const limit = Math.min(Math.max(parseInt(req.query.limit as string) || 50, 1), 100);
+    const airlines = searchObjects(AIRLINES, query, 2, limit);
 
     res.json({
       data: airlines,
+      meta: {
+        query,
+        count: airlines.length,
+        limit,
+      },
     });
   }
 });
@@ -246,8 +352,16 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
-    res.json({ data: aircraft });
+    const limit = Math.min(Math.max(parseInt(req.query.limit as string) || 50, 1), 100);
+    const aircraft = searchObjects(AIRCRAFT, query, 3, limit);
+    res.json({
+      data: aircraft,
+      meta: {
+        query,
+        count: aircraft.length,
+        limit,
+      },
+    });
   }
 });
 
