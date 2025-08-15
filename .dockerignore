@@ -1,1 +1,10 @@
 node_modules
+.git
+.github
+README.md
+LICENSE.md
+.tool-versions
+.env.example
+.prettierrc
+*.md
+.gitignore
