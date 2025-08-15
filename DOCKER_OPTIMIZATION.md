@@ -90,3 +90,19 @@ docker run -d -p 4000:4000 iata-code-decoder-api
 ```
 
 The application will be available at http://localhost:4000
+
+## Testing
+
+The optimized application has been tested and verified to work correctly:
+
+```bash
+# Local testing
+PORT=4000 npm start
+# ✈️  IATA Code Decoder API running on port 4000
+
+# API endpoint testing
+curl "http://localhost:4000/airports?query=LHR"
+# Returns: {"data":[{"icaoCode":"EGLL","iataCityCode":"LON"...}]}
+```
+
+All API endpoints function correctly with the optimized configuration.
