@@ -37,6 +37,20 @@ The cached data is updated regularly and committed to the repository thanks to t
 3. Set your Duffel access token. Make a copy of the example `.env` file with `cp .env.example .env`, and then edit the resulting `.env` file.
 4. Run `npm run generate-airports && rpm run generate-airlines && npm run generate-aircraft`. Commit the result.
 
+### Running tests
+
+The project includes comprehensive unit tests for all API endpoints and utility functions.
+
+1. **Run all tests**: `npm test`
+2. **Run tests in watch mode**: `npm run test:watch`
+3. **Run tests with coverage**: `npm run test:coverage`
+
+The test suite covers:
+- All REST API endpoints (`/health`, `/airports`, `/airlines`, `/aircraft`)
+- Input validation and error handling
+- Utility functions
+- Edge cases and filtering behavior
+
 ## Model Context Protocol (MCP) server
 
 Model Context Protocol (MCP) is an open standard that enables AI systems to securely access external data sources and tools. 

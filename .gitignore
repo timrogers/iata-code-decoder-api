@@ -1,3 +1,5 @@
 .env
 node_modules/
 src/**/*.js
+coverage/
+*.lcov
