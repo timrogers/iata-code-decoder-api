@@ -16,7 +16,7 @@ The cached data is updated regularly thanks to the power of GitHub Actions 👼
 
 ### Running locally with Node
 
-1. Make sure you're running at least Node.js v24 (v24.4.1 is recommended).
+1. Make sure you're running at least Node.js v24 (v24.7.0 is recommended).
 2. Install the dependencies by running `npm install`.
 3. Start the application by running `npm run dev`. You'll see a message once the app is ready to go.
 4. Hit <http://localhost:4000/airports?query=LHR> in your browser. You'll see information about Heathrow airport 🥳
@@ -32,7 +32,7 @@ The cached data is updated regularly thanks to the power of GitHub Actions 👼
 
 The cached data is updated regularly and committed to the repository thanks to the power of GitHub Actions. You can also do this locally yourself.
 
-1. Make sure you're running at least Node.js v24 (v24.4.1 is recommended).
+1. Make sure you're running at least Node.js v24 (v24.7.0 is recommended).
 2. Install the dependencies by running `npm install`.
 3. Set your Duffel access token. Make a copy of the example `.env` file with `cp .env.example .env`, and then edit the resulting `.env` file.
 4. Run `npm run generate-airports && rpm run generate-airlines && npm run generate-aircraft`. Commit the result.
