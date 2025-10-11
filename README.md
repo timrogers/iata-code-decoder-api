@@ -35,7 +35,7 @@ The cached data is updated regularly and committed to the repository thanks to t
 1. Make sure you're running at least Node.js v24 (v24.4.1 is recommended).
 2. Install the dependencies by running `npm install`.
 3. Set your Duffel access token. Make a copy of the example `.env` file with `cp .env.example .env`, and then edit the resulting `.env` file.
-4. Run `npm run generate-airports && rpm run generate-airlines && npm run generate-aircraft`. Commit the result.
+4. Run `npm run generate-airports && npm run generate-airlines && npm run generate-aircraft`. Commit the result.
 
 ### Running tests
 
