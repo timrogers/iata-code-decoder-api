@@ -1,0 +1,19 @@
+name: Clean up Azure Container Registry
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure Login action
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true
+    
+    - name: Azure CLI script
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az acr repository show-tags -n timrogers --repository timrogers/iata-code-decoder-api --detail --orderby time_desc -o table
