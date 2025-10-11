@@ -1,0 +1,68 @@
+name: Clean up old Docker images
+
+on:
+  schedule:
+    # Run every Monday at 2:00 AM UTC
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Azure Container Registry Login
+        uses: docker/login-action@v3
+        with:
+          registry: https://timrogers.azurecr.io/
+          username: ${{ secrets.AzureAppService_ContainerUsername_d375f23299f749d4b84d836826192fb9 }}
+          password: ${{ secrets.AzureAppService_ContainerPassword_98d63c73200644f781c4c5f05574fe55 }}
+
+      - name: Delete old Docker images
+        run: |
+          # Install Azure CLI
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+          # Login to Azure Container Registry
+          echo "${{ secrets.AzureAppService_ContainerPassword_98d63c73200644f781c4c5f05574fe55 }}" | \
+            az acr login --name timrogers --username "${{ secrets.AzureAppService_ContainerUsername_d375f23299f749d4b84d836826192fb9 }}" --password-stdin
+
+          # Get the repository name
+          REPOSITORY="${{ secrets.AzureAppService_ContainerUsername_d375f23299f749d4b84d836826192fb9 }}/iata-code-decoder-api"
+
+          # Calculate date 1 month ago
+          CUTOFF_DATE=$(date -u -d '1 month ago' '+%Y-%m-%dT%H:%M:%SZ')
+          echo "Deleting images older than: $CUTOFF_DATE"
+
+          # Get all tags for the repository
+          TAGS=$(az acr repository show-tags --name timrogers --repository "$REPOSITORY" --orderby time_asc --output tsv)
+
+          if [ -z "$TAGS" ]; then
+            echo "No tags found in repository"
+            exit 0
+          fi
+
+          # Counter for deleted images
+          DELETED_COUNT=0
+
+          # Iterate through each tag
+          for TAG in $TAGS; do
+            # Get the manifest creation timestamp
+            MANIFEST=$(az acr repository show --name timrogers --repository "$REPOSITORY" --image "${REPOSITORY}:${TAG}" --query "createdTime" -o tsv)
+            
+            if [ -z "$MANIFEST" ]; then
+              echo "Could not get manifest for tag: $TAG"
+              continue
+            fi
+
+            # Compare dates
+            if [[ "$MANIFEST" < "$CUTOFF_DATE" ]]; then
+              echo "Deleting old image: ${REPOSITORY}:${TAG} (created: $MANIFEST)"
+              az acr repository delete --name timrogers --image "${REPOSITORY}:${TAG}" --yes
+              DELETED_COUNT=$((DELETED_COUNT + 1))
+            else
+              echo "Keeping image: ${REPOSITORY}:${TAG} (created: $MANIFEST)"
+            fi
+          done
+
+          echo "Total images deleted: $DELETED_COUNT"
