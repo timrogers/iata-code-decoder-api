@@ -34,7 +34,7 @@ jobs:
           commit_message: Add latest airline, aircraft and airport data from Duffel
           file_pattern: 'data/*.json'
       - name: Trigger deploy if data changed
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: steps.commit.outputs.changes_detected == 'true'
         with:
           script: |
