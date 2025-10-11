@@ -26,7 +26,7 @@ jobs:
           commit_message: Add latest aircraft data from Duffel
           file_pattern: data/aircraft.json
       - name: Trigger deploy if aircraft data changed
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: steps.commit.outputs.changes_detected == 'true'
         with:
           script: |
