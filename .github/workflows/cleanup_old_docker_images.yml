@@ -49,7 +49,7 @@ jobs:
           # Iterate through each tag
           for TAG in $TAGS; do
             # Get the manifest creation timestamp
-            MANIFEST_DATE=$(az acr repository show --name "$ACR_NAME" --repository "$REPOSITORY" --image "${REPOSITORY}:${TAG}" --query "createdTime" -o tsv)
+            MANIFEST_DATE=$(az acr repository show --name "$ACR_NAME" --image "${REPOSITORY}:${TAG}" --query "createdTime" -o tsv)
             
             if [ -z "$MANIFEST_DATE" ]; then
               echo "Could not get manifest for tag: $TAG"
