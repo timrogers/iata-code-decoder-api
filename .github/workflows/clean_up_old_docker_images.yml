@@ -5,7 +5,6 @@ on:
     # Run every Monday at 2:00 AM UTC
     - cron: '0 2 * * 1'
   workflow_dispatch:
-  push:
 
 jobs:
   cleanup:
@@ -13,7 +12,6 @@ jobs:
 
     env:
       ACR_NAME: timrogers
-      ACR_REGISTRY: timrogers.azurecr.io
       REPOSITORY_NAME: iata-code-decoder-api
 
     steps:
