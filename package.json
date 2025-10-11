@@ -10,6 +10,8 @@
     "start": "node src/index.js",
     "dev": "nodemon -I --exec node --loader ts-node/esm ./src/index.ts",
     "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "prettier": "prettier src/**/*.ts",
     "prettier-fix": "prettier src/**/*.ts --write",
     "eslint": "eslint .",
@@ -22,10 +24,10 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.3",
-    "compression": "^1.8.0",
+    "compression": "^1.8.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.1"
   },
   "devDependencies": {
     "@duffel/api": "^4.18.0",
@@ -33,15 +35,20 @@
     "@eslint/js": "^9.22.0",
     "@types/compression": "^1.7.5",
     "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^24.7.1",
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "jest": "^30.2.0",
     "nodemon": "^3.1.9",
-    "prettier": "3.4.2",
+    "prettier": "3.6.2",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },

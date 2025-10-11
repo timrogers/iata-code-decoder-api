@@ -1,32 +1,40 @@
-name: Update aircraft data
+name: Update data
 
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '0 2 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version-version: .tool-versions
           cache: 'npm'
       - run: npm install
+      - name: Generate up-to-date airline data
+        env:
+          DUFFEL_ACCESS_TOKEN: ${{ secrets.DUFFEL_ACCESS_TOKEN }}
+        run: npm run generate-airlines
       - name: Generate up-to-date aircraft data
         env:
           DUFFEL_ACCESS_TOKEN: ${{ secrets.DUFFEL_ACCESS_TOKEN }}
         run: npm run generate-aircraft
+      - name: Generate up-to-date airport data
+        env:
+          DUFFEL_ACCESS_TOKEN: ${{ secrets.DUFFEL_ACCESS_TOKEN }}
+        run: npm run generate-airports
       - uses: stefanzweifel/git-auto-commit-action@v6
-        name: Commit and push any updates to aircraft data
+        name: Commit and push any updates to data
         id: commit
         with:
-          commit_message: Add latest aircraft data from Duffel
-          file_pattern: data/aircraft.json
-      - name: Trigger deploy if aircraft data changed
-        uses: actions/github-script@v7
+          commit_message: Add latest airline, aircraft and airport data from Duffel
+          file_pattern: 'data/*.json'
+      - name: Trigger deploy if data changed
+        uses: actions/github-script@v8
         if: steps.commit.outputs.changes_detected == 'true'
         with:
           script: |
