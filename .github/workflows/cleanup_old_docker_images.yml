@@ -17,13 +17,15 @@ jobs:
       REPOSITORY_NAME: iata-code-decoder-api
 
     steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Delete old Docker images
         run: |
-          # Install Azure CLI
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
           # Login to Azure Container Registry
-          az acr login --name "$ACR_NAME" --username "${{ secrets.AzureAppService_ContainerUsername_d375f23299f749d4b84d836826192fb9 }}" --password "${{ secrets.AzureAppService_ContainerPassword_98d63c73200644f781c4c5f05574fe55 }}"
+          az acr login --name "$ACR_NAME"
 
           # Get the repository name
           REPOSITORY="${{ secrets.AzureAppService_ContainerUsername_d375f23299f749d4b84d836826192fb9 }}/$REPOSITORY_NAME"
