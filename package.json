@@ -20,7 +20,7 @@
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
   "engines": {
-    "node": "24.x"
+    "node": "25.x"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.3",
