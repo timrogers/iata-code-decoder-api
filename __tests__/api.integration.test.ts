@@ -97,26 +97,22 @@ describe('IATA Code Decoder API - Integration Tests', () => {
   });
 
   describe('GET /airlines', () => {
-    it('should return 400 when query parameter is missing', async () => {
+    it('should return all airlines when query parameter is missing', async () => {
       const response = await request(app).get('/airlines');
 
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
-        data: {
-          error: 'A search query must be provided via the `query` querystring parameter',
-        },
-      });
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('data');
+      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.body.data.length).toBeGreaterThan(100);
     });
 
-    it('should return 400 when query parameter is empty', async () => {
+    it('should return all airlines when query parameter is empty', async () => {
       const response = await request(app).get('/airlines?query=');
 
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
-        data: {
-          error: 'A search query must be provided via the `query` querystring parameter',
-        },
-      });
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('data');
+      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.body.data.length).toBeGreaterThan(100);
     });
 
     it('should return airlines matching the query (BA)', async () => {
