@@ -1,0 +1,1 @@
+After making changes, run `npm run prettier-fix` and `npm run eslint-fix` to check for linting issues and automatically fix where possible, then run `npm run build` to check the code builds.
