@@ -337,5 +337,12 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('data');
     });
+
+    it('should handle whitespace-only queries by returning empty results', async () => {
+      const response = await request(app).get('/airports?query=%20%20%20');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ data: [] });
+    });
   });
 });

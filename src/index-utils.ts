@@ -52,11 +52,22 @@ export class IataCodeIndex {
    * Space complexity: O(1) returns reference to existing array
    */
   lookup(partialIataCode: string): Keyable[] {
-    if (partialIataCode.length > this.maxCodeLength) {
+    // Validate and sanitize input
+    if (
+      !partialIataCode ||
+      typeof partialIataCode !== 'string' ||
+      partialIataCode.trim() === ''
+    ) {
       return [];
     }
 
-    const lowerQuery = partialIataCode.toLowerCase();
+    const trimmedQuery = partialIataCode.trim();
+
+    if (trimmedQuery.length > this.maxCodeLength) {
+      return [];
+    }
+
+    const lowerQuery = trimmedQuery.toLowerCase();
     return this.index.get(lowerQuery) || [];
   }
 }
