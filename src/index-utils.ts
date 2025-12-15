@@ -26,7 +26,9 @@ export class IataCodeIndex {
 
     for (const object of objects) {
       const iataCode = object.iataCode;
-      if (!iataCode) continue;
+      if (!iataCode || typeof iataCode !== 'string' || iataCode.trim() === '') {
+        continue;
+      }
 
       const lowerCode = iataCode.toLowerCase();
       const codeLength = Math.min(lowerCode.length, this.maxCodeLength);
