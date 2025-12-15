@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -185,6 +186,17 @@ function createMcpServer(): Server {
 app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
+
+// Rate limiter: 100 requests per 15 minutes per IP, excluding /health
+const rateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  skip: (req) => req.path === '/health',
+});
+
+app.use(rateLimiter);
 
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],

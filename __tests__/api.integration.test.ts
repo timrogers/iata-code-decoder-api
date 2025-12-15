@@ -342,4 +342,33 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.body).toHaveProperty('data');
     });
   });
+
+  describe('Rate Limiting', () => {
+    it('should return rate limit headers on successful requests', async () => {
+      const response = await request(app).get('/airports?query=LHR');
+
+      expect(response.status).toBe(200);
+      expect(response.headers['ratelimit-limit']).toBeDefined();
+      expect(response.headers['ratelimit-remaining']).toBeDefined();
+      expect(response.headers['ratelimit-reset']).toBeDefined();
+    });
+
+    it('should NOT include rate limit headers on /health endpoint', async () => {
+      const response = await request(app).get('/health');
+
+      expect(response.status).toBe(200);
+      expect(response.headers['ratelimit-limit']).toBeUndefined();
+      expect(response.headers['ratelimit-remaining']).toBeUndefined();
+      expect(response.headers['ratelimit-reset']).toBeUndefined();
+    });
+
+    it('should verify rate limit configuration', async () => {
+      // Make requests and verify the rate limit headers show correct configuration
+      const firstResponse = await request(app).get('/airports?query=LHR');
+      const remaining = parseInt(firstResponse.headers['ratelimit-remaining'], 10);
+
+      expect(remaining).toBeLessThan(100);
+      expect(firstResponse.headers['ratelimit-limit']).toBe('100');
+    });
+  });
 });
