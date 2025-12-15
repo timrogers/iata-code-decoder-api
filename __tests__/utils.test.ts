@@ -53,8 +53,9 @@ describe('Utils Module', () => {
       expect(result).toHaveProperty('PrivateKey');
     });
 
-    it('should handle keys with numbers', () => {
-      // Numbers after underscores don't trigger uppercase conversion since they are not letters
+    it('should not convert keys with underscore followed by number', () => {
+      // The regex /(_[a-z])/gi only matches underscore followed by a letter
+      // So _1 and _2 are not converted because numbers don't match [a-z]
       const input = { value_1: 'one', value_2: 'two' };
       const expected = { value_1: 'one', value_2: 'two' };
 
