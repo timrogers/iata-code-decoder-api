@@ -15,7 +15,6 @@ import {
   isInitializeRequest,
 } from '@modelcontextprotocol/sdk/types.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-const app = express();
 
 const QUERY_MUST_BE_PROVIDED_ERROR = {
   data: {
@@ -183,6 +182,9 @@ function createMcpServer(): Server {
   return server;
 }
 
+const app = express();
+
+// Apply middleware
 app.use(cors());
 app.use(compression());
 app.use(morgan('tiny'));
