@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
+import cors from 'cors';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -182,6 +183,7 @@ function createMcpServer(): Server {
   return server;
 }
 
+app.use(cors());
 app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
