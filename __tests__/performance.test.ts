@@ -18,7 +18,9 @@ describe('Performance Tests', () => {
     const totalTime = endTime - startTime;
     const avgTime = totalTime / iterations;
 
-    console.log(`Airport lookups: ${iterations} requests in ${totalTime}ms (avg: ${avgTime.toFixed(2)}ms per request)`);
+    console.log(
+      `Airport lookups: ${iterations} requests in ${totalTime}ms (avg: ${avgTime.toFixed(2)}ms per request)`,
+    );
 
     // This is just a baseline measurement
     expect(totalTime).toBeLessThan(10000); // Should complete 100 requests in under 10 seconds
@@ -38,7 +40,9 @@ describe('Performance Tests', () => {
     const totalTime = endTime - startTime;
     const avgTime = totalTime / iterations;
 
-    console.log(`Airline lookups: ${iterations} requests in ${totalTime}ms (avg: ${avgTime.toFixed(2)}ms per request)`);
+    console.log(
+      `Airline lookups: ${iterations} requests in ${totalTime}ms (avg: ${avgTime.toFixed(2)}ms per request)`,
+    );
 
     expect(totalTime).toBeLessThan(10000);
   });
@@ -57,7 +61,9 @@ describe('Performance Tests', () => {
     const totalTime = endTime - startTime;
     const avgTime = totalTime / iterations;
 
-    console.log(`Aircraft lookups: ${iterations} requests in ${totalTime}ms (avg: ${avgTime.toFixed(2)}ms per request)`);
+    console.log(
+      `Aircraft lookups: ${iterations} requests in ${totalTime}ms (avg: ${avgTime.toFixed(2)}ms per request)`,
+    );
 
     expect(totalTime).toBeLessThan(10000);
   });
