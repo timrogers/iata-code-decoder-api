@@ -17,6 +17,8 @@ import {
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 const app = express();
 
+app.use(cors());
+
 const QUERY_MUST_BE_PROVIDED_ERROR = {
   data: {
     error: 'A search query must be provided via the `query` querystring parameter',
@@ -183,7 +185,6 @@ function createMcpServer(): Server {
   return server;
 }
 
-app.use(cors());
 app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
