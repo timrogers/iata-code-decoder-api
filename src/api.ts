@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
 import { randomUUID } from 'node:crypto';
+import { rateLimit } from 'express-rate-limit';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
@@ -22,6 +23,20 @@ const QUERY_MUST_BE_PROVIDED_ERROR = {
   },
 };
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+const FIFTEEN_MINUTES_IN_MS = 15 * 60 * 1000;
+
+// Rate limiter configuration: 100 requests per 15 minutes
+const limiter = rateLimit({
+  windowMs: FIFTEEN_MINUTES_IN_MS,
+  max: 100,
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: {
+    data: {
+      error: 'Too many requests, please try again later.',
+    },
+  },
+});
 
 // Map to store MCP transports by session ID
 const mcpTransports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
@@ -185,6 +200,15 @@ function createMcpServer(): Server {
 app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
+
+// Apply rate limiting to all API endpoints except health check
+app.use((req, res, next) => {
+  if (req.path === '/health') {
+    next();
+  } else {
+    limiter(req, res, next);
+  }
+});
 
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],

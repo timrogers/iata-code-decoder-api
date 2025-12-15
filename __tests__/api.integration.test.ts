@@ -342,4 +342,81 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.body).toHaveProperty('data');
     });
   });
+
+  describe('Rate Limiting', () => {
+    it('should include rate limit headers in response', async () => {
+      const response = await request(app).get('/airports?query=LHR');
+
+      expect(response.status).toBe(200);
+      expect(response.headers).toHaveProperty('ratelimit-limit');
+      expect(response.headers).toHaveProperty('ratelimit-remaining');
+      expect(response.headers).toHaveProperty('ratelimit-reset');
+    });
+
+    it('should not apply rate limiting to health endpoint', async () => {
+      const response = await request(app).get('/health');
+
+      expect(response.status).toBe(200);
+      // Health endpoint should not have rate limit headers
+      expect(response.headers).not.toHaveProperty('ratelimit-limit');
+    });
+
+    it('should enforce rate limits after exceeding max requests', async () => {
+      // Make 101 requests to exceed the limit (max is 100 per 15 minutes)
+      const requests = [];
+      for (let i = 0; i < 101; i++) {
+        requests.push(request(app).get('/airports?query=LHR'));
+      }
+
+      const responses = await Promise.all(requests);
+
+      // First 100 should succeed
+      const successfulResponses = responses.filter((r) => r.status === 200);
+      const rateLimitedResponses = responses.filter((r) => r.status === 429);
+
+      expect(successfulResponses.length).toBeGreaterThan(0);
+      expect(rateLimitedResponses.length).toBeGreaterThan(0);
+
+      // Check that rate limited response has the correct error message
+      const rateLimitedResponse = rateLimitedResponses[0];
+      expect(rateLimitedResponse.body).toHaveProperty('data');
+      expect(rateLimitedResponse.body.data.error).toContain(
+        'Too many requests',
+      );
+    });
+
+    it('should apply rate limiting to all API endpoints', async () => {
+      // Test that rate limiting applies to airports, airlines, and aircraft endpoints
+      const airportsResponse = await request(app).get('/airports?query=LHR');
+      const airlinesResponse = await request(app).get('/airlines?query=BA');
+      const aircraftResponse = await request(app).get('/aircraft?query=777');
+
+      // All should have rate limit headers
+      expect(airportsResponse.headers).toHaveProperty('ratelimit-limit');
+      expect(airlinesResponse.headers).toHaveProperty('ratelimit-limit');
+      expect(aircraftResponse.headers).toHaveProperty('ratelimit-limit');
+    });
+
+    it('should apply rate limiting to MCP endpoints', async () => {
+      const response = await request(app)
+        .post('/mcp')
+        .send({
+          jsonrpc: '2.0',
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: {
+              name: 'test-client',
+              version: '1.0.0',
+            },
+          },
+          id: 1,
+        });
+
+      // MCP endpoint should have rate limit headers (since it's not /health)
+      // The status might vary based on MCP protocol handling, but headers should be present
+      expect(response.headers).toHaveProperty('ratelimit-limit');
+    });
+  });
 });
