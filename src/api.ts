@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
 import { randomUUID } from 'node:crypto';
+import { rateLimit } from 'express-rate-limit';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
@@ -186,6 +187,19 @@ app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
 
+// Rate limiter: 100 requests per 15-minute window per IP
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: {
+    data: {
+      error: 'Too many requests from this IP, please try again after 15 minutes',
+    },
+  },
+});
+
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
@@ -209,7 +223,7 @@ app.get('/health', async (req: Request, res: Response): Promise<void> => {
   res.status(200).json({ success: true });
 });
 
-app.get('/airports', async (req: Request, res: Response): Promise<void> => {
+app.get('/airports', apiLimiter, async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
@@ -222,7 +236,7 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
+app.get('/airlines', apiLimiter, async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
@@ -238,7 +252,7 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
+app.get('/aircraft', apiLimiter, async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 

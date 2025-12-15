@@ -53,6 +53,27 @@ The test suite covers:
 - Error handling and edge cases
 - Request validation
 - Response formatting and headers
+- Rate limiting functionality
+
+## Rate Limiting
+
+To protect the API from abuse, rate limiting is implemented on all lookup endpoints (`/airports`, `/airlines`, `/aircraft`):
+
+- **Limit**: 100 requests per 15-minute window per IP address
+- **Headers**: Rate limit information is returned in the response headers:
+  - `RateLimit-Limit`: Maximum number of requests allowed in the window
+  - `RateLimit-Remaining`: Number of requests remaining in the current window
+  - `RateLimit-Reset`: Time when the rate limit window resets (Unix timestamp)
+- **Error Response**: When the rate limit is exceeded, a 429 (Too Many Requests) status code is returned with the message:
+  ```json
+  {
+    "data": {
+      "error": "Too many requests from this IP, please try again after 15 minutes"
+    }
+  }
+  ```
+
+The `/health` endpoint is not rate-limited to allow for unrestricted health checks.
 
 ## Model Context Protocol (MCP) server
 

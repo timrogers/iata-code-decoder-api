@@ -342,4 +342,56 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.body).toHaveProperty('data');
     });
   });
+
+  describe('Rate Limiting', () => {
+    it('should include rate limit headers in API responses', async () => {
+      const response = await request(app).get('/airports?query=LHR');
+
+      expect(response.status).toBe(200);
+      expect(response.headers).toHaveProperty('ratelimit-limit');
+      expect(response.headers).toHaveProperty('ratelimit-remaining');
+      expect(response.headers).toHaveProperty('ratelimit-reset');
+      expect(response.headers['ratelimit-limit']).toBe('100');
+    });
+
+    it('should not apply rate limiting to health endpoint', async () => {
+      const response = await request(app).get('/health');
+
+      expect(response.status).toBe(200);
+      expect(response.headers).not.toHaveProperty('ratelimit-limit');
+    });
+
+    it('should track rate limit remaining count', async () => {
+      // Make a request and capture the remaining count
+      const response1 = await request(app).get('/airlines?query=BA');
+      const remaining1 = parseInt(response1.headers['ratelimit-remaining']);
+
+      // Make another request and verify the count decreased
+      const response2 = await request(app).get('/airlines?query=AA');
+      const remaining2 = parseInt(response2.headers['ratelimit-remaining']);
+
+      expect(remaining2).toBeLessThan(remaining1);
+    });
+
+    it('should apply rate limiting to airports endpoint', async () => {
+      const response = await request(app).get('/airports?query=JFK');
+
+      expect(response.status).toBe(200);
+      expect(response.headers).toHaveProperty('ratelimit-limit');
+    });
+
+    it('should apply rate limiting to airlines endpoint', async () => {
+      const response = await request(app).get('/airlines?query=AA');
+
+      expect(response.status).toBe(200);
+      expect(response.headers).toHaveProperty('ratelimit-limit');
+    });
+
+    it('should apply rate limiting to aircraft endpoint', async () => {
+      const response = await request(app).get('/aircraft?query=737');
+
+      expect(response.status).toBe(200);
+      expect(response.headers).toHaveProperty('ratelimit-limit');
+    });
+  });
 });
