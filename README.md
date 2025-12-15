@@ -53,6 +53,22 @@ The test suite covers:
 - Error handling and edge cases
 - Request validation
 - Response formatting and headers
+- Rate limiting behavior
+
+## Rate Limiting
+
+To ensure fair usage and prevent abuse, the API implements rate limiting on all endpoints except `/health`:
+
+- **Window**: 15 minutes
+- **Limit**: 100 requests per IP address per window
+- **Response**: When the limit is exceeded, the API returns a `429 Too Many Requests` status with an error message
+
+Rate limit information is included in response headers:
+- `RateLimit-Limit`: Maximum number of requests allowed in the window
+- `RateLimit-Remaining`: Number of requests remaining in the current window
+- `RateLimit-Reset`: Time when the rate limit window resets (Unix timestamp)
+
+The `/health` endpoint is excluded from rate limiting to support monitoring and health checks.
 
 ## Model Context Protocol (MCP) server
 

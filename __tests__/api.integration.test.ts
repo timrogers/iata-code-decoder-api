@@ -380,9 +380,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       // Check that rate limited response has the correct error message
       const rateLimitedResponse = rateLimitedResponses[0];
       expect(rateLimitedResponse.body).toHaveProperty('data');
-      expect(rateLimitedResponse.body.data.error).toContain(
-        'Too many requests',
-      );
+      expect(rateLimitedResponse.body.data.error).toContain('Too many requests');
     });
 
     it('should apply rate limiting to all API endpoints', async () => {
