@@ -251,6 +251,30 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
+app.get('/search', async (req: Request, res: Response): Promise<void> => {
+  res.header('Content-Type', 'application/json');
+  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+
+  if (req.query.query === undefined || req.query.query === '') {
+    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
+  } else {
+    const query = req.query.query as string;
+
+    const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3).map(
+      (airport) => ({ ...airport, type: 'airport' }),
+    );
+    const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2).map(
+      (airline) => ({ ...airline, type: 'airline' }),
+    );
+    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3).map((ac) => ({
+      ...ac,
+      type: 'aircraft',
+    }));
+
+    res.json({ data: [...airports, ...airlines, ...aircraft] });
+  }
+});
+
 // MCP over HTTP endpoints
 app.post('/mcp', async (req: Request, res: Response): Promise<void> => {
   try {

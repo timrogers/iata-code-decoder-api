@@ -242,6 +242,104 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
   });
 
+  describe('GET /search', () => {
+    it('should return 400 when query parameter is missing', async () => {
+      const response = await request(app).get('/search');
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        data: {
+          error: 'A search query must be provided via the `query` querystring parameter',
+        },
+      });
+    });
+
+    it('should return 400 when query parameter is empty', async () => {
+      const response = await request(app).get('/search?query=');
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        data: {
+          error: 'A search query must be provided via the `query` querystring parameter',
+        },
+      });
+    });
+
+    it('should return results from airports, airlines, and aircraft', async () => {
+      const response = await request(app).get('/search?query=BA');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('data');
+      expect(Array.isArray(response.body.data)).toBe(true);
+
+      // Should find BA airline
+      const airlines = response.body.data.filter(
+        (item: { type: string }) => item.type === 'airline',
+      );
+      expect(airlines.length).toBeGreaterThan(0);
+      expect(airlines[0].iataCode).toBe('BA');
+    });
+
+    it('should include type field in all results', async () => {
+      const response = await request(app).get('/search?query=L');
+
+      expect(response.status).toBe(200);
+
+      response.body.data.forEach((item: { type: string; iataCode: string }) => {
+        expect(['airport', 'airline', 'aircraft']).toContain(item.type);
+        expect(item.iataCode).toBeDefined();
+      });
+    });
+
+    it('should return airports with type airport', async () => {
+      const response = await request(app).get('/search?query=LHR');
+
+      expect(response.status).toBe(200);
+
+      const airports = response.body.data.filter(
+        (item: { type: string }) => item.type === 'airport',
+      );
+      expect(airports.length).toBeGreaterThan(0);
+      expect(airports[0].iataCode).toBe('LHR');
+      expect(airports[0].type).toBe('airport');
+    });
+
+    it('should return aircraft with type aircraft', async () => {
+      const response = await request(app).get('/search?query=777');
+
+      expect(response.status).toBe(200);
+
+      const aircraft = response.body.data.filter(
+        (item: { type: string }) => item.type === 'aircraft',
+      );
+      expect(aircraft.length).toBeGreaterThan(0);
+      expect(aircraft[0].iataCode).toBe('777');
+      expect(aircraft[0].type).toBe('aircraft');
+    });
+
+    it('should be case-insensitive', async () => {
+      const responseUpper = await request(app).get('/search?query=ba');
+      const responseLower = await request(app).get('/search?query=BA');
+
+      expect(responseUpper.body).toEqual(responseLower.body);
+    });
+
+    it('should have proper cache headers', async () => {
+      const response = await request(app).get('/search?query=BA');
+
+      expect(response.headers['content-type']).toMatch(/json/);
+      expect(response.headers['cache-control']).toMatch(/public/);
+      expect(response.headers['cache-control']).toMatch(/max-age=86400/);
+    });
+
+    it('should return empty array when no matches found', async () => {
+      const response = await request(app).get('/search?query=ZZZZ');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ data: [] });
+    });
+  });
+
   describe('MCP Endpoints', () => {
     describe('POST /mcp', () => {
       it('should handle initialization request', async () => {
