@@ -1,6 +1,7 @@
 import { Airport } from './types.js';
 import AIRPORTS_DATA from './../data/airports.json' with { type: 'json' };
 import { cameliseKeys } from './utils.js';
+import { IataCodeIndex } from './index-utils.js';
 
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
@@ -15,3 +16,6 @@ const airportDataToAirport = (airport: object): Airport => {
 };
 
 export const AIRPORTS: Airport[] = AIRPORTS_DATA.map(airportDataToAirport);
+
+// Airport IATA codes are 3 characters
+export const AIRPORTS_INDEX = new IataCodeIndex(AIRPORTS, 3);
