@@ -2,10 +2,9 @@ import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
 import { randomUUID } from 'node:crypto';
-import { AIRPORTS } from './airports.js';
-import { AIRLINES } from './airlines.js';
-import { AIRCRAFT } from './aircraft.js';
-import { Keyable } from './types.js';
+import { AIRPORTS_INDEX } from './airports.js';
+import { AIRLINES, AIRLINES_INDEX } from './airlines.js';
+import { AIRCRAFT_INDEX } from './aircraft.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import {
   CallToolRequestSchema,
@@ -110,7 +109,7 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+          const airports = AIRPORTS_INDEX.lookup(query);
           return {
             content: [
               {
@@ -130,7 +129,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+          const airlines = AIRLINES_INDEX.lookup(query);
           return {
             content: [
               {
@@ -150,7 +149,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+          const aircraft = AIRCRAFT_INDEX.lookup(query);
           return {
             content: [
               {
@@ -186,20 +185,6 @@ app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
 
-const filterObjectsByPartialIataCode = (
-  objects: Keyable[],
-  partialIataCode: string,
-  iataCodeLength: number,
-): Keyable[] => {
-  if (partialIataCode.length > iataCodeLength) {
-    return [];
-  } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
-  }
-};
-
 app.get('/health', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -217,7 +202,7 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+    const airports = AIRPORTS_INDEX.lookup(query);
     res.json({ data: airports });
   }
 });
@@ -230,7 +215,7 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
     res.json({ data: AIRLINES });
   } else {
     const query = req.query.query as string;
-    const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+    const airlines = AIRLINES_INDEX.lookup(query);
 
     res.json({
       data: airlines,
@@ -246,7 +231,7 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
     const query = req.query.query as string;
-    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+    const aircraft = AIRCRAFT_INDEX.lookup(query);
     res.json({ data: aircraft });
   }
 });

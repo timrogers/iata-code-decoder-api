@@ -1,18 +1,19 @@
-import { AIRPORTS } from '../src/airports.js';
-import { AIRLINES } from '../src/airlines.js';
-import { AIRCRAFT } from '../src/aircraft.js';
+import { AIRPORTS, AIRPORTS_INDEX } from '../src/airports.js';
+import { AIRLINES, AIRLINES_INDEX } from '../src/airlines.js';
+import { AIRCRAFT, AIRCRAFT_INDEX } from '../src/aircraft.js';
 import { Keyable } from '../src/types.js';
 
+// Old implementation for comparison
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
-  iataCodeLength: number
+  iataCodeLength: number,
 ): Keyable[] => {
   if (partialIataCode.length > iataCodeLength) {
     return [];
   } else {
     return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase())
+      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
     );
   }
 };
@@ -20,34 +21,84 @@ const filterObjectsByPartialIataCode = (
 describe('Performance Benchmark', () => {
   const iterations = 10000;
 
-  it('should measure baseline lookup performance', () => {
-    console.log('\\nBaseline Performance Benchmark');
+  it('should measure improvement from indexed lookups', () => {
+    console.log('\nPerformance Benchmark: Linear Search vs Indexed Lookup');
     console.log('='.repeat(60));
     console.log(`Airports count: ${AIRPORTS.length}`);
     console.log(`Airlines count: ${AIRLINES.length}`);
     console.log(`Aircraft count: ${AIRCRAFT.length}`);
     console.log('');
 
-    const testQueries = [
-      { collection: AIRPORTS, query: 'L', length: 3, name: 'Airports prefix "L"' },
-      { collection: AIRPORTS, query: 'LH', length: 3, name: 'Airports prefix "LH"' },
-      { collection: AIRPORTS, query: 'LHR', length: 3, name: 'Airports exact "LHR"' },
-      { collection: AIRLINES, query: 'A', length: 2, name: 'Airlines prefix "A"' },
-      { collection: AIRLINES, query: 'BA', length: 2, name: 'Airlines exact "BA"' },
-      { collection: AIRCRAFT, query: '7', length: 3, name: 'Aircraft prefix "7"' },
-      { collection: AIRCRAFT, query: '777', length: 3, name: 'Aircraft exact "777"' },
+    const testCases = [
+      {
+        name: 'Airports prefix "L"',
+        oldFn: () => filterObjectsByPartialIataCode(AIRPORTS, 'L', 3),
+        newFn: () => AIRPORTS_INDEX.lookup('L'),
+      },
+      {
+        name: 'Airports prefix "LH"',
+        oldFn: () => filterObjectsByPartialIataCode(AIRPORTS, 'LH', 3),
+        newFn: () => AIRPORTS_INDEX.lookup('LH'),
+      },
+      {
+        name: 'Airports exact "LHR"',
+        oldFn: () => filterObjectsByPartialIataCode(AIRPORTS, 'LHR', 3),
+        newFn: () => AIRPORTS_INDEX.lookup('LHR'),
+      },
+      {
+        name: 'Airlines prefix "A"',
+        oldFn: () => filterObjectsByPartialIataCode(AIRLINES, 'A', 2),
+        newFn: () => AIRLINES_INDEX.lookup('A'),
+      },
+      {
+        name: 'Airlines exact "BA"',
+        oldFn: () => filterObjectsByPartialIataCode(AIRLINES, 'BA', 2),
+        newFn: () => AIRLINES_INDEX.lookup('BA'),
+      },
+      {
+        name: 'Aircraft prefix "7"',
+        oldFn: () => filterObjectsByPartialIataCode(AIRCRAFT, '7', 3),
+        newFn: () => AIRCRAFT_INDEX.lookup('7'),
+      },
+      {
+        name: 'Aircraft exact "777"',
+        oldFn: () => filterObjectsByPartialIataCode(AIRCRAFT, '777', 3),
+        newFn: () => AIRCRAFT_INDEX.lookup('777'),
+      },
     ];
 
-    for (const test of testQueries) {
-      const start = performance.now();
+    console.log('Test Case                         Old (ms)    New (ms)    Speedup');
+    console.log('-'.repeat(70));
+
+    for (const test of testCases) {
+      // Benchmark old implementation
+      const oldStart = performance.now();
       for (let i = 0; i < iterations; i++) {
-        filterObjectsByPartialIataCode(test.collection, test.query, test.length);
+        test.oldFn();
       }
-      const end = performance.now();
-      const avgTime = (end - start) / iterations;
-      console.log(`${test.name}: ${avgTime.toFixed(4)} ms avg (${iterations} iterations)`);
+      const oldEnd = performance.now();
+      const oldAvg = (oldEnd - oldStart) / iterations;
+
+      // Benchmark new implementation
+      const newStart = performance.now();
+      for (let i = 0; i < iterations; i++) {
+        test.newFn();
+      }
+      const newEnd = performance.now();
+      const newAvg = (newEnd - newStart) / iterations;
+
+      const speedup = oldAvg / newAvg;
+      console.log(
+        `${test.name.padEnd(32)} ${oldAvg.toFixed(4).padStart(10)} ${newAvg.toFixed(4).padStart(10)} ${speedup.toFixed(1).padStart(8)}x`,
+      );
+
+      // Verify both return the same results
+      const oldResult = test.oldFn();
+      const newResult = test.newFn();
+      expect(newResult.length).toBe(oldResult.length);
     }
 
-    expect(true).toBe(true);
+    console.log('');
+    console.log('Note: Speedup > 1.0x means new implementation is faster');
   });
 });
