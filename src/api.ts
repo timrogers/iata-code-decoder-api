@@ -186,7 +186,7 @@ app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
 
-const filterObjectsByPartialIataCode = (
+export const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
   iataCodeLength: number,
