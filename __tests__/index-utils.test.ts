@@ -59,14 +59,35 @@ describe('IataCodeIndex', () => {
     });
 
     it('should handle items with missing iataCode', () => {
-      const dataWithMissing = [
+      const dataWithMissing: Partial<TestItem>[] = [
         { iataCode: 'ABC', name: 'Airport ABC' },
-        { name: 'No Code' } as TestItem,
+        { name: 'No Code' },
         { iataCode: 'DEF', name: 'Airport DEF' },
       ];
-      const indexWithMissing = new IataCodeIndex(dataWithMissing, 3);
+      const indexWithMissing = new IataCodeIndex(dataWithMissing as TestItem[], 3);
       expect(indexWithMissing.lookup('A').length).toBe(1);
       expect(indexWithMissing.lookup('D').length).toBe(1);
+    });
+
+    it('should handle empty string iataCode', () => {
+      const dataWithEmpty: Partial<TestItem>[] = [
+        { iataCode: 'ABC', name: 'Airport ABC' },
+        { iataCode: '', name: 'Empty Code' },
+        { iataCode: '  ', name: 'Whitespace Code' },
+        { iataCode: 'DEF', name: 'Airport DEF' },
+      ];
+      const indexWithEmpty = new IataCodeIndex(dataWithEmpty as TestItem[], 3);
+      expect(indexWithEmpty.lookup('A').length).toBe(1);
+      expect(indexWithEmpty.lookup('D').length).toBe(1);
+      expect(indexWithEmpty.lookup('')).toEqual([]);
+    });
+
+    it('should truncate codes longer than iataCodeLength', () => {
+      const dataWithLong: TestItem[] = [{ iataCode: 'ABCDEF', name: 'Long Code' }];
+      const indexWithLong = new IataCodeIndex(dataWithLong, 3);
+      // Should be indexed by first 3 characters only
+      expect(indexWithLong.lookup('ABC').length).toBe(1);
+      expect(indexWithLong.lookup('ABCD')).toEqual([]);
     });
   });
 });

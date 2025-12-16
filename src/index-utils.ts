@@ -31,11 +31,14 @@ export class IataCodeIndex<T extends Keyable> {
   private buildIndex(items: T[]): void {
     for (const item of items) {
       const iataCode = item.iataCode?.toLowerCase();
-      if (!iataCode) continue;
+      // Skip items without IATA codes or with empty/whitespace-only codes
+      if (!iataCode || iataCode.trim() === '') continue;
+      // Only index codes up to the maximum length
+      const codeToIndex = iataCode.substring(0, this.iataCodeLength);
 
       // Index by all prefixes of the IATA code
-      for (let prefixLen = 1; prefixLen <= iataCode.length; prefixLen++) {
-        const prefix = iataCode.substring(0, prefixLen);
+      for (let prefixLen = 1; prefixLen <= codeToIndex.length; prefixLen++) {
+        const prefix = codeToIndex.substring(0, prefixLen);
         const existing = this.prefixMap.get(prefix);
         if (existing) {
           existing.push(item);
