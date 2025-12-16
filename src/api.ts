@@ -200,6 +200,29 @@ const filterObjectsByPartialIataCode = (
   }
 };
 
+// Middleware to set common JSON headers with caching
+const setJsonHeaders = (req: Request, res: Response, next: () => void): void => {
+  res.header('Content-Type', 'application/json');
+  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  next();
+};
+
+// Helper function to validate and extract query parameter
+const validateQuery = (
+  req: Request,
+  res: Response,
+  required: boolean = true,
+): string | null => {
+  const query = req.query.query as string | undefined;
+
+  if (required && (query === undefined || query === '')) {
+    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
+    return null;
+  }
+
+  return query || '';
+};
+
 app.get('/health', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -209,47 +232,45 @@ app.get('/health', async (req: Request, res: Response): Promise<void> => {
   res.status(200).json({ success: true });
 });
 
-app.get('/airports', async (req: Request, res: Response): Promise<void> => {
-  res.header('Content-Type', 'application/json');
-  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+app.get(
+  '/airports',
+  setJsonHeaders,
+  async (req: Request, res: Response): Promise<void> => {
+    const query = validateQuery(req, res, true);
+    if (query === null) return;
 
-  if (req.query.query === undefined || req.query.query === '') {
-    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
-  } else {
-    const query = req.query.query as string;
     const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
     res.json({ data: airports });
-  }
-});
+  },
+);
 
-app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
-  res.header('Content-Type', 'application/json');
-  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+app.get(
+  '/airlines',
+  setJsonHeaders,
+  async (req: Request, res: Response): Promise<void> => {
+    const query = validateQuery(req, res, false);
+    if (query === null) return;
 
-  if (req.query.query === undefined || req.query.query === '') {
-    res.json({ data: AIRLINES });
-  } else {
-    const query = req.query.query as string;
-    const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+    if (query === '') {
+      res.json({ data: AIRLINES });
+    } else {
+      const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+      res.json({ data: airlines });
+    }
+  },
+);
 
-    res.json({
-      data: airlines,
-    });
-  }
-});
+app.get(
+  '/aircraft',
+  setJsonHeaders,
+  async (req: Request, res: Response): Promise<void> => {
+    const query = validateQuery(req, res, true);
+    if (query === null) return;
 
-app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
-  res.header('Content-Type', 'application/json');
-  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
-
-  if (req.query.query === undefined || req.query.query === '') {
-    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
-  } else {
-    const query = req.query.query as string;
     const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
     res.json({ data: aircraft });
-  }
-});
+  },
+);
 
 // MCP over HTTP endpoints
 app.post('/mcp', async (req: Request, res: Response): Promise<void> => {
