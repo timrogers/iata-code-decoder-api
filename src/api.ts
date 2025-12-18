@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
@@ -22,6 +22,30 @@ const QUERY_MUST_BE_PROVIDED_ERROR = {
   },
 };
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+
+// Generate a hash for ETag based on data content
+const generateETag = (data: unknown): string => {
+  const hash = createHash('md5')
+    .update(JSON.stringify(data))
+    .digest('hex')
+    .substring(0, 16);
+  return `W/"${hash}"`;
+};
+
+// Pre-compute data version hashes for ETags (computed once at startup)
+const AIRPORTS_ETAG = generateETag(AIRPORTS);
+const AIRLINES_ETAG = generateETag(AIRLINES);
+const AIRCRAFT_ETAG = generateETag(AIRCRAFT);
+
+// Check if any of the client's ETags match and should return 304
+const checkETagMatch = (req: Request, etag: string): boolean => {
+  const ifNoneMatch = req.headers['if-none-match'];
+  if (!ifNoneMatch) return false;
+
+  // Handle multiple ETags in the header (comma-separated)
+  const clientETags = ifNoneMatch.split(',').map((tag) => tag.trim());
+  return clientETags.includes(etag) || clientETags.includes('*');
+};
 
 // Map to store MCP transports by session ID
 const mcpTransports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
@@ -212,10 +236,17 @@ app.get('/health', async (req: Request, res: Response): Promise<void> => {
 app.get('/airports', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  res.header('ETag', AIRPORTS_ETAG);
 
   if (req.query.query === undefined || req.query.query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
+    // Check for conditional request
+    if (checkETagMatch(req, AIRPORTS_ETAG)) {
+      res.status(304).end();
+      return;
+    }
+
     const query = req.query.query as string;
     const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
     res.json({ data: airports });
@@ -225,6 +256,13 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
 app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  res.header('ETag', AIRLINES_ETAG);
+
+  // Check for conditional request
+  if (checkETagMatch(req, AIRLINES_ETAG)) {
+    res.status(304).end();
+    return;
+  }
 
   if (req.query.query === undefined || req.query.query === '') {
     res.json({ data: AIRLINES });
@@ -241,10 +279,17 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
 app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  res.header('ETag', AIRCRAFT_ETAG);
 
   if (req.query.query === undefined || req.query.query === '') {
     res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
   } else {
+    // Check for conditional request
+    if (checkETagMatch(req, AIRCRAFT_ETAG)) {
+      res.status(304).end();
+      return;
+    }
+
     const query = req.query.query as string;
     const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
     res.json({ data: aircraft });
