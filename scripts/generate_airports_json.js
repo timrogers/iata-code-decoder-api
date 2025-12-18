@@ -19,6 +19,16 @@ const duffel = new Duffel({
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const snakeCaseToCamelCase = (string) =>
+  string.replace(/(_[a-z])/gi, ($1) =>
+    $1.toUpperCase().replace('-', '').replace('_', ''),
+  );
+
+const cameliseKeys = (object) =>
+  Object.fromEntries(
+    Object.entries(object).map(([key, value]) => [snakeCaseToCamelCase(key), value]),
+  );
+
 const fetchAndWriteAirports = async () => {
   let airports = [];
 
@@ -28,7 +38,14 @@ const fetchAndWriteAirports = async () => {
     // `airportResponse` can contain properties that aren't defined in the
     // `Airline` type. If this is the case, they'll still be included in our
     // list and written to the file.
-    airports.push(airportResponse.data);
+    const camelisedAirport = cameliseKeys(airportResponse.data);
+
+    // Also camelise the nested city object if it exists
+    if (camelisedAirport.city) {
+      camelisedAirport.city = cameliseKeys(camelisedAirport.city);
+    }
+
+    airports.push(camelisedAirport);
 
     // We artificially sleep after each airport - even though each response
     // contains many airports - just to avoid hitting the rate limit and
