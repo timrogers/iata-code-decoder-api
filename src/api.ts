@@ -217,6 +217,21 @@ const checkIfNoneMatch = (ifNoneMatch: string | undefined, etag: string): boolea
   return etags.includes(etag);
 };
 
+const sendWithETag = (
+  res: Response,
+  data: unknown,
+  ifNoneMatch: string | undefined,
+): void => {
+  const etag = generateETag(data);
+  res.header('ETag', etag);
+
+  if (checkIfNoneMatch(ifNoneMatch, etag)) {
+    res.status(304).end();
+  } else {
+    res.json(data);
+  }
+};
+
 app.get('/health', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -236,16 +251,7 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
     const query = req.query.query as string;
     const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
     const responseData = { data: airports };
-    const etag = generateETag(responseData);
-
-    res.header('ETag', etag);
-
-    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
-      res.status(304).end();
-      return;
-    }
-
-    res.json(responseData);
+    sendWithETag(res, responseData, req.headers['if-none-match']);
   }
 });
 
@@ -255,30 +261,12 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
 
   if (req.query.query === undefined || req.query.query === '') {
     const responseData = { data: AIRLINES };
-    const etag = generateETag(responseData);
-
-    res.header('ETag', etag);
-
-    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
-      res.status(304).end();
-      return;
-    }
-
-    res.json(responseData);
+    sendWithETag(res, responseData, req.headers['if-none-match']);
   } else {
     const query = req.query.query as string;
     const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
     const responseData = { data: airlines };
-    const etag = generateETag(responseData);
-
-    res.header('ETag', etag);
-
-    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
-      res.status(304).end();
-      return;
-    }
-
-    res.json(responseData);
+    sendWithETag(res, responseData, req.headers['if-none-match']);
   }
 });
 
@@ -292,16 +280,7 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
     const query = req.query.query as string;
     const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
     const responseData = { data: aircraft };
-    const etag = generateETag(responseData);
-
-    res.header('ETag', etag);
-
-    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
-      res.status(304).end();
-      return;
-    }
-
-    res.json(responseData);
+    sendWithETag(res, responseData, req.headers['if-none-match']);
   }
 });
 
