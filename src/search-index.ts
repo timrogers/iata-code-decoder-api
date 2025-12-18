@@ -19,12 +19,12 @@
  * ```
  */
 
-export interface SearchIndex {
+export interface SearchIndex<T = unknown> {
   /** Map for exact IATA code matches (e.g., "lhr" -> [airport]) */
-  exact: Map<string, unknown[]>;
+  exact: Map<string, T[]>;
 
   /** Map for prefix matches (e.g., "l" -> [all L airports]) */
-  prefix: Map<string, unknown[]>;
+  prefix: Map<string, T[]>;
 }
 
 /**
@@ -52,7 +52,7 @@ export interface SearchIndex {
 export function buildSearchIndex<T extends { iataCode: string }>(
   items: T[],
   codeLength: number,
-): SearchIndex {
+): SearchIndex<T> {
   const exact = new Map<string, T[]>();
   const prefix = new Map<string, T[]>();
 
@@ -108,7 +108,7 @@ export function buildSearchIndex<T extends { iataCode: string }>(
  * ```
  */
 export function searchByCode<T>(
-  index: SearchIndex,
+  index: SearchIndex<T>,
   query: string,
   maxCodeLength: number,
 ): T[] {
@@ -123,12 +123,12 @@ export function searchByCode<T>(
   if (query.length === maxCodeLength) {
     const exactMatch = index.exact.get(normalizedQuery);
     if (exactMatch) {
-      return exactMatch as T[];
+      return exactMatch;
     }
   }
 
   // Fall back to prefix match
-  return (index.prefix.get(normalizedQuery) || []) as T[];
+  return index.prefix.get(normalizedQuery) || [];
 }
 
 /**
@@ -146,7 +146,9 @@ export function searchByCode<T>(
  * console.log(`Estimated memory: ${stats.estimatedMemoryMB}MB`);
  * ```
  */
-export function getIndexStats(index: SearchIndex): {
+export function getIndexStats<T = unknown>(
+  index: SearchIndex<T>,
+): {
   exactEntries: number;
   prefixEntries: number;
   totalItems: number;

@@ -5,9 +5,13 @@
  *
  * Usage:
  *   ts-node scripts/benchmark.ts
+ *   node --expose-gc -r ts-node/register scripts/benchmark.ts  (for GC stats)
  *
  * Or add to package.json:
  *   "benchmark": "ts-node scripts/benchmark.ts"
+ *
+ * Default iterations: 1000 (takes ~1-2 seconds on most systems)
+ * Adjust ITERATIONS constant below if needed for your environment
  */
 
 import { AIRPORTS } from '../src/airports.js';
@@ -33,7 +37,13 @@ const filterObjectsByPartialIataCode = (
 /**
  * Measures execution time of a function
  */
-function benchmark(name: string, fn: () => unknown, iterations: number = 1000): void {
+const ITERATIONS = 1000; // Adjust if needed for your environment
+
+function benchmark(
+  name: string,
+  fn: () => unknown,
+  iterations: number = ITERATIONS,
+): void {
   // Warm up
   for (let i = 0; i < 10; i++) {
     fn();
@@ -58,8 +68,9 @@ function benchmark(name: string, fn: () => unknown, iterations: number = 1000): 
  * Measures memory usage
  */
 function measureMemory(name: string): void {
-  if (global.gc) {
-    global.gc();
+  const globalWithGc = global as { gc?: () => void };
+  if (typeof globalWithGc.gc === 'function') {
+    globalWithGc.gc();
   }
   const used = process.memoryUsage();
   console.log(`\n${name}:`);

@@ -86,8 +86,8 @@ describe('SearchIndex', () => {
   });
 
   describe('searchByCode', () => {
-    let airportIndex: SearchIndex;
-    let airlineIndex: SearchIndex;
+    let airportIndex: SearchIndex<(typeof airports)[0]>;
+    let airlineIndex: SearchIndex<(typeof airlines)[0]>;
 
     beforeEach(() => {
       airportIndex = buildSearchIndex(airports, 3);
