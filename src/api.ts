@@ -206,6 +206,17 @@ const generateETag = (data: unknown): string => {
   return `"${hash.digest('hex')}"`;
 };
 
+const checkIfNoneMatch = (ifNoneMatch: string | undefined, etag: string): boolean => {
+  if (!ifNoneMatch) return false;
+
+  // Handle wildcard
+  if (ifNoneMatch.trim() === '*') return true;
+
+  // Handle comma-separated ETags
+  const etags = ifNoneMatch.split(',').map((e) => e.trim());
+  return etags.includes(etag);
+};
+
 app.get('/health', async (req: Request, res: Response): Promise<void> => {
   res.header('Content-Type', 'application/json');
   res.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -229,7 +240,7 @@ app.get('/airports', async (req: Request, res: Response): Promise<void> => {
 
     res.header('ETag', etag);
 
-    if (req.headers['if-none-match'] === etag) {
+    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
       res.status(304).end();
       return;
     }
@@ -248,7 +259,7 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
 
     res.header('ETag', etag);
 
-    if (req.headers['if-none-match'] === etag) {
+    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
       res.status(304).end();
       return;
     }
@@ -262,7 +273,7 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
 
     res.header('ETag', etag);
 
-    if (req.headers['if-none-match'] === etag) {
+    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
       res.status(304).end();
       return;
     }
@@ -285,7 +296,7 @@ app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
 
     res.header('ETag', etag);
 
-    if (req.headers['if-none-match'] === etag) {
+    if (checkIfNoneMatch(req.headers['if-none-match'], etag)) {
       res.status(304).end();
       return;
     }
