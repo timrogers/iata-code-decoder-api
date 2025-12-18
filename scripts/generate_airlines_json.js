@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 import { Duffel } from '@duffel/api';
+import { deepCameliseKeys } from './camelise_utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,7 +29,7 @@ const fetchAndWriteAirlines = async () => {
     // `airlineResponse` can contain properties that aren't defined in the
     // `Airline` type. If this is the case, they'll still be included in our
     // list and written to the file.
-    airlines.push(airlineResponse.data);
+    airlines.push(deepCameliseKeys(airlineResponse.data));
 
     // We artificially sleep after each airport - even though each response
     // contains many airports - just to avoid hitting the rate limit and
