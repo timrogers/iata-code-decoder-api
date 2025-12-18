@@ -94,6 +94,37 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
     });
+
+    it('should return ETag header', async () => {
+      const response = await request(app).get('/airports?query=LHR');
+
+      expect(response.status).toBe(200);
+      expect(response.headers['etag']).toBeDefined();
+      expect(response.headers['etag']).toMatch(/^"[a-f0-9]{64}"$/);
+    });
+
+    it('should return 304 when If-None-Match matches ETag', async () => {
+      const firstResponse = await request(app).get('/airports?query=LHR');
+      const etag = firstResponse.headers['etag'];
+
+      const secondResponse = await request(app)
+        .get('/airports?query=LHR')
+        .set('If-None-Match', etag);
+
+      expect(secondResponse.status).toBe(304);
+      expect(secondResponse.text).toBe('');
+      expect(secondResponse.headers['etag']).toBe(etag);
+    });
+
+    it('should return 200 when If-None-Match does not match ETag', async () => {
+      const response = await request(app)
+        .get('/airports?query=LHR')
+        .set('If-None-Match', '"invalid-etag"');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('data');
+      expect(response.headers['etag']).toBeDefined();
+    });
   });
 
   describe('GET /airlines', () => {
@@ -162,6 +193,48 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['content-type']).toMatch(/json/);
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
+    });
+
+    it('should return ETag header', async () => {
+      const response = await request(app).get('/airlines?query=BA');
+
+      expect(response.status).toBe(200);
+      expect(response.headers['etag']).toBeDefined();
+      expect(response.headers['etag']).toMatch(/^"[a-f0-9]{64}"$/);
+    });
+
+    it('should return 304 when If-None-Match matches ETag', async () => {
+      const firstResponse = await request(app).get('/airlines?query=BA');
+      const etag = firstResponse.headers['etag'];
+
+      const secondResponse = await request(app)
+        .get('/airlines?query=BA')
+        .set('If-None-Match', etag);
+
+      expect(secondResponse.status).toBe(304);
+      expect(secondResponse.text).toBe('');
+      expect(secondResponse.headers['etag']).toBe(etag);
+    });
+
+    it('should return ETag for all airlines when no query', async () => {
+      const response = await request(app).get('/airlines');
+
+      expect(response.status).toBe(200);
+      expect(response.headers['etag']).toBeDefined();
+      expect(response.headers['etag']).toMatch(/^"[a-f0-9]{64}"$/);
+    });
+
+    it('should return 304 for all airlines when If-None-Match matches', async () => {
+      const firstResponse = await request(app).get('/airlines');
+      const etag = firstResponse.headers['etag'];
+
+      const secondResponse = await request(app)
+        .get('/airlines')
+        .set('If-None-Match', etag);
+
+      expect(secondResponse.status).toBe(304);
+      expect(secondResponse.text).toBe('');
+      expect(secondResponse.headers['etag']).toBe(etag);
     });
   });
 
@@ -235,6 +308,37 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['content-type']).toMatch(/json/);
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
+    });
+
+    it('should return ETag header', async () => {
+      const response = await request(app).get('/aircraft?query=777');
+
+      expect(response.status).toBe(200);
+      expect(response.headers['etag']).toBeDefined();
+      expect(response.headers['etag']).toMatch(/^"[a-f0-9]{64}"$/);
+    });
+
+    it('should return 304 when If-None-Match matches ETag', async () => {
+      const firstResponse = await request(app).get('/aircraft?query=777');
+      const etag = firstResponse.headers['etag'];
+
+      const secondResponse = await request(app)
+        .get('/aircraft?query=777')
+        .set('If-None-Match', etag);
+
+      expect(secondResponse.status).toBe(304);
+      expect(secondResponse.text).toBe('');
+      expect(secondResponse.headers['etag']).toBe(etag);
+    });
+
+    it('should return 200 when If-None-Match does not match ETag', async () => {
+      const response = await request(app)
+        .get('/aircraft?query=777')
+        .set('If-None-Match', '"invalid-etag"');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('data');
+      expect(response.headers['etag']).toBeDefined();
     });
   });
 
