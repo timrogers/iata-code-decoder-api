@@ -25,15 +25,15 @@ export const deepCameliseKeys = (object) => {
   if (typeof object !== 'object') {
     return object;
   }
-  
+
   const camelised = cameliseKeys(object);
-  
+
   // Recursively camelise nested objects
   for (const [key, value] of Object.entries(camelised)) {
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       camelised[key] = deepCameliseKeys(value);
     }
   }
-  
+
   return camelised;
 };
