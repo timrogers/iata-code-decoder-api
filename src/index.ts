@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const DEFAULT_PORT = 3000;
+const PORT = parseInt(process.env.PORT || String(DEFAULT_PORT), 10);
 
 const start = async () => {
   try {
