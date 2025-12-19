@@ -1,7 +1,7 @@
 {
   "name": "iata-code-decoder-api",
   "version": "1.0.0",
-  "description": "A simple API, written in Node.js with the Express framework, which allows you to identify airports, airlines and aircraft by their IATA code",
+  "description": "A simple API, written in Node.js with the Fastify framework, which allows you to identify airports, airlines and aircraft by their IATA code",
   "type": "module",
   "scripts": {
     "generate-airports": "node scripts/generate_airports_json.js",
@@ -23,10 +23,14 @@
     "node": "24.x"
   },
   "dependencies": {
+    "@fastify/compress": "^8.3.0",
+    "@fastify/helmet": "^13.0.2",
+    "@fastify/rate-limit": "^10.3.0",
     "@modelcontextprotocol/sdk": "^1.13.3",
     "compression": "^1.8.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "fastify": "^5.6.2",
     "morgan": "^1.10.1"
   },
   "devDependencies": {
