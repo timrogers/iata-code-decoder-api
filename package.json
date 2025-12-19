@@ -24,6 +24,8 @@
   },
   "dependencies": {
     "@fastify/compress": "^8.3.0",
+    "@fastify/helmet": "^13.0.2",
+    "@fastify/rate-limit": "^10.3.0",
     "@modelcontextprotocol/sdk": "^1.13.3",
     "dotenv": "^16.4.7",
     "fastify": "^5.6.2"
