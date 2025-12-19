@@ -264,11 +264,15 @@ async function buildApp(): Promise<FastifyInstance> {
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(rateLimit, { max: 100, timeWindow: '1 minute' });
 
-  // Error handler
+  // Error handler - sanitize error messages in production
   app.setErrorHandler((error: FastifyError, request, reply) => {
     request.log.error(error);
     const statusCode = error.statusCode ?? 500;
-    const message = error.message ?? 'Internal Server Error';
+    // Only expose error messages for client errors (4xx), sanitize server errors (5xx)
+    const message =
+      statusCode >= 500
+        ? 'Internal Server Error'
+        : (error.message ?? 'Internal Server Error');
     reply.status(statusCode).send({ error: message });
   });
 
@@ -424,6 +428,8 @@ async function buildApp(): Promise<FastifyInstance> {
         }
 
         // Handle the request using raw request/response
+        // Note: MCP SDK's StreamableHTTPServerTransport requires raw Node.js
+        // HTTP objects, so we must use request.raw/reply.raw and hijack the response
         await transport.handleRequest(request.raw, reply.raw, request.body);
         // Mark reply as sent since we used raw response
         reply.hijack();
@@ -466,7 +472,5 @@ async function buildApp(): Promise<FastifyInstance> {
   return app;
 }
 
-// Export built app for testing and usage
-const app = await buildApp();
-export default app;
+// Export buildApp for use by index.ts and tests
 export { buildApp };

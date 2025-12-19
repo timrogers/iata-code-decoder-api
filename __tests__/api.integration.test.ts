@@ -1,6 +1,13 @@
-import app from '../src/api.js';
+import { buildApp } from '../src/api.js';
+import { FastifyInstance } from 'fastify';
 
 describe('IATA Code Decoder API - Integration Tests', () => {
+  let app: FastifyInstance;
+
+  beforeAll(async () => {
+    app = await buildApp();
+  });
+
   afterAll(async () => {
     await app.close();
   });
