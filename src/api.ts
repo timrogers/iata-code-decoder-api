@@ -1,6 +1,7 @@
-import express, { Request, Response } from 'express';
-import morgan from 'morgan';
-import compression from 'compression';
+import Fastify, { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import compress from '@fastify/compress';
+import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -14,7 +15,6 @@ import {
   isInitializeRequest,
 } from '@modelcontextprotocol/sdk/types.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-const app = express();
 
 const QUERY_MUST_BE_PROVIDED_ERROR = {
   data: {
@@ -182,10 +182,6 @@ function createMcpServer(): Server {
   return server;
 }
 
-app.use(compression());
-app.use(morgan('tiny'));
-app.use(express.json());
-
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
@@ -200,133 +196,283 @@ const filterObjectsByPartialIataCode = (
   }
 };
 
-app.get('/health', async (req: Request, res: Response): Promise<void> => {
-  res.header('Content-Type', 'application/json');
-  res.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  res.header('Pragma', 'no-cache');
-  res.header('Expires', '0');
+// Interface for query parameters
+interface QueryParams {
+  query?: string;
+}
 
-  res.status(200).json({ success: true });
-});
+// Create and configure Fastify app
+async function buildApp(): Promise<FastifyInstance> {
+  const app = Fastify({ logger: true });
 
-app.get('/airports', async (req: Request, res: Response): Promise<void> => {
-  res.header('Content-Type', 'application/json');
-  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+  // Register security plugins
+  await app.register(helmet, {
+    contentSecurityPolicy: false, // Disable CSP for API
+  });
+  await app.register(rateLimit, {
+    max: 100,
+    timeWindow: '1 minute',
+  });
+  await app.register(compress);
 
-  if (req.query.query === undefined || req.query.query === '') {
-    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
-  } else {
-    const query = req.query.query as string;
-    const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
-    res.json({ data: airports });
-  }
-});
+  // Error handler
+  app.setErrorHandler((error: Error & { statusCode?: number }, request, reply) => {
+    request.log.error(error);
+    reply.status(error.statusCode || 500).send({ error: error.message });
+  });
 
-app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
-  res.header('Content-Type', 'application/json');
-  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
-
-  if (req.query.query === undefined || req.query.query === '') {
-    res.json({ data: AIRLINES });
-  } else {
-    const query = req.query.query as string;
-    const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
-
-    res.json({
-      data: airlines,
-    });
-  }
-});
-
-app.get('/aircraft', async (req: Request, res: Response): Promise<void> => {
-  res.header('Content-Type', 'application/json');
-  res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
-
-  if (req.query.query === undefined || req.query.query === '') {
-    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
-  } else {
-    const query = req.query.query as string;
-    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
-    res.json({ data: aircraft });
-  }
-});
-
-// MCP over HTTP endpoints
-app.post('/mcp', async (req: Request, res: Response): Promise<void> => {
-  try {
-    // Check for existing session ID
-    const sessionId = req.headers['mcp-session-id'] as string | undefined;
-    let transport: StreamableHTTPServerTransport;
-
-    if (sessionId && mcpTransports[sessionId]) {
-      // Reuse existing transport
-      transport = mcpTransports[sessionId];
-    } else if (!sessionId && isInitializeRequest(req.body)) {
-      // New initialization request
-      transport = new StreamableHTTPServerTransport({
-        sessionIdGenerator: () => randomUUID(),
-        onsessioninitialized: (sessionId) => {
-          // Store the transport by session ID
-          mcpTransports[sessionId] = transport;
+  // Health endpoint
+  app.get(
+    '/health',
+    {
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              success: { type: 'boolean' },
+            },
+          },
         },
-      });
+      },
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      reply.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+      reply.header('Pragma', 'no-cache');
+      reply.header('Expires', '0');
+      return { success: true };
+    },
+  );
 
-      // Clean up transport when closed
-      transport.onclose = () => {
-        if (transport.sessionId) {
-          delete mcpTransports[transport.sessionId];
-        }
-      };
-
-      const server = createMcpServer();
-      // Connect to the MCP server
-      await server.connect(transport);
-    } else {
-      // Invalid request
-      res.status(400).json({
-        jsonrpc: '2.0',
-        error: {
-          code: -32000,
-          message: 'Bad Request: No valid session ID provided',
+  // Airports endpoint
+  app.get<{ Querystring: QueryParams }>(
+    '/airports',
+    {
+      schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            query: { type: 'string' },
+          },
         },
-        id: null,
-      });
-      return;
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              data: { type: 'array' },
+            },
+          },
+          400: {
+            type: 'object',
+            properties: {
+              data: {
+                type: 'object',
+                properties: {
+                  error: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    async (
+      request: FastifyRequest<{ Querystring: QueryParams }>,
+      reply: FastifyReply,
+    ) => {
+      reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+
+      if (request.query.query === undefined || request.query.query === '') {
+        reply.code(400);
+        return QUERY_MUST_BE_PROVIDED_ERROR;
+      }
+
+      const query = request.query.query;
+      const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+      return { data: airports };
+    },
+  );
+
+  // Airlines endpoint
+  app.get<{ Querystring: QueryParams }>(
+    '/airlines',
+    {
+      schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            query: { type: 'string' },
+          },
+        },
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              data: { type: 'array' },
+            },
+          },
+        },
+      },
+    },
+    async (
+      request: FastifyRequest<{ Querystring: QueryParams }>,
+      reply: FastifyReply,
+    ) => {
+      reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+
+      if (request.query.query === undefined || request.query.query === '') {
+        return { data: AIRLINES };
+      }
+
+      const query = request.query.query;
+      const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+      return { data: airlines };
+    },
+  );
+
+  // Aircraft endpoint
+  app.get<{ Querystring: QueryParams }>(
+    '/aircraft',
+    {
+      schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            query: { type: 'string' },
+          },
+        },
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              data: { type: 'array' },
+            },
+          },
+          400: {
+            type: 'object',
+            properties: {
+              data: {
+                type: 'object',
+                properties: {
+                  error: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    async (
+      request: FastifyRequest<{ Querystring: QueryParams }>,
+      reply: FastifyReply,
+    ) => {
+      reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+
+      if (request.query.query === undefined || request.query.query === '') {
+        reply.code(400);
+        return QUERY_MUST_BE_PROVIDED_ERROR;
+      }
+
+      const query = request.query.query;
+      const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+      return { data: aircraft };
+    },
+  );
+
+  // MCP POST endpoint
+  app.post('/mcp', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      // Check for existing session ID
+      const sessionId = request.headers['mcp-session-id'] as string | undefined;
+      let transport: StreamableHTTPServerTransport;
+
+      if (sessionId && mcpTransports[sessionId]) {
+        // Reuse existing transport
+        transport = mcpTransports[sessionId];
+      } else if (!sessionId && isInitializeRequest(request.body)) {
+        // New initialization request
+        transport = new StreamableHTTPServerTransport({
+          sessionIdGenerator: () => randomUUID(),
+          onsessioninitialized: (sessionId) => {
+            // Store the transport by session ID
+            mcpTransports[sessionId] = transport;
+          },
+        });
+
+        // Clean up transport when closed
+        transport.onclose = () => {
+          if (transport.sessionId) {
+            delete mcpTransports[transport.sessionId];
+          }
+        };
+
+        const server = createMcpServer();
+        // Connect to the MCP server
+        await server.connect(transport);
+      } else {
+        // Invalid request
+        reply.code(400);
+        return {
+          jsonrpc: '2.0',
+          error: {
+            code: -32000,
+            message: 'Bad Request: No valid session ID provided',
+          },
+          id: null,
+        };
+      }
+
+      // Handle the request using raw Node.js request/response
+      await transport.handleRequest(request.raw, reply.raw, request.body);
+      reply.hijack();
+    } catch (error) {
+      request.log.error(error);
+      if (!reply.sent) {
+        reply.code(500);
+        return {
+          jsonrpc: '2.0',
+          error: {
+            code: -32603,
+            message: 'Internal server error',
+          },
+          id: null,
+        };
+      }
+    }
+  });
+
+  // MCP GET endpoint for SSE
+  app.get('/mcp', async (request: FastifyRequest, reply: FastifyReply) => {
+    const sessionId = request.headers['mcp-session-id'] as string | undefined;
+    if (!sessionId || !mcpTransports[sessionId]) {
+      reply.code(400);
+      return reply.send('Invalid or missing session ID');
     }
 
-    // Handle the request
-    await transport.handleRequest(req, res, req.body);
-  } catch (error) {
-    console.error('Error handling MCP request:', error);
-    if (!res.headersSent) {
-      res.status(500).json({
-        jsonrpc: '2.0',
-        error: {
-          code: -32603,
-          message: 'Internal server error',
-        },
-        id: null,
-      });
+    const transport = mcpTransports[sessionId];
+    await transport.handleRequest(request.raw, reply.raw);
+    reply.hijack();
+  });
+
+  // MCP DELETE endpoint for session termination
+  app.delete('/mcp', async (request: FastifyRequest, reply: FastifyReply) => {
+    const sessionId = request.headers['mcp-session-id'] as string | undefined;
+    if (!sessionId || !mcpTransports[sessionId]) {
+      reply.code(400);
+      return reply.send('Invalid or missing session ID');
     }
-  }
-});
 
-// Reusable handler for GET and DELETE requests
-const handleSessionRequest = async (req: Request, res: Response) => {
-  const sessionId = req.headers['mcp-session-id'] as string | undefined;
-  if (!sessionId || !mcpTransports[sessionId]) {
-    res.status(400).send('Invalid or missing session ID');
-    return;
-  }
+    const transport = mcpTransports[sessionId];
+    await transport.handleRequest(request.raw, reply.raw);
+    reply.hijack();
+  });
 
-  const transport = mcpTransports[sessionId];
-  await transport.handleRequest(req, res);
-};
+  return app;
+}
 
-// Handle GET requests for server-to-client notifications via SSE
-app.get('/mcp', handleSessionRequest);
+// Export the app builder and a ready instance for testing
+export { buildApp };
 
-// Handle DELETE requests for session termination
-app.delete('/mcp', handleSessionRequest);
-
+// Create and export a default app instance
+const app = await buildApp();
 export default app;
