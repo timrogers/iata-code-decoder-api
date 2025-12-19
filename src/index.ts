@@ -3,8 +3,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = parseInt(process.env.PORT || '3000', 10);
 
-app.listen(PORT, (): void =>
-  console.log(`✈️  IATA Code Decoder API running on port ${PORT}`),
-);
+const start = async () => {
+  try {
+    await app.listen({ port: PORT, host: '0.0.0.0' });
+    console.log(`✈️  IATA Code Decoder API running on port ${PORT}`);
+  } catch (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
+};
+
+start();
