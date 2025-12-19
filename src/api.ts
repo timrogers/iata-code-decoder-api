@@ -422,7 +422,10 @@ async function buildApp(): Promise<FastifyInstance> {
         };
       }
 
-      // Handle the request using raw Node.js request/response
+      // Handle the request using raw Node.js request/response.
+      // We use reply.hijack() to tell Fastify that the response is being handled
+      // directly by the MCP transport, which manages its own response lifecycle
+      // for the streaming HTTP protocol.
       await transport.handleRequest(request.raw, reply.raw, request.body);
       reply.hijack();
     } catch (error) {
@@ -441,7 +444,9 @@ async function buildApp(): Promise<FastifyInstance> {
     }
   });
 
-  // MCP GET endpoint for SSE
+  // MCP GET endpoint for SSE (Server-Sent Events)
+  // The MCP transport handles the SSE response directly, so we use reply.hijack()
+  // to prevent Fastify from trying to send a response after the transport is done.
   app.get('/mcp', async (request: FastifyRequest, reply: FastifyReply) => {
     const sessionId = request.headers['mcp-session-id'] as string | undefined;
     if (!sessionId || !mcpTransports[sessionId]) {
@@ -455,6 +460,7 @@ async function buildApp(): Promise<FastifyInstance> {
   });
 
   // MCP DELETE endpoint for session termination
+  // Similar to GET, the transport handles the response directly.
   app.delete('/mcp', async (request: FastifyRequest, reply: FastifyReply) => {
     const sessionId = request.headers['mcp-session-id'] as string | undefined;
     if (!sessionId || !mcpTransports[sessionId]) {
