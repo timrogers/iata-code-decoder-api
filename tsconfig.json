@@ -2,9 +2,9 @@
     "compilerOptions": {
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "target": "ES6",
-        "module": "ESNext",
-        "moduleResolution": "Node"
+        "target": "ES2022",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext"
     },
     "include": ["src"],
     "exclude": ["node_modules"]

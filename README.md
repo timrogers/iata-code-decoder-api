@@ -1,6 +1,6 @@
 # IATA Code Decoder API
 
-A simple API, written in Node.js with the Express framework, which allows you to identify airports, airlines and aircraft by their IATA code.
+A simple API, written in Node.js with the Fastify framework, which allows you to identify airports, airlines and aircraft by their IATA code.
 
 This project provides two interfaces:
 1. **REST API**: Traditional HTTP endpoints for looking up IATA codes (`/airports`, `/airlines`, `/aircraft`)
@@ -39,7 +39,7 @@ The cached data is updated regularly and committed to the repository thanks to t
 
 ### Running tests
 
-The project includes comprehensive integration tests using Jest and Supertest.
+The project includes comprehensive integration tests using Jest.
 
 1. Make sure you're running at least Node.js v24 (v24.4.1 is recommended).
 2. Install the dependencies by running `npm install`.
