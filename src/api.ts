@@ -197,7 +197,7 @@ function createMcpServer(): Server {
 // Register compression plugin
 await app.register(fastifyCompress);
 
-const filterObjectsByPartialIataCode = (
+export const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
   iataCodeLength: number,
