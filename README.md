@@ -105,5 +105,5 @@ The server provides three tools:
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE.md).
+This project is licensed under the [GNU General Public License v3.0 or later](LICENSE.md).
 
