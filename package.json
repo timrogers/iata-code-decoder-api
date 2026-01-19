@@ -18,7 +18,7 @@
     "eslint-fix": "eslint . --fix"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",
-  "license": "Apache-2.0",
+  "license": "GPL-3.0-only",
   "engines": {
     "node": "24.x"
   },
