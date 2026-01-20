@@ -457,4 +457,57 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.json()).toHaveProperty('data');
     });
   });
+
+  describe('CORS Headers', () => {
+    it('should have CORS headers on /health endpoint', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should have CORS headers on /airports endpoint', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=LHR',
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should have CORS headers on /airlines endpoint', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airlines?query=BA',
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should have CORS headers on /aircraft endpoint', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/aircraft?query=777',
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should handle OPTIONS preflight requests', async () => {
+      const response = await app.inject({
+        method: 'OPTIONS',
+        url: '/health',
+        headers: {
+          'Access-Control-Request-Method': 'GET',
+          Origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(204);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-methods']).toBeDefined();
+    });
+  });
 });
