@@ -33,7 +33,8 @@ function buildLookupIndex<T extends Keyable>(
   // Build indexes
   for (const item of data) {
     const iataCode = item.iataCode;
-    if (!iataCode) continue;
+    // Skip items without a valid IATA code string
+    if (!iataCode || typeof iataCode !== 'string') continue;
 
     const lowerCode = iataCode.toLowerCase();
 
@@ -98,11 +99,15 @@ function lookupByPartialIataCode<T extends Keyable>(
  * Generic lookup function that works like the original filterObjectsByPartialIataCode.
  * This is a wrapper that maintains the original API signature.
  * 
+ * Note: This function is provided for compatibility but is not used in the optimized implementation.
+ * The preferred approach is to use createLookupFunction() which encapsulates the index.
+ * 
  * @param objects - Array of objects to search (not used, kept for API compatibility)
  * @param partialIataCode - IATA code or partial code to search for
- * @param iataCodeLength - Maximum IATA code length
+ * @param iataCodeLength - Maximum IATA code length (validated against index)
  * @param index - Pre-built lookup index to use
  * @returns Array of matching objects
+ * @throws Error if iataCodeLength doesn't match the index's maxLength
  */
 export function lookupObjects<T extends Keyable>(
   objects: T[],
@@ -110,6 +115,12 @@ export function lookupObjects<T extends Keyable>(
   iataCodeLength: number,
   index: LookupIndex<T>,
 ): T[] {
+  // Validate that the provided iataCodeLength matches the index configuration
+  if (iataCodeLength !== index.maxLength) {
+    throw new Error(
+      `Configuration mismatch: iataCodeLength (${iataCodeLength}) does not match index maxLength (${index.maxLength})`,
+    );
+  }
   return lookupByPartialIataCode(index, partialIataCode);
 }
 
