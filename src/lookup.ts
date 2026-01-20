@@ -18,7 +18,7 @@ interface LookupIndex<T extends Keyable> {
 /**
  * Build an optimized lookup index from an array of objects with IATA codes.
  * Pre-computes all possible prefixes for efficient partial matching.
- * 
+ *
  * @param data - Array of objects containing iataCode property
  * @param maxLength - Maximum expected IATA code length (e.g., 2 for airlines, 3 for airports)
  * @returns Optimized lookup index structure
@@ -33,7 +33,7 @@ function buildLookupIndex<T extends Keyable>(
   // Build indexes
   for (const item of data) {
     const iataCode = item.iataCode;
-    // Skip items without a valid IATA code string
+    // Skip items without a valid IATA code string (null, undefined, empty string, or non-string types)
     if (!iataCode || typeof iataCode !== 'string') continue;
 
     const lowerCode = iataCode.toLowerCase();
@@ -67,7 +67,7 @@ function buildLookupIndex<T extends Keyable>(
 /**
  * Perform an optimized lookup using the pre-built index.
  * Supports both exact matches and partial prefix matches.
- * 
+ *
  * @param index - Pre-built lookup index
  * @param partialIataCode - IATA code or partial code to search for
  * @returns Array of matching objects
@@ -102,10 +102,10 @@ function lookupByPartialIataCode<T extends Keyable>(
 /**
  * Generic lookup function that works like the original filterObjectsByPartialIataCode.
  * This is a wrapper that maintains the original API signature.
- * 
+ *
  * Note: This function is provided for compatibility but is not used in the optimized implementation.
  * The preferred approach is to use createLookupFunction() which encapsulates the index.
- * 
+ *
  * @param objects - Array of objects to search (not used, kept for API compatibility)
  * @param partialIataCode - IATA code or partial code to search for
  * @param iataCodeLength - Maximum IATA code length (validated against index)
@@ -114,7 +114,7 @@ function lookupByPartialIataCode<T extends Keyable>(
  * @throws Error if iataCodeLength doesn't match the index's maxLength
  */
 export function lookupObjects<T extends Keyable>(
-  objects: T[],
+  _objects: T[],
   partialIataCode: string,
   iataCodeLength: number,
   index: LookupIndex<T>,
@@ -131,7 +131,7 @@ export function lookupObjects<T extends Keyable>(
 /**
  * Create a specialized lookup function for a specific dataset.
  * This function builds the index once and returns a lookup function that uses it.
- * 
+ *
  * @param data - Array of objects to index
  * @param maxLength - Maximum IATA code length
  * @returns Function that performs optimized lookups on the indexed data

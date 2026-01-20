@@ -1,6 +1,6 @@
 /**
  * Performance Benchmark: Linear Filter vs Optimized Lookup
- * 
+ *
  * This benchmark compares the old linear filter approach with the new
  * optimized lookup using Maps and prefix indexing.
  */
@@ -54,7 +54,7 @@ const benchmark = (
   iterations: number = 10000,
 ): BenchmarkResult => {
   const times: number[] = [];
-  
+
   // Warmup
   for (let i = 0; i < 100; i++) {
     fn();
@@ -133,19 +133,19 @@ console.log('='.repeat(60));
 
 for (const query of airportQueries) {
   console.log(`\nQuery: "${query}"`);
-  
+
   const oldResult = benchmark(
     'Linear Filter (Old)',
     () => filterObjectsByPartialIataCode(AIRPORTS, query, 3),
     10000,
   );
-  
+
   const newResult = benchmark(
     'Map Lookup (Optimized)',
     () => lookupAirport(query),
     10000,
   );
-  
+
   printResult(oldResult);
   printResult(newResult);
   compareResults(oldResult, newResult);
@@ -158,19 +158,19 @@ console.log('='.repeat(60));
 
 for (const query of airlineQueries) {
   console.log(`\nQuery: "${query}"`);
-  
+
   const oldResult = benchmark(
     'Linear Filter (Old)',
     () => filterObjectsByPartialIataCode(AIRLINES, query, 2),
     10000,
   );
-  
+
   const newResult = benchmark(
     'Map Lookup (Optimized)',
     () => lookupAirline(query),
     10000,
   );
-  
+
   printResult(oldResult);
   printResult(newResult);
   compareResults(oldResult, newResult);
@@ -183,19 +183,19 @@ console.log('='.repeat(60));
 
 for (const query of aircraftQueries) {
   console.log(`\nQuery: "${query}"`);
-  
+
   const oldResult = benchmark(
     'Linear Filter (Old)',
     () => filterObjectsByPartialIataCode(AIRCRAFT, query, 3),
     10000,
   );
-  
+
   const newResult = benchmark(
     'Map Lookup (Optimized)',
     () => lookupAircraft(query),
     10000,
   );
-  
+
   printResult(oldResult);
   printResult(newResult);
   compareResults(oldResult, newResult);
@@ -207,7 +207,9 @@ console.log('BENCHMARK COMPLETE');
 console.log('='.repeat(60));
 console.log('\nSummary:');
 console.log(`- Index build time: ${formatTime(indexTime)} (one-time cost at startup)`);
-console.log(`- Data sizes: ${AIRPORTS.length} airports, ${AIRLINES.length} airlines, ${AIRCRAFT.length} aircraft`);
+console.log(
+  `- Data sizes: ${AIRPORTS.length} airports, ${AIRLINES.length} airlines, ${AIRCRAFT.length} aircraft`,
+);
 console.log('- All tests run with 10,000 iterations per query');
 console.log('- Optimized lookups use pre-built Map indexes for O(1) access');
 console.log('- Old implementation uses linear array filter for O(n) access');

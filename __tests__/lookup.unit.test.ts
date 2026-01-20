@@ -108,10 +108,10 @@ describe('Lookup Module - Unit Tests', () => {
   describe('lookupObjects', () => {
     it('should validate iataCodeLength matches index maxLength', () => {
       const index = buildLookupIndex(sampleData, 3);
-      
+
       // This should work
       expect(() => lookupObjects(sampleData, 'LHR', 3, index)).not.toThrow();
-      
+
       // This should throw
       expect(() => lookupObjects(sampleData, 'LHR', 2, index)).toThrow(
         'Configuration mismatch: iataCodeLength (2) does not match index maxLength (3)',
@@ -146,13 +146,13 @@ describe('Lookup Module - Unit Tests', () => {
         { iataCode: 'LHR', name: 'London Heathrow' },
       ];
       const lookup = createLookupFunction(airportData, 3);
-      
+
       const lResults = lookup('L');
       expect(lResults).toHaveLength(4);
-      
+
       const laResults = lookup('LA');
       expect(laResults).toHaveLength(3);
-      
+
       const lasResults = lookup('LAS');
       expect(lasResults).toHaveLength(1);
     });
@@ -164,10 +164,10 @@ describe('Lookup Module - Unit Tests', () => {
         { iataCode: '737', name: 'Boeing 737' },
       ];
       const lookup = createLookupFunction(aircraftData, 3);
-      
+
       const results7 = lookup('7');
       expect(results7).toHaveLength(3);
-      
+
       const results77 = lookup('77');
       expect(results77).toHaveLength(1);
       expect(results77[0].iataCode).toBe('777');

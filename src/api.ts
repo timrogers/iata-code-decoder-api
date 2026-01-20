@@ -11,7 +11,6 @@ import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
-import { Keyable } from './types.js';
 import { createLookupFunction } from './lookup.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import {
