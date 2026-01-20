@@ -28,7 +28,7 @@ jobs:
         env:
           DUFFEL_ACCESS_TOKEN: ${{ secrets.DUFFEL_ACCESS_TOKEN }}
         run: npm run generate-airports
-      - uses: stefanzweifel/git-auto-commit-action@v6
+      - uses: stefanzweifel/git-auto-commit-action@v7
         name: Commit and push any updates to data
         id: commit
         with:
