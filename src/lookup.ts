@@ -42,6 +42,7 @@ function buildLookupIndex<T extends Keyable>(
     if (!exactMap.has(lowerCode)) {
       exactMap.set(lowerCode, []);
     }
+    // Safe to use non-null assertion: we just checked/created the key above
     exactMap.get(lowerCode)!.push(item);
 
     // Add to prefix map for all prefixes
@@ -50,6 +51,7 @@ function buildLookupIndex<T extends Keyable>(
       if (!prefixMap.has(prefix)) {
         prefixMap.set(prefix, []);
       }
+      // Safe to use non-null assertion: we just checked/created the key above
       prefixMap.get(prefix)!.push(item);
     }
   }
@@ -83,11 +85,13 @@ function lookupByPartialIataCode<T extends Keyable>(
 
   // Check exact map first (full IATA code match)
   if (index.exactMap.has(lowerQuery)) {
+    // Safe to use non-null assertion: we just verified the key exists with has()
     return index.exactMap.get(lowerQuery)!;
   }
 
   // Check prefix map for partial matches
   if (index.prefixMap.has(lowerQuery)) {
+    // Safe to use non-null assertion: we just verified the key exists with has()
     return index.prefixMap.get(lowerQuery)!;
   }
 
