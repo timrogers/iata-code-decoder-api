@@ -43,11 +43,9 @@ describe('Aircraft - Unit Tests', () => {
     it('should contain commonly known aircraft types', () => {
       const iataCodesList = AIRCRAFT.map((a) => a.iataCode);
 
-      // Test for some well-known aircraft
-      const knownAircraft = ['777', '787', 'A320', 'A380', '737', '747'];
-      const foundAircraft = knownAircraft.filter((code) =>
-        iataCodesList.some((iata) => iata.includes(code)),
-      );
+      // Test for some well-known aircraft (exact matches)
+      const knownAircraft = ['777', '787', '320', '380', '737', '747'];
+      const foundAircraft = knownAircraft.filter((code) => iataCodesList.includes(code));
 
       // At least some of these should exist
       expect(foundAircraft.length).toBeGreaterThan(0);

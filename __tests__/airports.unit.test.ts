@@ -39,10 +39,9 @@ describe('Airports - Unit Tests', () => {
         expect(typeof airport.name).toBe('string');
         expect(typeof airport.iataCode).toBe('string');
         // icaoCode can be null or string
-        expect(['string', 'object'].includes(typeof airport.icaoCode)).toBe(true);
-        if (airport.icaoCode !== null) {
-          expect(typeof airport.icaoCode).toBe('string');
-        }
+        expect(airport.icaoCode === null || typeof airport.icaoCode === 'string').toBe(
+          true,
+        );
         expect(typeof airport.iataCountryCode).toBe('string');
         expect(typeof airport.cityName).toBe('string');
         expect(typeof airport.latitude).toBe('number');
