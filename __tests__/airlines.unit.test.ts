@@ -48,11 +48,11 @@ describe('Airlines - Unit Tests', () => {
 
     it('should contain commonly known airlines', () => {
       const iataCodesList = AIRLINES.map((a) => a.iataCode);
-      
+
       // Test for some well-known airlines
       const knownAirlines = ['BA', 'AA', 'DL', 'UA', 'LH', 'AF', 'KL'];
       const foundAirlines = knownAirlines.filter((code) => iataCodesList.includes(code));
-      
+
       // At least some of these should exist
       expect(foundAirlines.length).toBeGreaterThan(0);
     });
@@ -61,7 +61,7 @@ describe('Airlines - Unit Tests', () => {
       // Most IATA airline codes should be 2 characters
       const twoCharCodes = AIRLINES.filter((airline) => airline.iataCode.length === 2);
       expect(twoCharCodes.length).toBeGreaterThan(0);
-      
+
       // Most should be 2 characters (allowing for some exceptions)
       expect(twoCharCodes.length / AIRLINES.length).toBeGreaterThan(0.8);
     });

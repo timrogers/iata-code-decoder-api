@@ -23,9 +23,7 @@ describe('IATA Code Filtering - Unit Tests', () => {
     });
 
     it('should handle empty results for non-existent codes', () => {
-      const results = AIRPORTS.filter((a) =>
-        a.iataCode.toLowerCase().startsWith('zzzz'),
-      );
+      const results = AIRPORTS.filter((a) => a.iataCode.toLowerCase().startsWith('zzzz'));
 
       expect(results).toEqual([]);
     });
@@ -120,7 +118,7 @@ describe('IATA Code Filtering - Unit Tests', () => {
         a.iataCode.toLowerCase().startsWith('lhr'),
       );
       const upperResults = AIRPORTS.filter((a) =>
-        a.iataCode.toLowerCase().startsWith('lhr'.toLowerCase()),
+        a.iataCode.toLowerCase().startsWith('lhr'),
       );
 
       expect(lowerResults).toEqual(upperResults);
@@ -131,7 +129,7 @@ describe('IATA Code Filtering - Unit Tests', () => {
         a.iataCode.toLowerCase().startsWith('ba'),
       );
       const upperResults = AIRLINES.filter((a) =>
-        a.iataCode.toLowerCase().startsWith('ba'.toLowerCase()),
+        a.iataCode.toLowerCase().startsWith('ba'),
       );
 
       expect(lowerResults).toEqual(upperResults);
@@ -139,7 +137,7 @@ describe('IATA Code Filtering - Unit Tests', () => {
 
     it('should handle mixed case queries for aircraft', () => {
       const mixedResults = AIRCRAFT.filter((a) =>
-        a.iataCode.toLowerCase().startsWith('A320'.toLowerCase()),
+        a.iataCode.toLowerCase().startsWith('a320'),
       );
       const lowerResults = AIRCRAFT.filter((a) =>
         a.iataCode.toLowerCase().startsWith('a320'),

@@ -18,7 +18,7 @@ describe('Aircraft - Unit Tests', () => {
     it('should have camelCased property names', () => {
       const firstAircraft = AIRCRAFT[0];
       expect(firstAircraft).toHaveProperty('iataCode');
-      
+
       // Should not have snake_case
       expect(firstAircraft).not.toHaveProperty('iata_code');
     });
@@ -42,13 +42,13 @@ describe('Aircraft - Unit Tests', () => {
 
     it('should contain commonly known aircraft types', () => {
       const iataCodesList = AIRCRAFT.map((a) => a.iataCode);
-      
+
       // Test for some well-known aircraft
       const knownAircraft = ['777', '787', 'A320', 'A380', '737', '747'];
-      const foundAircraft = knownAircraft.filter((code) => 
-        iataCodesList.some((iata) => iata.includes(code))
+      const foundAircraft = knownAircraft.filter((code) =>
+        iataCodesList.some((iata) => iata.includes(code)),
       );
-      
+
       // At least some of these should exist
       expect(foundAircraft.length).toBeGreaterThan(0);
     });
@@ -77,7 +77,7 @@ describe('Aircraft - Unit Tests', () => {
     it('should have unique IATA codes', () => {
       const iataCodes = AIRCRAFT.map((a) => a.iataCode);
       const uniqueIataCodes = new Set(iataCodes);
-      
+
       // All IATA codes should be unique (or at least most of them)
       // Some aircraft might share codes with variants
       expect(uniqueIataCodes.size).toBeGreaterThan(AIRCRAFT.length * 0.9);
@@ -86,7 +86,7 @@ describe('Aircraft - Unit Tests', () => {
     it('should have unique IDs', () => {
       const ids = AIRCRAFT.map((a) => a.id);
       const uniqueIds = new Set(ids);
-      
+
       // All IDs should be unique
       expect(uniqueIds.size).toBe(AIRCRAFT.length);
     });

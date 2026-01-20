@@ -25,7 +25,7 @@ describe('Airports - Unit Tests', () => {
       expect(firstAirport).toHaveProperty('icaoCode');
       expect(firstAirport).toHaveProperty('iataCountryCode');
       expect(firstAirport).toHaveProperty('cityName');
-      
+
       // Should not have snake_case
       expect(firstAirport).not.toHaveProperty('iata_code');
       expect(firstAirport).not.toHaveProperty('icao_code');
@@ -73,11 +73,11 @@ describe('Airports - Unit Tests', () => {
 
     it('should contain commonly known airports', () => {
       const iataCodesList = AIRPORTS.map((a) => a.iataCode);
-      
+
       // Test for some well-known airports
       const knownAirports = ['LHR', 'JFK', 'LAX', 'CDG', 'DXB', 'SYD'];
       const foundAirports = knownAirports.filter((code) => iataCodesList.includes(code));
-      
+
       // At least some of these should exist
       expect(foundAirports.length).toBeGreaterThan(0);
     });
@@ -85,13 +85,13 @@ describe('Airports - Unit Tests', () => {
     it('should handle city data transformation', () => {
       // Find an airport with city data
       const airportWithCity = AIRPORTS.find((airport) => airport.city !== null);
-      
+
       if (airportWithCity && airportWithCity.city) {
         // City should have camelCased properties
         expect(airportWithCity.city).toHaveProperty('name');
         expect(airportWithCity.city).toHaveProperty('iataCode');
         expect(airportWithCity.city).toHaveProperty('iataCountryCode');
-        
+
         // Should not have snake_case
         expect(airportWithCity.city).not.toHaveProperty('iata_code');
         expect(airportWithCity.city).not.toHaveProperty('iata_country_code');
@@ -101,7 +101,7 @@ describe('Airports - Unit Tests', () => {
     it('should allow null city values', () => {
       // Some airports might not have city data
       const airportsWithNullCity = AIRPORTS.filter((airport) => airport.city === null);
-      
+
       // It's valid for some airports to have null city
       expect(airportsWithNullCity.length).toBeGreaterThanOrEqual(0);
     });
