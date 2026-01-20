@@ -102,3 +102,8 @@ The server provides three tools:
 - **Input**: `query` - The IATA aircraft code or partial code to search for
 - **Returns**: JSON object with matching aircraft including name and IATA code
 
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0 or later](LICENSE.md).
+
