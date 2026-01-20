@@ -218,13 +218,16 @@ const setCacheHeaders = (reply: FastifyReply): void => {
 };
 
 // Helper function to validate query parameter
+type ValidationSuccess = { isValid: true; query: string };
+type ValidationError = { isValid: false; error: typeof QUERY_MUST_BE_PROVIDED_ERROR };
+
 const validateQueryParameter = (
   query: string | undefined,
-): { isValid: boolean; error?: typeof QUERY_MUST_BE_PROVIDED_ERROR } => {
+): ValidationSuccess | ValidationError => {
   if (query === undefined || query === '') {
     return { isValid: false, error: QUERY_MUST_BE_PROVIDED_ERROR };
   }
-  return { isValid: true };
+  return { isValid: true, query };
 };
 
 // Query parameter interface
@@ -305,11 +308,10 @@ app.get<{ Querystring: QueryParams }>(
     const validation = validateQueryParameter(request.query.query);
     if (!validation.isValid) {
       reply.code(400);
-      return validation.error;
+      return (validation as ValidationError).error;
     }
 
-    const query = request.query.query!;
-    const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+    const airports = filterObjectsByPartialIataCode(AIRPORTS, validation.query, 3);
     return { data: airports };
   },
 );
@@ -357,11 +359,10 @@ app.get<{ Querystring: QueryParams }>(
     const validation = validateQueryParameter(request.query.query);
     if (!validation.isValid) {
       reply.code(400);
-      return validation.error;
+      return (validation as ValidationError).error;
     }
 
-    const query = request.query.query!;
-    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, validation.query, 3);
     return { data: aircraft };
   },
 );
