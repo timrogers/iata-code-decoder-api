@@ -227,7 +227,7 @@ app.get('/airlines', async (req: Request, res: Response): Promise<void> => {
   res.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
   if (req.query.query === undefined || req.query.query === '') {
-    res.status(400).json(QUERY_MUST_BE_PROVIDED_ERROR);
+    res.json({ data: AIRLINES });
   } else {
     const query = req.query.query as string;
     const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
