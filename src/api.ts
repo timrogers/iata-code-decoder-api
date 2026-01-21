@@ -211,6 +211,24 @@ const filterObjectsByPartialIataCode = (
   }
 };
 
+// Helper function to set standard cache headers
+const setStandardCacheHeaders = (reply: FastifyReply): void => {
+  reply.header('Content-Type', 'application/json');
+  reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+};
+
+// Helper function to validate required query parameter
+const validateRequiredQuery = (
+  query: string | undefined,
+  reply: FastifyReply,
+): boolean => {
+  if (query === undefined || query === '') {
+    reply.code(400);
+    return false;
+  }
+  return true;
+};
+
 // Query parameter interface
 interface QueryParams {
   query?: string;
@@ -284,17 +302,15 @@ app.get<{ Querystring: QueryParams }>(
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
-    reply.header('Content-Type', 'application/json');
-    reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+    setStandardCacheHeaders(reply);
 
-    if (request.query.query === undefined || request.query.query === '') {
-      reply.code(400);
+    if (!validateRequiredQuery(request.query.query, reply)) {
       return QUERY_MUST_BE_PROVIDED_ERROR;
-    } else {
-      const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
-      return { data: airports };
     }
+
+    const query = request.query.query!;
+    const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+    return { data: airports };
   },
 );
 
@@ -309,8 +325,7 @@ app.get<{ Querystring: QueryParams }>(
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
-    reply.header('Content-Type', 'application/json');
-    reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+    setStandardCacheHeaders(reply);
 
     if (request.query.query === undefined || request.query.query === '') {
       return { data: AIRLINES };
@@ -337,17 +352,15 @@ app.get<{ Querystring: QueryParams }>(
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
-    reply.header('Content-Type', 'application/json');
-    reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+    setStandardCacheHeaders(reply);
 
-    if (request.query.query === undefined || request.query.query === '') {
-      reply.code(400);
+    if (!validateRequiredQuery(request.query.query, reply)) {
       return QUERY_MUST_BE_PROVIDED_ERROR;
-    } else {
-      const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
-      return { data: aircraft };
     }
+
+    const query = request.query.query!;
+    const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+    return { data: aircraft };
   },
 );
 
