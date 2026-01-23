@@ -41,9 +41,7 @@ describe('Data modules and utilities', () => {
 
       expect(airportWithCity).toBeDefined();
 
-      const city = (
-        airportWithCity as unknown as { city: Record<string, unknown> }
-      ).city;
+      const city = (airportWithCity as unknown as { city: Record<string, unknown> }).city;
       expect(city).toHaveProperty('iataCode');
       expect(city).toHaveProperty('iataCountryCode');
       expect(city).not.toHaveProperty('iata_code');
