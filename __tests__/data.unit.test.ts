@@ -26,7 +26,7 @@ describe('Data modules and utilities', () => {
 
   describe('AIRPORTS', () => {
     it('camelises airport data keys', () => {
-      const airport = AIRPORTS[0] as Record<string, unknown>;
+      const airport = AIRPORTS[0] as unknown as Record<string, unknown>;
 
       expect(AIRPORTS.length).toBeGreaterThan(0);
       expect(airport).toHaveProperty('iataCode');
@@ -41,7 +41,9 @@ describe('Data modules and utilities', () => {
 
       expect(airportWithCity).toBeDefined();
 
-      const city = (airportWithCity as { city: Record<string, unknown> }).city;
+      const city = (
+        airportWithCity as unknown as { city: Record<string, unknown> }
+      ).city;
       expect(city).toHaveProperty('iataCode');
       expect(city).toHaveProperty('iataCountryCode');
       expect(city).not.toHaveProperty('iata_code');
@@ -63,7 +65,7 @@ describe('Data modules and utilities', () => {
     it('camelises aircraft data keys', () => {
       expect(AIRCRAFT.length).toBeGreaterThan(0);
 
-      const aircraft = AIRCRAFT[0] as Record<string, unknown>;
+      const aircraft = AIRCRAFT[0] as unknown as Record<string, unknown>;
       expect(aircraft).toHaveProperty('iataCode');
       expect(aircraft).toHaveProperty('name');
       expect(aircraft).not.toHaveProperty('iata_code');
