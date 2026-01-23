@@ -1,11 +1,11 @@
-import { Keyable } from './types.js';
+import { ObjectWithIataCode } from './types.js';
 
 /**
  * A prefix-indexed lookup structure for fast IATA code searches.
  * Pre-indexes all items by their IATA code prefixes for O(1) exact matches
  * and efficient prefix searches.
  */
-export interface PrefixIndex<T extends Keyable> {
+export interface PrefixIndex<T extends ObjectWithIataCode> {
   /** Map from lowercase IATA code prefix to array of matching items */
   byPrefix: Map<string, T[]>;
   /** All items in the collection */
@@ -18,7 +18,7 @@ export interface PrefixIndex<T extends Keyable> {
  * Creates a prefix index for a collection of items with IATA codes.
  * Pre-computes all prefixes (e.g., for "LHR": "l", "lh", "lhr") for fast lookup.
  */
-export function createPrefixIndex<T extends Keyable>(
+export function createPrefixIndex<T extends ObjectWithIataCode>(
   items: T[],
   iataCodeLength: number,
 ): PrefixIndex<T> {
@@ -45,7 +45,7 @@ export function createPrefixIndex<T extends Keyable>(
  * Looks up items by partial or complete IATA code using the prefix index.
  * Returns empty array if query is longer than the IATA code length.
  */
-export function lookupByIataCode<T extends Keyable>(
+export function lookupByIataCode<T extends ObjectWithIataCode>(
   index: PrefixIndex<T>,
   partialIataCode: string,
 ): T[] {
