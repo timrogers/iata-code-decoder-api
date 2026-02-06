@@ -457,4 +457,73 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.json()).toHaveProperty('data');
     });
   });
+
+  describe('CORS Support', () => {
+    it('should include CORS headers on GET /health', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should include CORS headers on GET /airports', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=LHR',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should include CORS headers on GET /airlines', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airlines?query=BA',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should include CORS headers on GET /aircraft', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/aircraft?query=777',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should handle OPTIONS preflight requests', async () => {
+      const response = await app.inject({
+        method: 'OPTIONS',
+        url: '/airports',
+        headers: {
+          origin: 'https://example.com',
+          'access-control-request-method': 'GET',
+        },
+      });
+
+      expect(response.statusCode).toBe(204);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-methods']).toBeDefined();
+    });
+  });
 });
