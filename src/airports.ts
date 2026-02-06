@@ -1,17 +1,5 @@
 import { Airport } from './types.js';
-import AIRPORTS_DATA from './../data/airports.json' with { type: 'json' };
-import { cameliseKeys } from './utils.js';
+import AIRPORTS_DATA from './../data/airports.transformed.json' with { type: 'json' };
 
-const airportDataToAirport = (airport: object): Airport => {
-  const camelisedAirport = cameliseKeys(airport) as Airport;
-
-  if (camelisedAirport.city) {
-    return Object.assign(camelisedAirport, {
-      city: cameliseKeys(camelisedAirport.city),
-    }) as Airport;
-  } else {
-    return camelisedAirport as Airport;
-  }
-};
-
-export const AIRPORTS: Airport[] = AIRPORTS_DATA.map(airportDataToAirport);
+// Data is pre-transformed at build time for better performance
+export const AIRPORTS: Airport[] = AIRPORTS_DATA as Airport[];

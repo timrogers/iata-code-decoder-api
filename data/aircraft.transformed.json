@@ -1,0 +1,2557 @@
+[
+  {
+    "iataCode": "AT5",
+    "name": "Aerospatiale/Alenia ATR 42-500",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hi"
+  },
+  {
+    "iataCode": "SSC",
+    "name": "Aerospatiale/British Aerospace Concorde (discontinued)",
+    "id": "arc_00009VMF8AibOVIXTVmwwU"
+  },
+  {
+    "iataCode": "ND2",
+    "name": "Aerospatiale/Nord 262",
+    "id": "arc_00009VMF8AibOVIXTVmwwJ"
+  },
+  {
+    "iataCode": "NDC",
+    "name": "Aerospatiale SN601 Corvette",
+    "id": "arc_00009VMF8AibOVIXTVmwwK"
+  },
+  {
+    "iataCode": "CRV",
+    "name": "Aerospatiale/SUD SE210 Caravelle",
+    "id": "arc_00009VMF8AhtR8jNRJSNpi"
+  },
+  {
+    "iataCode": "AGH",
+    "name": "AgustaWestland A109",
+    "id": "arc_00009VMF8AhXSSRnQDI6HX"
+  },
+  {
+    "iataCode": "AWH",
+    "name": "AgustaWestland AW139",
+    "id": "arc_00009oBdrPiW5WkC9haUD8"
+  },
+  {
+    "iataCode": "AW6",
+    "name": "AgustaWestland AW169",
+    "id": "arc_00009oBdrPis4D1mAnkllh"
+  },
+  {
+    "iataCode": "AW8",
+    "name": "AgustaWestland AW189",
+    "id": "arc_00009oBdrPis4D1mAnklli"
+  },
+  {
+    "iataCode": "32S",
+    "name": "Airbus A138/A319/A320/A321",
+    "id": "arc_00009VMF8AgpV5sdO0xXAt"
+  },
+  {
+    "iataCode": "31A",
+    "name": "Airbus A138 (sharklets)",
+    "id": "arc_00009oBdrPis4D1mAnkllQ"
+  },
+  {
+    "iataCode": "220",
+    "name": "Airbus A220",
+    "id": "arc_00009oBdrPis4D1mAnkllK"
+  },
+  {
+    "iataCode": "221",
+    "name": "Airbus A220-100",
+    "id": "arc_00009oBdrPis4D1mAnkllL"
+  },
+  {
+    "iataCode": "223",
+    "name": "Airbus A220-300",
+    "id": "arc_00009oBdrPis4D1mAnkllM"
+  },
+  {
+    "iataCode": "AB3",
+    "name": "Airbus A300",
+    "id": "arc_00009VMF8AhXSSRnQDI6HP"
+  },
+  {
+    "iataCode": "ABF",
+    "name": "Airbus A300",
+    "id": "arc_00009VMF8AhXSSRnQDI6HT"
+  },
+  {
+    "iataCode": "AB6",
+    "name": "Airbus A300-600",
+    "id": "arc_00009VMF8AhXSSRnQDI6HR"
+  },
+  {
+    "iataCode": "ABY",
+    "name": "Airbus A300-600",
+    "id": "arc_00009VMF8AhXSSRnQDI6HV"
+  },
+  {
+    "iataCode": "ABB",
+    "name": "Airbus A300-600ST Beluga",
+    "id": "arc_00009VMF8AhXSSRnQDI6HS"
+  },
+  {
+    "iataCode": "AB4",
+    "name": "Airbus A300B2/A300B4",
+    "id": "arc_00009VMF8AhXSSRnQDI6HQ"
+  },
+  {
+    "iataCode": "ABX",
+    "name": "Airbus A300B4/A300C4/A300F4",
+    "id": "arc_00009VMF8AhXSSRnQDI6HU"
+  },
+  {
+    "iataCode": "310",
+    "name": "Airbus A310",
+    "id": "arc_00009VMF8AgpV5sdO0xXAj"
+  },
+  {
+    "iataCode": "31F",
+    "name": "Airbus A310",
+    "id": "arc_00009VMF8AgpV5sdO0xXAo"
+  },
+  {
+    "iataCode": "312",
+    "name": "Airbus A310-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXAk"
+  },
+  {
+    "iataCode": "31X",
+    "name": "Airbus A310-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXAp"
+  },
+  {
+    "iataCode": "313",
+    "name": "Airbus A310-300",
+    "id": "arc_00009VMF8AgpV5sdO0xXAl"
+  },
+  {
+    "iataCode": "31Y",
+    "name": "Airbus A310-300",
+    "id": "arc_00009VMF8AgpV5sdO0xXAq"
+  },
+  {
+    "iataCode": "318",
+    "name": "Airbus A318",
+    "id": "arc_00009VMF8AgpV5sdO0xXAm"
+  },
+  {
+    "iataCode": "319",
+    "name": "Airbus A319",
+    "id": "arc_00009VMF8AgpV5sdO0xXAn"
+  },
+  {
+    "iataCode": "31N",
+    "name": "Airbus A319neo",
+    "id": "arc_00009oBdrPis4D1mAnkllS"
+  },
+  {
+    "iataCode": "31B",
+    "name": "Airbus A319 (sharklets)",
+    "id": "arc_00009oBdrPis4D1mAnkllR"
+  },
+  {
+    "iataCode": "32F",
+    "name": "Airbus A320",
+    "id": "arc_00009oBdrPiA6qSc8bQCeW"
+  },
+  {
+    "iataCode": "320",
+    "name": "Airbus A320",
+    "id": "arc_00009VMF8AgpV5sdO0xXAr"
+  },
+  {
+    "iataCode": "32N",
+    "name": "Airbus A320neo",
+    "id": "arc_00009lcSPZuSbgKG1u4Pkn"
+  },
+  {
+    "iataCode": "32A",
+    "name": "Airbus A320 (sharklets)",
+    "id": "arc_00009Y7nq3J0w9nlhN3x3Y"
+  },
+  {
+    "iataCode": "32X",
+    "name": "Airbus A321",
+    "id": "arc_00009oBdrPiA6qSc8bQCeX"
+  },
+  {
+    "iataCode": "321",
+    "name": "Airbus A321",
+    "id": "arc_00009VMF8AgpV5sdO0xXAs"
+  },
+  {
+    "iataCode": "32Q",
+    "name": "Airbus A321neo",
+    "id": "arc_00009lcSPZuSbgKG1u4Pku"
+  },
+  {
+    "iataCode": "32B",
+    "name": "Airbus A321 (sharklets)",
+    "id": "arc_00009Y7sFfofqcSYTljSwS"
+  },
+  {
+    "iataCode": "33F",
+    "name": "Airbus A330",
+    "id": "arc_00009oBdrPis4D1mAnkllU"
+  },
+  {
+    "iataCode": "330",
+    "name": "Airbus A330",
+    "id": "arc_00009VMF8AgpV5sdO0xXAu"
+  },
+  {
+    "iataCode": "33X",
+    "name": "Airbus A330-200",
+    "id": "arc_00009oBdrPiW5WkC9haUCm"
+  },
+  {
+    "iataCode": "332",
+    "name": "Airbus A330-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXAv"
+  },
+  {
+    "iataCode": "33Y",
+    "name": "Airbus A330-300",
+    "id": "arc_00009oBdrPis4D1mAnkllV"
+  },
+  {
+    "iataCode": "333",
+    "name": "Airbus A330-300",
+    "id": "arc_00009VMF8AgpV5sdO0xXAw"
+  },
+  {
+    "iataCode": "338",
+    "name": "Airbus A330-800 Neo",
+    "id": "arc_0000AOfC5IqLBpWx4wp8u8"
+  },
+  {
+    "iataCode": "339",
+    "name": "Airbus A330-900neo",
+    "id": "arc_00009oBdrPis4D1mAnkllT"
+  },
+  {
+    "iataCode": "340",
+    "name": "Airbus A340",
+    "id": "arc_00009VMF8AgpV5sdO0xXAx"
+  },
+  {
+    "iataCode": "342",
+    "name": "Airbus A340-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXAy"
+  },
+  {
+    "iataCode": "343",
+    "name": "Airbus A340-300",
+    "id": "arc_00009VMF8AgpV5sdO0xXAz"
+  },
+  {
+    "iataCode": "345",
+    "name": "Airbus A340-500",
+    "id": "arc_00009VMF8AgpV5sdO0xXB0"
+  },
+  {
+    "iataCode": "346",
+    "name": "Airbus A340-600",
+    "id": "arc_00009VMF8AgpV5sdO0xXB1"
+  },
+  {
+    "iataCode": "350",
+    "name": "Airbus A350",
+    "id": "arc_00009oBdrPis4D1mAnkllW"
+  },
+  {
+    "iataCode": "351",
+    "name": "Airbus A350-1000",
+    "id": "arc_00009oBdrPiW5WkC9haUCo"
+  },
+  {
+    "iataCode": "358",
+    "name": "Airbus A350-800",
+    "id": "arc_00009oBdrPiW5WkC9haUCn"
+  },
+  {
+    "iataCode": "359",
+    "name": "Airbus A350-900",
+    "id": "arc_00009Y7soL1P9aXc7ZDTdo"
+  },
+  {
+    "iataCode": "380",
+    "name": "Airbus A380",
+    "id": "arc_00009VMF8AgpV5sdO0xXB2"
+  },
+  {
+    "iataCode": "388",
+    "name": "Airbus A380-800",
+    "id": "arc_00009VMF8AgpV5sdO0xXB3"
+  },
+  {
+    "iataCode": "38F",
+    "name": "Airbus A380-800F",
+    "id": "arc_00009VMF8AgpV5sdO0xXB4"
+  },
+  {
+    "iataCode": "L4F",
+    "name": "Aircraft Industries (LET) 410",
+    "id": "arc_00009oBdrPiW5WkC9haUE7"
+  },
+  {
+    "iataCode": "L4T",
+    "name": "Aircraft Industries (LET) 410",
+    "id": "arc_00009VMF8AibOVIXTVmww1"
+  },
+  {
+    "iataCode": "ANF",
+    "name": "Antonov An-12",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hb"
+  },
+  {
+    "iataCode": "A4F",
+    "name": "Antonov An-124 Ruslan",
+    "id": "arc_00009VMF8AhXSSRnQDI6HN"
+  },
+  {
+    "iataCode": "A40",
+    "name": "Antonov An-140",
+    "id": "arc_00009VMF8AhXSSRnQDI6HM"
+  },
+  {
+    "iataCode": "A81",
+    "name": "Antonov AN148-100",
+    "id": "arc_00009VMF8AhXSSRnQDI6HO"
+  },
+  {
+    "iataCode": "A58",
+    "name": "Antonov An-158",
+    "id": "arc_00009oBdrPiW5WkC9haUD1"
+  },
+  {
+    "iataCode": "A78",
+    "name": "Antonov An-178",
+    "id": "arc_00009oBdrPis4D1mAnkllg"
+  },
+  {
+    "iataCode": "A22",
+    "name": "Antonov An-22",
+    "id": "arc_00009oBdrPiW5WkC9haUCz"
+  },
+  {
+    "iataCode": "A5F",
+    "name": "Antonov An-225",
+    "id": "arc_00009oBdrPiW5WkC9haUD2"
+  },
+  {
+    "iataCode": "AN4",
+    "name": "Antonov An-24",
+    "id": "arc_00009VMF8AhXSSRnQDI6HY"
+  },
+  {
+    "iataCode": "A26",
+    "name": "Antonov An-26",
+    "id": "arc_00009VMF8AhXSSRnQDI6HI"
+  },
+  {
+    "iataCode": "AN6",
+    "name": "Antonov An-26/An-30/An-32",
+    "id": "arc_00009VMF8AhXSSRnQDI6HZ"
+  },
+  {
+    "iataCode": "A28",
+    "name": "Antonov An-28/PZL Mielec M-28 Skytruck",
+    "id": "arc_00009VMF8AhXSSRnQDI6HJ"
+  },
+  {
+    "iataCode": "A30",
+    "name": "Antonov An-30",
+    "id": "arc_00009VMF8AhXSSRnQDI6HK"
+  },
+  {
+    "iataCode": "A32",
+    "name": "Antonov An-32",
+    "id": "arc_00009VMF8AhXSSRnQDI6HL"
+  },
+  {
+    "iataCode": "A38",
+    "name": "Antonov An-38",
+    "id": "arc_00009oBdrPiW5WkC9haUD0"
+  },
+  {
+    "iataCode": "AN7",
+    "name": "Antonov An-72/An-74",
+    "id": "arc_00009VMF8AhXSSRnQDI6Ha"
+  },
+  {
+    "iataCode": "ATZ",
+    "name": "ATR 42",
+    "id": "arc_00009oBdrPiW5WkC9haUD9"
+  },
+  {
+    "iataCode": "AT4",
+    "name": "ATR 42-300/320",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hh"
+  },
+  {
+    "iataCode": "ATR",
+    "name": "ATR 42/ATR 72",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hl"
+  },
+  {
+    "iataCode": "ATF",
+    "name": "ATR 72",
+    "id": "arc_00009oBdrPiW5WkC9haUD7"
+  },
+  {
+    "iataCode": "AT7",
+    "name": "ATR 72",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hj"
+  },
+  {
+    "iataCode": "AR1",
+    "name": "Avro RJ100",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hc"
+  },
+  {
+    "iataCode": "AR7",
+    "name": "Avro RJ70",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hd"
+  },
+  {
+    "iataCode": "ARJ",
+    "name": "Avro RJ70/RJ85/RJ100",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hf"
+  },
+  {
+    "iataCode": "AR8",
+    "name": "Avro RJ85",
+    "id": "arc_00009VMF8AhXSSRnQDI6He"
+  },
+  {
+    "iataCode": "ARX",
+    "name": "Avro RJX",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hg"
+  },
+  {
+    "iataCode": "AX1",
+    "name": "Avro RJX100",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hm"
+  },
+  {
+    "iataCode": "AX8",
+    "name": "Avro RJX85",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hn"
+  },
+  {
+    "iataCode": "146",
+    "name": "BAE Systems 146",
+    "id": "arc_00009VMF8AgpV5sdO0xXAe"
+  },
+  {
+    "iataCode": "14F",
+    "name": "BAE Systems 146",
+    "id": "arc_00009VMF8AgpV5sdO0xXAf"
+  },
+  {
+    "iataCode": "14X",
+    "name": "BAE Systems 146-100",
+    "id": "arc_00009VMF8AgpV5sdO0xXAg"
+  },
+  {
+    "iataCode": "141",
+    "name": "BAE Systems 146-100",
+    "id": "arc_00009VMF8AgTWPb3MunFcP"
+  },
+  {
+    "iataCode": "14Y",
+    "name": "BAE Systems 146-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXAh"
+  },
+  {
+    "iataCode": "142",
+    "name": "BAE Systems 146-200",
+    "id": "arc_00009VMF8AgTWPb3MunFcQ"
+  },
+  {
+    "iataCode": "14Z",
+    "name": "BAE Systems 146-300",
+    "id": "arc_00009VMF8AgpV5sdO0xXAi"
+  },
+  {
+    "iataCode": "143",
+    "name": "BAE Systems 146-300",
+    "id": "arc_00009VMF8AgTWPb3MunFcR"
+  },
+  {
+    "iataCode": "APF",
+    "name": "BAE Systems ATP",
+    "id": "arc_00009oBdrPiW5WkC9haUD5"
+  },
+  {
+    "iataCode": "ATP",
+    "name": "BAE Systems ATP",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hk"
+  },
+  {
+    "iataCode": "B11",
+    "name": "BAE Systems (BAC) One-Eleven",
+    "id": "arc_00009VMF8AhXSSRnQDI6Ho"
+  },
+  {
+    "iataCode": "B12",
+    "name": "BAE Systems (BAC) One-Eleven 200",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hp"
+  },
+  {
+    "iataCode": "B13",
+    "name": "BAE Systems (BAC) One-Eleven 300",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hq"
+  },
+  {
+    "iataCode": "B14",
+    "name": "BAE Systems (BAC) One-Eleven 400/475",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hr"
+  },
+  {
+    "iataCode": "B15",
+    "name": "BAE Systems (BAC) One-Eleven 500/RomBac",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hs"
+  },
+  {
+    "iataCode": "DHD",
+    "name": "BAE Systems (De Havilland) 104 Dove",
+    "id": "arc_00009oBdrPiW5WkC9haUDm"
+  },
+  {
+    "iataCode": "DHH",
+    "name": "BAE Systems (De Havilland) 114 Heron",
+    "id": "arc_00009oBdrPiW5WkC9haUDo"
+  },
+  {
+    "iataCode": "HS7",
+    "name": "BAE Systems (Hawker Siddeley) 748/Andover",
+    "id": "arc_00009VMF8AiFPp0xSPcfOO"
+  },
+  {
+    "iataCode": "JST",
+    "name": "BAE Systems Jetstream",
+    "id": "arc_00009VMF8AiFPp0xSPcfOc"
+  },
+  {
+    "iataCode": "J31",
+    "name": "BAE Systems Jetstream 31",
+    "id": "arc_00009VMF8AiFPp0xSPcfOZ"
+  },
+  {
+    "iataCode": "J32",
+    "name": "BAE Systems Jetstream 32",
+    "id": "arc_00009VMF8AiFPp0xSPcfOa"
+  },
+  {
+    "iataCode": "J41",
+    "name": "BAE Systems Jetstream 41",
+    "id": "arc_00009VMF8AiFPp0xSPcfOb"
+  },
+  {
+    "iataCode": "BH2",
+    "name": "Bell (Helicopters)",
+    "id": "arc_00009VMF8AhtR8jNRJSNpR"
+  },
+  {
+    "iataCode": "D1F",
+    "name": "Boeign (Douglas) DC-10",
+    "id": "arc_00009VMF8AhtR8jNRJSNps"
+  },
+  {
+    "iataCode": "703",
+    "name": "Boeing 707-320B/320C",
+    "id": "arc_00009VMF8AgpV5sdO0xXB5"
+  },
+  {
+    "iataCode": "70F",
+    "name": "Boeing 707-320B/320C",
+    "id": "arc_00009VMF8AgpV5sdO0xXB7"
+  },
+  {
+    "iataCode": "70M",
+    "name": "Boeing 707-320B/320C",
+    "id": "arc_00009VMF8AgpV5sdO0xXB8"
+  },
+  {
+    "iataCode": "707",
+    "name": "Boeing 707/720",
+    "id": "arc_00009VMF8AgpV5sdO0xXB6"
+  },
+  {
+    "iataCode": "717",
+    "name": "Boeing 717-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXB9"
+  },
+  {
+    "iataCode": "B72",
+    "name": "Boeing 720-020B",
+    "id": "arc_00009VMF8AhXSSRnQDI6Ht"
+  },
+  {
+    "iataCode": "727",
+    "name": "Boeing 727",
+    "id": "arc_00009VMF8AgpV5sdO0xXBC"
+  },
+  {
+    "iataCode": "72F",
+    "name": "Boeing 727",
+    "id": "arc_00009VMF8AgpV5sdO0xXBG"
+  },
+  {
+    "iataCode": "72M",
+    "name": "Boeing 727",
+    "id": "arc_00009VMF8AgpV5sdO0xXBH"
+  },
+  {
+    "iataCode": "721",
+    "name": "Boeing 727-100",
+    "id": "arc_00009VMF8AgpV5sdO0xXBA"
+  },
+  {
+    "iataCode": "72B",
+    "name": "Boeing 727-100",
+    "id": "arc_00009VMF8AgpV5sdO0xXBE"
+  },
+  {
+    "iataCode": "72X",
+    "name": "Boeing 727-100",
+    "id": "arc_00009VMF8AgpV5sdO0xXBJ"
+  },
+  {
+    "iataCode": "722",
+    "name": "Boeing 727-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXBB"
+  },
+  {
+    "iataCode": "72C",
+    "name": "Boeing 727-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXBF"
+  },
+  {
+    "iataCode": "72S",
+    "name": "Boeing 727-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXBI"
+  },
+  {
+    "iataCode": "72Y",
+    "name": "Boeing 727-200",
+    "id": "arc_00009VMF8AgpV5sdO0xXBK"
+  },
+  {
+    "iataCode": "72A",
+    "name": "Boeing 727-200 Advanced",
+    "id": "arc_00009VMF8AgpV5sdO0xXBD"
+  },
+  {
+    "iataCode": "72W",
+    "name": "Boeing 727-200 (winglets)",
+    "id": "arc_00009oBdrPiW5WkC9haUCp"
+  },
+  {
+    "iataCode": "737",
+    "name": "Boeing 737",
+    "id": "arc_00009VMF8AhBTmADP77oiz"
+  },
+  {
+    "iataCode": "73F",
+    "name": "Boeing 737",
+    "id": "arc_00009VMF8AhBTmADP77oj5"
+  },
+  {
+    "iataCode": "73M",
+    "name": "Boeing 737",
+    "id": "arc_00009VMF8AhBTmADP77ojA"
+  },
+  {
+    "iataCode": "731",
+    "name": "Boeing 737-100",
+    "id": "arc_00009VMF8AgpV5sdO0xXBL"
+  },
+  {
+    "iataCode": "73L",
+    "name": "Boeing 737-200",
+    "id": "arc_00009oBdrPiW5WkC9haUCq"
+  },
+  {
+    "iataCode": "732",
+    "name": "Boeing 737-200",
+    "id": "arc_00009VMF8AhBTmADP77oiu"
+  },
+  {
+    "iataCode": "73X",
+    "name": "Boeing 737-200",
+    "id": "arc_00009VMF8AhBTmADP77ojF"
+  },
+  {
+    "iataCode": "73A",
+    "name": "Boeing 737-200/200C Advanced",
+    "id": "arc_00009VMF8AhBTmADP77oj2"
+  },
+  {
+    "iataCode": "733",
+    "name": "Boeing 737-300",
+    "id": "arc_00009VMF8AhBTmADP77oiv"
+  },
+  {
+    "iataCode": "73N",
+    "name": "Boeing 737-300",
+    "id": "arc_00009VMF8AhBTmADP77oj9"
+  },
+  {
+    "iataCode": "73Y",
+    "name": "Boeing 737-300",
+    "id": "arc_00009VMF8AhBTmADP77ojG"
+  },
+  {
+    "iataCode": "73C",
+    "name": "Boeing 737-300 (winglets)",
+    "id": "arc_00009VMF8AhBTmADP77oj3"
+  },
+  {
+    "iataCode": "734",
+    "name": "Boeing 737-400",
+    "id": "arc_00009VMF8AhBTmADP77oiw"
+  },
+  {
+    "iataCode": "73P",
+    "name": "Boeing 737-400",
+    "id": "arc_00009VMF8AhBTmADP77ojB"
+  },
+  {
+    "iataCode": "73Q",
+    "name": "Boeing 737-400",
+    "id": "arc_00009VMF8AhBTmADP77ojC"
+  },
+  {
+    "iataCode": "735",
+    "name": "Boeing 737-500",
+    "id": "arc_00009VMF8AhBTmADP77oix"
+  },
+  {
+    "iataCode": "73E",
+    "name": "Boeing 737-500 (winglets)",
+    "id": "arc_00009VMF8AhBTmADP77oj4"
+  },
+  {
+    "iataCode": "736",
+    "name": "Boeing 737-600",
+    "id": "arc_00009VMF8AhBTmADP77oiy"
+  },
+  {
+    "iataCode": "73G",
+    "name": "Boeing 737-700",
+    "id": "arc_00009VMF8AhBTmADP77oj6"
+  },
+  {
+    "iataCode": "73S",
+    "name": "Boeing 737-700",
+    "id": "arc_00009VMF8AhBTmADP77ojD"
+  },
+  {
+    "iataCode": "7S7",
+    "name": "Boeing 737-700",
+    "id": "arc_0000AtsOTm76v5orLqBpNQ"
+  },
+  {
+    "iataCode": "73R",
+    "name": "Boeing 737-700/BBJC",
+    "id": "arc_00009oBdrPiW5WkC9haUCr"
+  },
+  {
+    "iataCode": "73W",
+    "name": "Boeing 737-700 (winglets)/BBJ1",
+    "id": "arc_00009VMF8AhBTmADP77ojE"
+  },
+  {
+    "iataCode": "738",
+    "name": "Boeing 737-800",
+    "id": "arc_00009VMF8AhBTmADP77oj0"
+  },
+  {
+    "iataCode": "7S8",
+    "name": "Boeing 737-800 (Scimitar Winglets)",
+    "id": "arc_00009oBdrPis4D1mAnklld"
+  },
+  {
+    "iataCode": "73K",
+    "name": "Boeing 737-800 (winglets)",
+    "id": "arc_00009oBdrPis4D1mAnkllX"
+  },
+  {
+    "iataCode": "73H",
+    "name": "Boeing 737-800 (winglets)/BBJ2",
+    "id": "arc_00009VMF8AhBTmADP77oj7"
+  },
+  {
+    "iataCode": "739",
+    "name": "Boeing 737-900",
+    "id": "arc_00009VMF8AhBTmADP77oj1"
+  },
+  {
+    "iataCode": "73J",
+    "name": "Boeing 737-900 (winglets)/BBJ3",
+    "id": "arc_00009VMF8AhBTmADP77oj8"
+  },
+  {
+    "iataCode": "7M7",
+    "name": "Boeing 737 MAX 7 / BBJ MAX 7",
+    "id": "arc_00009oBdrPis4D1mAnkllb"
+  },
+  {
+    "iataCode": "7M8",
+    "name": "Boeing 737 MAX 8 / BBJ MAX 8/MAX200",
+    "id": "arc_00009g3mppxYZbG6EEWxlI"
+  },
+  {
+    "iataCode": "7M9",
+    "name": "Boeing 737 MAX 9 / BBJ MAX 9",
+    "id": "arc_00009oBdrPis4D1mAnkllc"
+  },
+  {
+    "iataCode": "747",
+    "name": "Boeing 747",
+    "id": "arc_00009VMF8AhBTmADP77ojL"
+  },
+  {
+    "iataCode": "74M",
+    "name": "Boeing 747",
+    "id": "arc_00009VMF8AhBTmADP77ojS"
+  },
+  {
+    "iataCode": "741",
+    "name": "Boeing 747-100",
+    "id": "arc_00009VMF8AhBTmADP77ojH"
+  },
+  {
+    "iataCode": "74T",
+    "name": "Boeing 747-100",
+    "id": "arc_00009VMF8AhBTmADP77ojT"
+  },
+  {
+    "iataCode": "742",
+    "name": "Boeing 747-200",
+    "id": "arc_00009VMF8AhBTmADP77ojI"
+  },
+  {
+    "iataCode": "74C",
+    "name": "Boeing 747-200",
+    "id": "arc_00009VMF8AhBTmADP77ojM"
+  },
+  {
+    "iataCode": "74X",
+    "name": "Boeing 747-200",
+    "id": "arc_00009VMF8AhBTmADP77ojW"
+  },
+  {
+    "iataCode": "743",
+    "name": "Boeing 747-300/747-100/200 SUD",
+    "id": "arc_00009VMF8AhBTmADP77ojJ"
+  },
+  {
+    "iataCode": "74D",
+    "name": "Boeing 747-300/747-200 SUD",
+    "id": "arc_00009VMF8AhBTmADP77ojN"
+  },
+  {
+    "iataCode": "74U",
+    "name": "Boeing 747-300/747-200 SUD",
+    "id": "arc_00009VMF8AhBTmADP77ojU"
+  },
+  {
+    "iataCode": "744",
+    "name": "Boeing 747-400",
+    "id": "arc_00009VMF8AhBTmADP77ojK"
+  },
+  {
+    "iataCode": "74E",
+    "name": "Boeing 747-400",
+    "id": "arc_00009VMF8AhBTmADP77ojP"
+  },
+  {
+    "iataCode": "74Y",
+    "name": "Boeing 747-400",
+    "id": "arc_00009VMF8AhBTmADP77ojX"
+  },
+  {
+    "iataCode": "74J",
+    "name": "Boeing 747-400 (Domestic)",
+    "id": "arc_00009VMF8AhBTmADP77ojQ"
+  },
+  {
+    "iataCode": "74B",
+    "name": "Boeing 747-400 Swingtail",
+    "id": "arc_00009oBdrPiW5WkC9haUCs"
+  },
+  {
+    "iataCode": "74H",
+    "name": "Boeing 747-8",
+    "id": "arc_00009oBdrPiW5WkC9haUCt"
+  },
+  {
+    "iataCode": "74N",
+    "name": "Boeing 747-8F",
+    "id": "arc_00009oBdrPiW5WkC9haUCu"
+  },
+  {
+    "iataCode": "74F",
+    "name": "Boeing 747 Freighter",
+    "id": "arc_00009VMF8AhBTmADP77ojO"
+  },
+  {
+    "iataCode": "74L",
+    "name": "Boeing 747SP",
+    "id": "arc_00009VMF8AhBTmADP77ojR"
+  },
+  {
+    "iataCode": "74R",
+    "name": "Boeing 747SR",
+    "id": "arc_00009oBdrPiW5WkC9haUCv"
+  },
+  {
+    "iataCode": "74V",
+    "name": "Boeing 747SR",
+    "id": "arc_00009VMF8AhBTmADP77ojV"
+  },
+  {
+    "iataCode": "757",
+    "name": "Boeing 757",
+    "id": "arc_00009VMF8AhBTmADP77ojb"
+  },
+  {
+    "iataCode": "75C",
+    "name": "Boeing 757-200",
+    "id": "arc_00009oBdrPis4D1mAnkllY"
+  },
+  {
+    "iataCode": "75F",
+    "name": "Boeing 757-200",
+    "id": "arc_00009VMF8AhBTmADP77ojc"
+  },
+  {
+    "iataCode": "75M",
+    "name": "Boeing 757-200",
+    "id": "arc_00009VMF8AhBTmADP77ojd"
+  },
+  {
+    "iataCode": "752",
+    "name": "Boeing 757-200",
+    "id": "arc_00009VMF8AhBTmADP77ojY"
+  },
+  {
+    "iataCode": "75V",
+    "name": "Boeing 757-200 (winglets)",
+    "id": "arc_00009oBdrPis4D1mAnkllZ"
+  },
+  {
+    "iataCode": "75W",
+    "name": "Boeing 757-200 (winglets)",
+    "id": "arc_00009VMF8AhBTmADP77oja"
+  },
+  {
+    "iataCode": "753",
+    "name": "Boeing 757-300",
+    "id": "arc_00009VMF8AhBTmADP77ojZ"
+  },
+  {
+    "iataCode": "75T",
+    "name": "Boeing 757-300 (winglets)",
+    "id": "arc_00009oBdrPiW5WkC9haUCw"
+  },
+  {
+    "iataCode": "767",
+    "name": "Boeing 767",
+    "id": "arc_00009VMF8AhBTmADP77ojh"
+  },
+  {
+    "iataCode": "76F",
+    "name": "Boeing 767",
+    "id": "arc_00009VMF8AhXSSRnQDI6HA"
+  },
+  {
+    "iataCode": "762",
+    "name": "Boeing 767-200",
+    "id": "arc_00009VMF8AhBTmADP77oje"
+  },
+  {
+    "iataCode": "76X",
+    "name": "Boeing 767-200",
+    "id": "arc_00009VMF8AhXSSRnQDI6HB"
+  },
+  {
+    "iataCode": "763",
+    "name": "Boeing 767-300",
+    "id": "arc_00009VMF8AhBTmADP77ojf"
+  },
+  {
+    "iataCode": "76Y",
+    "name": "Boeing 767-300",
+    "id": "arc_00009VMF8AhXSSRnQDI6HC"
+  },
+  {
+    "iataCode": "76V",
+    "name": "Boeing 767-300 (winglets)",
+    "id": "arc_00009oBdrPiW5WkC9haUCx"
+  },
+  {
+    "iataCode": "76W",
+    "name": "Boeing 767-300 (winglets)",
+    "id": "arc_00009Y7rmIoiHPU6kYkHgW"
+  },
+  {
+    "iataCode": "764",
+    "name": "Boeing 767-400",
+    "id": "arc_00009VMF8AhBTmADP77ojg"
+  },
+  {
+    "iataCode": "77F",
+    "name": "Boeing 777",
+    "id": "arc_00009oBdrPis4D1mAnklle"
+  },
+  {
+    "iataCode": "777",
+    "name": "Boeing 777",
+    "id": "arc_00009VMF8AhXSSRnQDI6HF"
+  },
+  {
+    "iataCode": "772",
+    "name": "Boeing 777-200/200ER",
+    "id": "arc_00009VMF8AhXSSRnQDI6HD"
+  },
+  {
+    "iataCode": "77X",
+    "name": "Boeing 777-200F",
+    "id": "arc_00009oBdrPiW5WkC9haUCy"
+  },
+  {
+    "iataCode": "77L",
+    "name": "Boeing 777-200LR",
+    "id": "arc_00009VMF8AhXSSRnQDI6HG"
+  },
+  {
+    "iataCode": "773",
+    "name": "Boeing 777-300",
+    "id": "arc_00009VMF8AhXSSRnQDI6HE"
+  },
+  {
+    "iataCode": "77W",
+    "name": "Boeing 777-300ER",
+    "id": "arc_00009VMF8AhXSSRnQDI6HH"
+  },
+  {
+    "iataCode": "787",
+    "name": "Boeing 787",
+    "id": "arc_00009oBdrPis4D1mAnkllf"
+  },
+  {
+    "iataCode": "781",
+    "name": "Boeing 787-10",
+    "id": "arc_00009oBdrPis4D1mAnklla"
+  },
+  {
+    "iataCode": "788",
+    "name": "Boeing 787-8",
+    "id": "arc_00009Y7sVj19iGeh2cDz2O"
+  },
+  {
+    "iataCode": "789",
+    "name": "Boeing 787-9",
+    "id": "arc_00009Y7sdMgecbtm6IHItE"
+  },
+  {
+    "iataCode": "C17",
+    "name": "Boeing C17 Globemaster",
+    "id": "arc_00009oBdrPis4D1mAnkllj"
+  },
+  {
+    "iataCode": "D10",
+    "name": "Boeing (Douglas) DC-10",
+    "id": "arc_00009VMF8AhtR8jNRJSNpp"
+  },
+  {
+    "iataCode": "D1X",
+    "name": "Boeing (Douglas) DC-10-10",
+    "id": "arc_00009VMF8AhtR8jNRJSNpt"
+  },
+  {
+    "iataCode": "D11",
+    "name": "Boeing (Douglas) DC-10-10/15",
+    "id": "arc_00009VMF8AhtR8jNRJSNpq"
+  },
+  {
+    "iataCode": "D1M",
+    "name": "Boeing (Douglas) DC-10-30",
+    "id": "arc_00009oBdrPiW5WkC9haUDa"
+  },
+  {
+    "iataCode": "D1C",
+    "name": "Boeing (Douglas) DC-10-30/40",
+    "id": "arc_00009VMF8AhtR8jNRJSNpr"
+  },
+  {
+    "iataCode": "D1Y",
+    "name": "Boeing (Douglas) DC-10-30/40",
+    "id": "arc_00009VMF8AhtR8jNRJSNpu"
+  },
+  {
+    "iataCode": "D3F",
+    "name": "Boeing (Douglas) DC-3",
+    "id": "arc_00009VMF8AhtR8jNRJSNpx"
+  },
+  {
+    "iataCode": "DC3",
+    "name": "Boeing (Douglas) DC-3",
+    "id": "arc_00009VMF8AiFPp0xSPcfNi"
+  },
+  {
+    "iataCode": "DC4",
+    "name": "Boeing (Douglas) DC-4",
+    "id": "arc_00009oBdrPiW5WkC9haUDg"
+  },
+  {
+    "iataCode": "D6F",
+    "name": "Boeing (Douglas) DC-6A/DC-6B/DC-6C",
+    "id": "arc_00009VMF8AhtR8jNRJSNpy"
+  },
+  {
+    "iataCode": "DC6",
+    "name": "Boeing (Douglas) DC-6B",
+    "id": "arc_00009VMF8AiFPp0xSPcfNj"
+  },
+  {
+    "iataCode": "D8F",
+    "name": "Boeing (Douglas) DC-8",
+    "id": "arc_00009VMF8AhtR8jNRJSNpz"
+  },
+  {
+    "iataCode": "DC8",
+    "name": "Boeing (Douglas) DC-8",
+    "id": "arc_00009VMF8AiFPp0xSPcfNk"
+  },
+  {
+    "iataCode": "D8T",
+    "name": "Boeing (Douglas) DC-8-50",
+    "id": "arc_00009VMF8AhtR8jNRJSNq3"
+  },
+  {
+    "iataCode": "D8X",
+    "name": "Boeing (Douglas) DC-8-61/62/63",
+    "id": "arc_00009VMF8AhtR8jNRJSNq4"
+  },
+  {
+    "iataCode": "D8L",
+    "name": "Boeing (Douglas) DC-8-62",
+    "id": "arc_00009VMF8AhtR8jNRJSNq0"
+  },
+  {
+    "iataCode": "D8M",
+    "name": "Boeing (Douglas) DC-8-62",
+    "id": "arc_00009VMF8AhtR8jNRJSNq1"
+  },
+  {
+    "iataCode": "D8Y",
+    "name": "Boeing (Douglas) DC-8-71/72/73",
+    "id": "arc_00009VMF8AhtR8jNRJSNq5"
+  },
+  {
+    "iataCode": "D8Q",
+    "name": "Boeing (Douglas) DC-8-72",
+    "id": "arc_00009VMF8AhtR8jNRJSNq2"
+  },
+  {
+    "iataCode": "D9F",
+    "name": "Boeing (Douglas) DC-9",
+    "id": "arc_00009VMF8AhtR8jNRJSNqC"
+  },
+  {
+    "iataCode": "DC9",
+    "name": "Boeing (Douglas) DC-9",
+    "id": "arc_00009VMF8AiFPp0xSPcfNl"
+  },
+  {
+    "iataCode": "D91",
+    "name": "Boeing (Douglas) DC-9-10",
+    "id": "arc_00009VMF8AhtR8jNRJSNq6"
+  },
+  {
+    "iataCode": "D9X",
+    "name": "Boeing (Douglas) DC-9-10",
+    "id": "arc_00009VMF8AiFPp0xSPcfNh"
+  },
+  {
+    "iataCode": "D92",
+    "name": "Boeing (Douglas) DC-9-20",
+    "id": "arc_00009VMF8AhtR8jNRJSNq7"
+  },
+  {
+    "iataCode": "D93",
+    "name": "Boeing (Douglas) DC-9-30",
+    "id": "arc_00009VMF8AhtR8jNRJSNq8"
+  },
+  {
+    "iataCode": "D9C",
+    "name": "Boeing (Douglas) DC-9-30",
+    "id": "arc_00009VMF8AhtR8jNRJSNqB"
+  },
+  {
+    "iataCode": "D9D",
+    "name": "Boeing (Douglas) DC-9-40",
+    "id": "arc_00009oBdrPiW5WkC9haUDe"
+  },
+  {
+    "iataCode": "D94",
+    "name": "Boeing (Douglas) DC-9-40",
+    "id": "arc_00009VMF8AhtR8jNRJSNq9"
+  },
+  {
+    "iataCode": "D95",
+    "name": "Boeing (Douglas) DC-9-50",
+    "id": "arc_00009VMF8AhtR8jNRJSNqA"
+  },
+  {
+    "iataCode": "M11",
+    "name": "Boeing (Douglas) MD-11",
+    "id": "arc_00009VMF8AibOVIXTVmww7"
+  },
+  {
+    "iataCode": "M1F",
+    "name": "Boeing (Douglas) MD-11",
+    "id": "arc_00009VMF8AibOVIXTVmww8"
+  },
+  {
+    "iataCode": "M1M",
+    "name": "Boeing (Douglas) MD-11",
+    "id": "arc_00009VMF8AibOVIXTVmww9"
+  },
+  {
+    "iataCode": "M80",
+    "name": "Boeing (Douglas) MD-80",
+    "id": "arc_00009VMF8AibOVIXTVmwwA"
+  },
+  {
+    "iataCode": "M81",
+    "name": "Boeing (Douglas) MD-81",
+    "id": "arc_00009VMF8AibOVIXTVmwwB"
+  },
+  {
+    "iataCode": "M2F",
+    "name": "Boeing (Douglas) MD82",
+    "id": "arc_00009oBdrPiW5WkC9haUEA"
+  },
+  {
+    "iataCode": "M82",
+    "name": "Boeing (Douglas) MD-82",
+    "id": "arc_00009VMF8AibOVIXTVmwwC"
+  },
+  {
+    "iataCode": "M3F",
+    "name": "Boeing (Douglas) MD83",
+    "id": "arc_00009oBdrPiW5WkC9haUEB"
+  },
+  {
+    "iataCode": "M83",
+    "name": "Boeing (Douglas) MD-83",
+    "id": "arc_00009VMF8AibOVIXTVmwwD"
+  },
+  {
+    "iataCode": "M87",
+    "name": "Boeing (Douglas) MD-87",
+    "id": "arc_00009VMF8AibOVIXTVmwwE"
+  },
+  {
+    "iataCode": "M8F",
+    "name": "Boeing (Douglas) MD88",
+    "id": "arc_00009oBdrPiW5WkC9haUEC"
+  },
+  {
+    "iataCode": "M88",
+    "name": "Boeing (Douglas) MD-88",
+    "id": "arc_00009VMF8AibOVIXTVmwwF"
+  },
+  {
+    "iataCode": "M90",
+    "name": "Boeing (Douglas) MD-90",
+    "id": "arc_00009VMF8AibOVIXTVmwwG"
+  },
+  {
+    "iataCode": "D9S",
+    "name": "Boeing/McDonnell Douglas DC-9-30/40/50",
+    "id": "arc_00009VMF8AiFPp0xSPcfNg"
+  },
+  {
+    "iataCode": "DCF",
+    "name": "Boeing/McDonnell Douglas DC-9 Freighter",
+    "id": "arc_00009VMF8AiFPp0xSPcfNm"
+  },
+  {
+    "iataCode": "CCX",
+    "name": "Bombardier BD-700 Global Express/Global 500",
+    "id": "arc_00009oBdrPiW5WkC9haUDF"
+  },
+  {
+    "iataCode": "CL3",
+    "name": "Bombardier Challenger 300",
+    "id": "arc_00009oBdrPiW5WkC9haUDN"
+  },
+  {
+    "iataCode": "CL5",
+    "name": "Bombardier Challenger 350",
+    "id": "arc_00009oBdrPis4D1mAnklls"
+  },
+  {
+    "iataCode": "CS1",
+    "name": "Bombardier CS100",
+    "id": "arc_00009oBdrPiW5WkC9haUDS"
+  },
+  {
+    "iataCode": "CS3",
+    "name": "Bombardier CS300",
+    "id": "arc_00009oBdrPiW5WkC9haUDT"
+  },
+  {
+    "iataCode": "CSB",
+    "name": "Bombardier C Series",
+    "id": "arc_00009oBdrPis4D1mAnkllu"
+  },
+  {
+    "iataCode": "CC6",
+    "name": "Bombardier Global 6000",
+    "id": "arc_00009oBdrPis4D1mAnklll"
+  },
+  {
+    "iataCode": "CC7",
+    "name": "Bombardier Global 7000",
+    "id": "arc_00009oBdrPis4D1mAnkllm"
+  },
+  {
+    "iataCode": "BNI",
+    "name": "Britten-Norman BN-2A/BN-2B Islander",
+    "id": "arc_00009VMF8AhtR8jNRJSNpS"
+  },
+  {
+    "iataCode": "BNT",
+    "name": "Britten-Norman BN-2A Mk.III Trislander",
+    "id": "arc_00009VMF8AhtR8jNRJSNpT"
+  },
+  {
+    "iataCode": "BTA",
+    "name": "Business Turbo-Prop Aircraft",
+    "id": "arc_00009oBdrPiW5WkC9haUDD"
+  },
+  {
+    "iataCode": "CCJ",
+    "name": "Canadair (Bombardier) CL-600/601/604/605 Challenger",
+    "id": "arc_00009VMF8AhtR8jNRJSNpV"
+  },
+  {
+    "iataCode": "CRF",
+    "name": "Canadair (Bombardier) Regional Jet",
+    "id": "arc_00009oBdrPiW5WkC9haUDR"
+  },
+  {
+    "iataCode": "CRJ",
+    "name": "Canadair (Bombardier) Regional Jet",
+    "id": "arc_00009VMF8AhtR8jNRJSNph"
+  },
+  {
+    "iataCode": "CR1",
+    "name": "Canadair (Bombardier) Regional Jet 100",
+    "id": "arc_00009VMF8AhtR8jNRJSNpc"
+  },
+  {
+    "iataCode": "CRK",
+    "name": "Canadair (Bombardier) Regional Jet 1000",
+    "id": "arc_00009o3K5n13Mh0xl2u5RY"
+  },
+  {
+    "iataCode": "CR2",
+    "name": "Canadair (Bombardier) Regional Jet 200",
+    "id": "arc_00009VMF8AhtR8jNRJSNpd"
+  },
+  {
+    "iataCode": "CR5",
+    "name": "Canadair (Bombardier) Regional Jet 550",
+    "id": "arc_0000A871u2lAFdWFyUuJM0"
+  },
+  {
+    "iataCode": "CR7",
+    "name": "Canadair (Bombardier) Regional Jet 700 and Challenger 870",
+    "id": "arc_00009VMF8AhtR8jNRJSNpe"
+  },
+  {
+    "iataCode": "CRA",
+    "name": "Canadair (Bombardier) Regional Jet 705",
+    "id": "arc_00009VMF8AhtR8jNRJSNpg"
+  },
+  {
+    "iataCode": "CR9",
+    "name": "Canadair (Bombardier) Regional Jet 900 and Challenger 890",
+    "id": "arc_00009VMF8AhtR8jNRJSNpf"
+  },
+  {
+    "iataCode": "CS9",
+    "name": "CASA / IAe C-295",
+    "id": "arc_00009oBdrPis4D1mAnkllt"
+  },
+  {
+    "iataCode": "CS2",
+    "name": "CASA/lAe 212 Aviocar",
+    "id": "arc_00009VMF8AhtR8jNRJSNpj"
+  },
+  {
+    "iataCode": "CS5",
+    "name": "CASA/lAe CN-235",
+    "id": "arc_00009VMF8AhtR8jNRJSNpk"
+  },
+  {
+    "iataCode": "CNF",
+    "name": "Cessna 208B",
+    "id": "arc_00009oBdrPiW5WkC9haUDQ"
+  },
+  {
+    "iataCode": "CJ1",
+    "name": "Cessna 500/501/525 Citation",
+    "id": "arc_00009oBdrPiW5WkC9haUDI"
+  },
+  {
+    "iataCode": "CJM",
+    "name": "Cessna 510 Mustang Citation",
+    "id": "arc_00009oBdrPiW5WkC9haUDH"
+  },
+  {
+    "iataCode": "CJ2",
+    "name": "Cessna 550/551/552 Citation",
+    "id": "arc_00009oBdrPiW5WkC9haUDJ"
+  },
+  {
+    "iataCode": "CJ5",
+    "name": "Cessna 560 Citation",
+    "id": "arc_00009oBdrPiW5WkC9haUDK"
+  },
+  {
+    "iataCode": "CJL",
+    "name": "Cessna 560 XL/XLS Citation",
+    "id": "arc_00009oBdrPiW5WkC9haUDG"
+  },
+  {
+    "iataCode": "CJ6",
+    "name": "Cessna 650 Citation",
+    "id": "arc_00009oBdrPiW5WkC9haUDL"
+  },
+  {
+    "iataCode": "CJ8",
+    "name": "Cessna 680 Citation",
+    "id": "arc_00009oBdrPiW5WkC9haUDM"
+  },
+  {
+    "iataCode": "CJ7",
+    "name": "Cessna 700 Citation Longitude",
+    "id": "arc_00009oBdrPis4D1mAnkllr"
+  },
+  {
+    "iataCode": "CJX",
+    "name": "Cessna 750 Citation X",
+    "id": "arc_00009oBdrPis4D1mAnkllq"
+  },
+  {
+    "iataCode": "CN7",
+    "name": "Cessna 750 Citation X",
+    "id": "arc_00009oBdrPiW5WkC9haUDP"
+  },
+  {
+    "iataCode": "CNJ",
+    "name": "Cessna Citation",
+    "id": "arc_00009VMF8AhtR8jNRJSNpa"
+  },
+  {
+    "iataCode": "CJT",
+    "name": "Cessna Citation Latitude",
+    "id": "arc_00009oBdrPis4D1mAnkllp"
+  },
+  {
+    "iataCode": "CJS",
+    "name": "Cessna Citation Sovereign+",
+    "id": "arc_00009oBdrPis4D1mAnkllo"
+  },
+  {
+    "iataCode": "CAN",
+    "name": "Cessna (Light aircraft)",
+    "id": "arc_00009oBdrPis4D1mAnklln"
+  },
+  {
+    "iataCode": "CNA",
+    "name": "Cessna Light Aircraft",
+    "id": "arc_00009VMF8AhtR8jNRJSNpY"
+  },
+  {
+    "iataCode": "CN1",
+    "name": "Cessna (Light aircraft-single piston engine)",
+    "id": "arc_00009VMF8AhtR8jNRJSNpX"
+  },
+  {
+    "iataCode": "CNC",
+    "name": "Cessna (Light aircraft-single turboprop engine)",
+    "id": "arc_00009VMF8AhtR8jNRJSNpZ"
+  },
+  {
+    "iataCode": "CN2",
+    "name": "Cessna (Light aircraft-twin piston engines)",
+    "id": "arc_00009oBdrPiW5WkC9haUDO"
+  },
+  {
+    "iataCode": "CNT",
+    "name": "Cessna (Light aircraft-twin turboprop engines)",
+    "id": "arc_00009VMF8AhtR8jNRJSNpb"
+  },
+  {
+    "iataCode": "C21",
+    "name": "Comac ARJ21",
+    "id": "arc_00009oBdrPis4D1mAnkllk"
+  },
+  {
+    "iataCode": "C27",
+    "name": "Comac ARJ21-700",
+    "id": "arc_00009oBdrPiW5WkC9haUDE"
+  },
+  {
+    "iataCode": "CV2",
+    "name": "Convair 240",
+    "id": "arc_00009oBdrPiW5WkC9haUDU"
+  },
+  {
+    "iataCode": "CVV",
+    "name": "Convair 240",
+    "id": "arc_00009oBdrPiW5WkC9haUDW"
+  },
+  {
+    "iataCode": "CVF",
+    "name": "Convair 240/340/440/580/5800/600/640",
+    "id": "arc_00009VMF8AhtR8jNRJSNpm"
+  },
+  {
+    "iataCode": "CVR",
+    "name": "Convair 240/440/580",
+    "id": "arc_00009VMF8AhtR8jNRJSNpo"
+  },
+  {
+    "iataCode": "CVX",
+    "name": "Convair 340/440",
+    "id": "arc_00009oBdrPiW5WkC9haUDX"
+  },
+  {
+    "iataCode": "CV4",
+    "name": "Convair 440 Metropolitan",
+    "id": "arc_00009oBdrPiW5WkC9haUDV"
+  },
+  {
+    "iataCode": "CV5",
+    "name": "Convair 580",
+    "id": "arc_00009VMF8AhtR8jNRJSNpl"
+  },
+  {
+    "iataCode": "CVY",
+    "name": "Convair 580/5800/600/640",
+    "id": "arc_00009oBdrPiW5WkC9haUDY"
+  },
+  {
+    "iataCode": "CWC",
+    "name": "Curtiss C-46 Commando",
+    "id": "arc_00009VMF8AhtR8jNRJSNpn"
+  },
+  {
+    "iataCode": "DFL",
+    "name": "Dassault Falcon",
+    "id": "arc_00009oBdrPis4D1mAnkllv"
+  },
+  {
+    "iataCode": "DF1",
+    "name": "Dassault Falcon 10/100",
+    "id": "arc_00009oBdrPiW5WkC9haUDh"
+  },
+  {
+    "iataCode": "D20",
+    "name": "Dassault Falcon 2000/2000DX",
+    "id": "arc_00009oBdrPiW5WkC9haUDZ"
+  },
+  {
+    "iataCode": "D2L",
+    "name": "Dassault Falcon 2000EX/EASY/LX",
+    "id": "arc_00009oBdrPiW5WkC9haUDb"
+  },
+  {
+    "iataCode": "DF2",
+    "name": "Dassault Falcon 20/200",
+    "id": "arc_00009oBdrPiW5WkC9haUDi"
+  },
+  {
+    "iataCode": "DF5",
+    "name": "Dassault Falcon 50/50EX",
+    "id": "arc_00009oBdrPiW5WkC9haUDj"
+  },
+  {
+    "iataCode": "DF7",
+    "name": "Dassault Falcon 7X",
+    "id": "arc_00009oBdrPiW5WkC9haUDk"
+  },
+  {
+    "iataCode": "DF8",
+    "name": "Dassault Falcon 8X",
+    "id": "arc_00009oBdrPis4D1mAnklm0"
+  },
+  {
+    "iataCode": "DF9",
+    "name": "Dassault Falcon 900/900B/900C/900DX/900EX/EASY",
+    "id": "arc_00009oBdrPiW5WkC9haUDl"
+  },
+  {
+    "iataCode": "D9L",
+    "name": "Dassault Falcon 900LX",
+    "id": "arc_00009oBdrPiW5WkC9haUDf"
+  },
+  {
+    "iataCode": "D3X",
+    "name": "De Havilland (B/E Aerospace) DHC-8-300 Dash 8 / 8Q",
+    "id": "arc_00009oBdrPis4D1mAnklly"
+  },
+  {
+    "iataCode": "DHP",
+    "name": "De Havilland (Bombardier) DHC-2 Beaver",
+    "id": "arc_00009VMF8AiFPp0xSPcfNv"
+  },
+  {
+    "iataCode": "DHB",
+    "name": "De Havilland (Bombardier) DHC-2 Beaver/Turbo Beaver",
+    "id": "arc_00009oBdrPis4D1mAnkllx"
+  },
+  {
+    "iataCode": "DHR",
+    "name": "De Havilland (Bombardier) DHC-2 Turbo Beaver",
+    "id": "arc_00009oBdrPiW5WkC9haUDp"
+  },
+  {
+    "iataCode": "DHS",
+    "name": "De Havilland (Bombardier) DHC-3 Otter",
+    "id": "arc_00009VMF8AiFPp0xSPcfNw"
+  },
+  {
+    "iataCode": "DH0",
+    "name": "De Havilland (Bombardier) DHC-3 Otter/Turbo Otter",
+    "id": "arc_00009oBdrPis4D1mAnkllw"
+  },
+  {
+    "iataCode": "DHL",
+    "name": "De Havilland (Bombardier) DHC-3 Turbo Otter",
+    "id": "arc_00009VMF8AiFPp0xSPcfNu"
+  },
+  {
+    "iataCode": "DHC",
+    "name": "De Havilland (Bombardier) DHC-4 Caribou",
+    "id": "arc_00009VMF8AiFPp0xSPcfNt"
+  },
+  {
+    "iataCode": "DHT",
+    "name": "De Havilland (Bombardier) DHC-6 Twin Otter",
+    "id": "arc_00009VMF8AiFPp0xSPcfNx"
+  },
+  {
+    "iataCode": "DH7",
+    "name": "De Havilland (Bombardier) DHC-7 Dash 7",
+    "id": "arc_00009VMF8AiFPp0xSPcfNr"
+  },
+  {
+    "iataCode": "DHF",
+    "name": "De Havilland (Bombardier) DHC-8",
+    "id": "arc_00009oBdrPiW5WkC9haUDn"
+  },
+  {
+    "iataCode": "DH1",
+    "name": "De Havilland (Bombardier) DHC-8-100 Dash 8/8Q",
+    "id": "arc_00009VMF8AiFPp0xSPcfNn"
+  },
+  {
+    "iataCode": "DH2",
+    "name": "De Havilland (Bombardier) DHC-8-200 Dash 8/8Q",
+    "id": "arc_00009VMF8AiFPp0xSPcfNo"
+  },
+  {
+    "iataCode": "DH3",
+    "name": "De Havilland (Bombardier) DHC-8-300 Dash 8/8Q",
+    "id": "arc_00009VMF8AiFPp0xSPcfNp"
+  },
+  {
+    "iataCode": "D4X",
+    "name": "De Havilland (Bombardier) DHC-8-400 Dash 8Q",
+    "id": "arc_00009oBdrPiW5WkC9haUDd"
+  },
+  {
+    "iataCode": "DH4",
+    "name": "De Havilland (Bombardier) DHC-8-400 Dash 8Q",
+    "id": "arc_00009VMF8AiFPp0xSPcfNq"
+  },
+  {
+    "iataCode": "DH8",
+    "name": "De Havilland (Bombardier) DHC-8 Dash 8",
+    "id": "arc_00009VMF8AiFPp0xSPcfNs"
+  },
+  {
+    "iataCode": "D42",
+    "name": "Diamond Aircraft DA42 Twin Star",
+    "id": "arc_00009oBdrPiW5WkC9haUDc"
+  },
+  {
+    "iataCode": "D62",
+    "name": "Diamond Aircraft DA62",
+    "id": "arc_00009oBdrPis4D1mAnkllz"
+  },
+  {
+    "iataCode": "EAC",
+    "name": "Eclipse",
+    "id": "arc_00009oBdrPis4D1mAnklm1"
+  },
+  {
+    "iataCode": "EA5",
+    "name": "Eclipse 500",
+    "id": "arc_00009oBdrPiW5WkC9haUDq"
+  },
+  {
+    "iataCode": "EMB",
+    "name": "Embraer 110 Bandeirante",
+    "id": "arc_00009VMF8AiFPp0xSPcfO4"
+  },
+  {
+    "iataCode": "EM2",
+    "name": "Embraer 120 Brasilia",
+    "id": "arc_00009VMF8AiFPp0xSPcfO2"
+  },
+  {
+    "iataCode": "E70",
+    "name": "Embraer 170",
+    "id": "arc_00009gGTFTSlMisTxPYNkW"
+  },
+  {
+    "iataCode": "EMJ",
+    "name": "Embraer 170/175/190/195",
+    "id": "arc_00009VMF8AiFPp0xSPcfO5"
+  },
+  {
+    "iataCode": "E75",
+    "name": "Embraer 175",
+    "id": "arc_00009VMF8AiFPp0xSPcfNz"
+  },
+  {
+    "iataCode": "275",
+    "name": "Embraer 175 E2",
+    "id": "arc_00009oBdrPis4D1mAnkllN"
+  },
+  {
+    "iataCode": "E7W",
+    "name": "Embraer 175 (Enhanced Winglets)",
+    "id": "arc_00009VMF8AiFPp0xSPcfNy"
+  },
+  {
+    "iataCode": "E90",
+    "name": "Embraer 190",
+    "id": "arc_00009VMF8AiFPp0xSPcfO0"
+  },
+  {
+    "iataCode": "E95",
+    "name": "Embraer 195 and Legacy 1000",
+    "id": "arc_00009VMF8AiFPp0xSPcfO1"
+  },
+  {
+    "iataCode": "295",
+    "name": "Embraer 195 E2",
+    "id": "arc_00009oBdrPis4D1mAnkllP"
+  },
+  {
+    "iataCode": "EM9",
+    "name": "Embraer E190",
+    "id": "arc_00009VMF8AiFPp0xSPcfO3"
+  },
+  {
+    "iataCode": "EP1",
+    "name": "Embraer EMB-500 Phenom 100",
+    "id": "arc_00009oBdrPiW5WkC9haUDs"
+  },
+  {
+    "iataCode": "EP3",
+    "name": "Embraer EMB-505 Phenom 300",
+    "id": "arc_00009oBdrPiW5WkC9haUDt"
+  },
+  {
+    "iataCode": "EML",
+    "name": "Embraer Legacy",
+    "id": "arc_00009oBdrPis4D1mAnklm2"
+  },
+  {
+    "iataCode": "EM4",
+    "name": "Embraer Legacy 450",
+    "id": "arc_00009oBdrPis4D1mAnklm7"
+  },
+  {
+    "iataCode": "EM5",
+    "name": "Embraer Legacy 500",
+    "id": "arc_00009oBdrPis4D1mAnklm8"
+  },
+  {
+    "iataCode": "EPH",
+    "name": "Embraer Phenom",
+    "id": "arc_00009oBdrPis4D1mAnklm5"
+  },
+  {
+    "iataCode": "ER3",
+    "name": "Embraer RJ135 and Legacy 600/650",
+    "id": "arc_00009VMF8AiFPp0xSPcfO6"
+  },
+  {
+    "iataCode": "ERJ",
+    "name": "Embraer RJ135/RJ140/RJ145",
+    "id": "arc_00009VMF8AiFPp0xSPcfO9"
+  },
+  {
+    "iataCode": "ERD",
+    "name": "Embraer RJ140",
+    "id": "arc_00009VMF8AiFPp0xSPcfO8"
+  },
+  {
+    "iataCode": "ER4",
+    "name": "Embraer RJ145",
+    "id": "arc_00009VMF8AiFPp0xSPcfO7"
+  },
+  {
+    "iataCode": "290",
+    "name": "Emraer 190 E2",
+    "id": "arc_00009oBdrPis4D1mAnkllO"
+  },
+  {
+    "iataCode": "NDE",
+    "name": "Eurocopter (Aerospatiale) AS350 Ecureuil/AS355 Ecureuil 2",
+    "id": "arc_00009VMF8AibOVIXTVmwwL"
+  },
+  {
+    "iataCode": "APH",
+    "name": "Eurocopter (Aerospatiale) SA330 Puma/AS332 Super Puma",
+    "id": "arc_00009oBdrPiW5WkC9haUD6"
+  },
+  {
+    "iataCode": "NDH",
+    "name": "Eurocopter (Aerospatiale) SA365C/SA365N Dauphin 2",
+    "id": "arc_00009oBdrPis4D1mAnkll4"
+  },
+  {
+    "iataCode": "EC3",
+    "name": "Eurocopter EC130",
+    "id": "arc_00009oBdrPiW5WkC9haUDr"
+  },
+  {
+    "iataCode": "EC4",
+    "name": "Eurocopter EC145/EC145T2",
+    "id": "arc_00009oBdrPis4D1mAnklm3"
+  },
+  {
+    "iataCode": "EC5",
+    "name": "Eurocopter EC155",
+    "id": "arc_00009oBdrPis4D1mAnklm4"
+  },
+  {
+    "iataCode": "EC7",
+    "name": "Eurocopter EC175",
+    "id": "arc_00009oBdrPis4D1mAnklm6"
+  },
+  {
+    "iataCode": "MBH",
+    "name": "Eurocopter (MBB) BO105",
+    "id": "arc_00009oBdrPis4D1mAnkll2"
+  },
+  {
+    "iataCode": "D28",
+    "name": "Fairchild Dornier 228",
+    "id": "arc_00009VMF8AhtR8jNRJSNpv"
+  },
+  {
+    "iataCode": "D38",
+    "name": "Fairchild Dornier 328-100",
+    "id": "arc_00009VMF8AhtR8jNRJSNpw"
+  },
+  {
+    "iataCode": "FRJ",
+    "name": "Fairchild Dornier 328JET",
+    "id": "arc_00009VMF8AiFPp0xSPcfOK"
+  },
+  {
+    "iataCode": "FA7",
+    "name": "Fairchild Dornier 728JET",
+    "id": "arc_00009VMF8AiFPp0xSPcfOI"
+  },
+  {
+    "iataCode": "FK7",
+    "name": "Fairchild Industries FH-227",
+    "id": "arc_00009VMF8AiFPp0xSPcfOJ"
+  },
+  {
+    "iataCode": "SWF",
+    "name": "Fairchild (Swearingen) SA226",
+    "id": "arc_00009oBdrPis4D1mAnkllE"
+  },
+  {
+    "iataCode": "SWM",
+    "name": "Fairchild (Swearingen) SA26/SA226/SA227 Merlin/Metro/Expediter",
+    "id": "arc_00009VMF8AibOVIXTVmwwa"
+  },
+  {
+    "iataCode": "100",
+    "name": "Fokker 100",
+    "id": "arc_00009VMF8AgTWPb3MunFcO"
+  },
+  {
+    "iataCode": "F5F",
+    "name": "Fokker 50",
+    "id": "arc_00009oBdrPiW5WkC9haUDu"
+  },
+  {
+    "iataCode": "F50",
+    "name": "Fokker 50",
+    "id": "arc_00009VMF8AiFPp0xSPcfOG"
+  },
+  {
+    "iataCode": "F70",
+    "name": "Fokker 70",
+    "id": "arc_00009VMF8AiFPp0xSPcfOH"
+  },
+  {
+    "iataCode": "F27",
+    "name": "Fokker F27 Friendship/Fairchild Industries F-27",
+    "id": "arc_00009VMF8AiFPp0xSPcfOE"
+  },
+  {
+    "iataCode": "F28",
+    "name": "Fokker F28 Fellowship",
+    "id": "arc_00009VMF8AiFPp0xSPcfOF"
+  },
+  {
+    "iataCode": "F21",
+    "name": "Fokker F28 Fellowship 1000",
+    "id": "arc_00009VMF8AiFPp0xSPcfOA"
+  },
+  {
+    "iataCode": "F22",
+    "name": "Fokker F28 Fellowship 2000",
+    "id": "arc_00009VMF8AiFPp0xSPcfOB"
+  },
+  {
+    "iataCode": "F23",
+    "name": "Fokker F28 Fellowship 3000",
+    "id": "arc_00009VMF8AiFPp0xSPcfOC"
+  },
+  {
+    "iataCode": "F24",
+    "name": "Fokker F28 Fellowship 4000",
+    "id": "arc_00009VMF8AiFPp0xSPcfOD"
+  },
+  {
+    "iataCode": "GA1",
+    "name": "Gippsland Aeronautics GA10",
+    "id": "arc_00009oBdrPis4D1mAnklmB"
+  },
+  {
+    "iataCode": "GA8",
+    "name": "Gippsland Aeronautics GA8 Airvan",
+    "id": "arc_00009oBdrPiW5WkC9haUDv"
+  },
+  {
+    "iataCode": "CD2",
+    "name": "Gippsland Aeronautics N22B/N24A Nomad",
+    "id": "arc_00009VMF8AhtR8jNRJSNpW"
+  },
+  {
+    "iataCode": "GRG",
+    "name": "Grumman G-21 Goose (Amphibian)",
+    "id": "arc_00009VMF8AiFPp0xSPcfOL"
+  },
+  {
+    "iataCode": "GRM",
+    "name": "Grumman G-73 Turbo Mallard (Amphibian)",
+    "id": "arc_00009VMF8AiFPp0xSPcfOM"
+  },
+  {
+    "iataCode": "GRJ",
+    "name": "Gulfstream Aerospace",
+    "id": "arc_00009oBdrPiW5WkC9haUDz"
+  },
+  {
+    "iataCode": "GR1",
+    "name": "Gulfstream Aerospace G-100/G-150",
+    "id": "arc_00009oBdrPiW5WkC9haUDw"
+  },
+  {
+    "iataCode": "GJ3",
+    "name": "Gulfstream Aerospace G-1159A Gulfstream III",
+    "id": "arc_00009oBdrPis4D1mAnklmF"
+  },
+  {
+    "iataCode": "GJ2",
+    "name": "Gulfstream Aerospace G-1159 Gulfstream II",
+    "id": "arc_00009oBdrPis4D1mAnklmE"
+  },
+  {
+    "iataCode": "G2B",
+    "name": "Gulfstream Aerospace G-1159 Gulfstream IIB",
+    "id": "arc_00009oBdrPis4D1mAnklm9"
+  },
+  {
+    "iataCode": "G2S",
+    "name": "Gulfstream Aerospace G-1159 Gulfstream IISP",
+    "id": "arc_00009oBdrPis4D1mAnklmA"
+  },
+  {
+    "iataCode": "GR2",
+    "name": "Gulfstream Aerospace G-200 (Galaxy)",
+    "id": "arc_00009oBdrPiW5WkC9haUDx"
+  },
+  {
+    "iataCode": "GR3",
+    "name": "Gulfstream Aerospace G-250",
+    "id": "arc_00009oBdrPiW5WkC9haUDy"
+  },
+  {
+    "iataCode": "GA5",
+    "name": "Gulfstream Aerospace G500",
+    "id": "arc_00009oBdrPis4D1mAnklmC"
+  },
+  {
+    "iataCode": "GA6",
+    "name": "Gulfstream Aerospace G600",
+    "id": "arc_00009oBdrPis4D1mAnklmD"
+  },
+  {
+    "iataCode": "GJ6",
+    "name": "Gulfstream Aerospace G650",
+    "id": "arc_00009oBdrPis4D1mAnklmI"
+  },
+  {
+    "iataCode": "GJ4",
+    "name": "Gulfstream Aerospace IV (G300/G350/G400/G450/IVSP)",
+    "id": "arc_00009oBdrPis4D1mAnklmG"
+  },
+  {
+    "iataCode": "GJ5",
+    "name": "Gulfstream Aerospace V (G550)",
+    "id": "arc_00009oBdrPis4D1mAnklmH"
+  },
+  {
+    "iataCode": "YN2",
+    "name": "Harbin Yunshuji Y12",
+    "id": "arc_00009VMF8AibOVIXTVmwwj"
+  },
+  {
+    "iataCode": "H21",
+    "name": "Hawker 1000",
+    "id": "arc_00009oBdrPiW5WkC9haUE1"
+  },
+  {
+    "iataCode": "H20",
+    "name": "Hawker 200",
+    "id": "arc_00009oBdrPiW5WkC9haUE0"
+  },
+  {
+    "iataCode": "PR1",
+    "name": "Hawker 390 Premier 1/1A",
+    "id": "arc_00009oBdrPis4D1mAnkll8"
+  },
+  {
+    "iataCode": "H24",
+    "name": "Hawker 4000",
+    "id": "arc_00009oBdrPiW5WkC9haUE2"
+  },
+  {
+    "iataCode": "BE4",
+    "name": "Hawker 400 Beechjet/400A/400XP/400T",
+    "id": "arc_00009oBdrPiW5WkC9haUDA"
+  },
+  {
+    "iataCode": "H25",
+    "name": "Hawker 750/800/800XP/800SP",
+    "id": "arc_00009oBdrPiW5WkC9haUE3"
+  },
+  {
+    "iataCode": "H28",
+    "name": "Hawker 850XP/900",
+    "id": "arc_00009oBdrPiW5WkC9haUE4"
+  },
+  {
+    "iataCode": "H29",
+    "name": "Hawker 900XP",
+    "id": "arc_00009oBdrPiW5WkC9haUE5"
+  },
+  {
+    "iataCode": "HBA",
+    "name": "Hawker Beechcraft",
+    "id": "arc_00009oBdrPis4D1mAnklmJ"
+  },
+  {
+    "iataCode": "BEF",
+    "name": "Hawker Beechcraft 1900",
+    "id": "arc_00009oBdrPiW5WkC9haUDB"
+  },
+  {
+    "iataCode": "BE1",
+    "name": "Hawker Beechcraft 1900 Airline",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hu"
+  },
+  {
+    "iataCode": "BES",
+    "name": "Hawker Beechcraft 1900C Airliner",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hz"
+  },
+  {
+    "iataCode": "BEH",
+    "name": "Hawker Beechcraft 1900D Airliner",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hy"
+  },
+  {
+    "iataCode": "BE9",
+    "name": "Hawker Beechcraft C99 Airliner",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hw"
+  },
+  {
+    "iataCode": "BEC",
+    "name": "Hawker Beechcraft (Light aircraft)",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hx"
+  },
+  {
+    "iataCode": "BEP",
+    "name": "Hawker Beechcraft (Light aircraft-single piston engine)",
+    "id": "arc_00009oBdrPiW5WkC9haUDC"
+  },
+  {
+    "iataCode": "BE2",
+    "name": "Hawker Beechcraft (Light aircraft-twin piston engines)",
+    "id": "arc_00009VMF8AhXSSRnQDI6Hv"
+  },
+  {
+    "iataCode": "BET",
+    "name": "Hawker Beechcraft (Light aircraft-twin turboprop engines)",
+    "id": "arc_00009VMF8AhtR8jNRJSNpQ"
+  },
+  {
+    "iataCode": "HEC",
+    "name": "Helio H-250 Courier/H-295/395 Super Courier",
+    "id": "arc_00009VMF8AiFPp0xSPcfON"
+  },
+  {
+    "iataCode": "HHJ",
+    "name": "Honda HA-420 HondaJet",
+    "id": "arc_00009oBdrPis4D1mAnklmK"
+  },
+  {
+    "iataCode": "I4F",
+    "name": "Ilyushin II-114T",
+    "id": "arc_00009oBdrPis4D1mAnklmL"
+  },
+  {
+    "iataCode": "I14",
+    "name": "Ilyushin Il-114",
+    "id": "arc_00009VMF8AiFPp0xSPcfOP"
+  },
+  {
+    "iataCode": "IL8",
+    "name": "Ilyushin Il-18",
+    "id": "arc_00009VMF8AiFPp0xSPcfOW"
+  },
+  {
+    "iataCode": "IL6",
+    "name": "Ilyushin Il-62",
+    "id": "arc_00009VMF8AiFPp0xSPcfOU"
+  },
+  {
+    "iataCode": "IL7",
+    "name": "Ilyushin Il-76",
+    "id": "arc_00009VMF8AiFPp0xSPcfOV"
+  },
+  {
+    "iataCode": "ILW",
+    "name": "Ilyushin Il-86",
+    "id": "arc_00009VMF8AiFPp0xSPcfOY"
+  },
+  {
+    "iataCode": "I9F",
+    "name": "Ilyushin Il-96",
+    "id": "arc_00009VMF8AiFPp0xSPcfOR"
+  },
+  {
+    "iataCode": "IL9",
+    "name": "Ilyushin Il-96",
+    "id": "arc_00009VMF8AiFPp0xSPcfOX"
+  },
+  {
+    "iataCode": "I93",
+    "name": "Ilyushin IL-96-300",
+    "id": "arc_00009VMF8AiFPp0xSPcfOQ"
+  },
+  {
+    "iataCode": "I9M",
+    "name": "Ilyushin IL-96M",
+    "id": "arc_00009VMF8AiFPp0xSPcfOS"
+  },
+  {
+    "iataCode": "I9Y",
+    "name": "Ilyushin IL-96T",
+    "id": "arc_00009VMF8AiFPp0xSPcfOT"
+  },
+  {
+    "iataCode": "219",
+    "name": "Indonesia Aerospace (IAe) N219",
+    "id": "arc_00009oBdrPis4D1mAnkllJ"
+  },
+  {
+    "iataCode": "WWP",
+    "name": "Israel Aerospace Industries 1124 Westwind",
+    "id": "arc_00009VMF8AibOVIXTVmwwg"
+  },
+  {
+    "iataCode": "JU5",
+    "name": "Junkers Ju 52/3m",
+    "id": "arc_00009VMF8AibOVIXTVmwvw"
+  },
+  {
+    "iataCode": "LRJ",
+    "name": "Learjet",
+    "id": "arc_00009VMF8AibOVIXTVmww6"
+  },
+  {
+    "iataCode": "LJ2",
+    "name": "Learjet 23/24/25",
+    "id": "arc_00009oBdrPis4D1mAnklmM"
+  },
+  {
+    "iataCode": "LJ3",
+    "name": "Learjet 28/29/31/35/36",
+    "id": "arc_00009oBdrPis4D1mAnklmN"
+  },
+  {
+    "iataCode": "LJ4",
+    "name": "Learjet 40/45",
+    "id": "arc_00009oBdrPis4D1mAnklmO"
+  },
+  {
+    "iataCode": "LJ6",
+    "name": "Learjet 55/60",
+    "id": "arc_00009oBdrPis4D1mAnklmP"
+  },
+  {
+    "iataCode": "LJ7",
+    "name": "Learjet 70/75",
+    "id": "arc_00009oBdrPis4D1mAnklmQ"
+  },
+  {
+    "iataCode": "LJ8",
+    "name": "Learjet 85",
+    "id": "arc_00009oBdrPis4D1mAnklmR"
+  },
+  {
+    "iataCode": "LJA",
+    "name": "Light Jet Aircraft",
+    "id": "arc_00009oBdrPiW5WkC9haUE8"
+  },
+  {
+    "iataCode": "L10",
+    "name": "Lockheed Martin L-1011 TriStar",
+    "id": "arc_00009VMF8AibOVIXTVmwvx"
+  },
+  {
+    "iataCode": "L1F",
+    "name": "Lockheed Martin L-1011 TriStar",
+    "id": "arc_00009VMF8AibOVIXTVmww0"
+  },
+  {
+    "iataCode": "L11",
+    "name": "Lockheed Martin L-1011 TriStar 1/50/100/150/200/250",
+    "id": "arc_00009VMF8AibOVIXTVmwvy"
+  },
+  {
+    "iataCode": "L15",
+    "name": "Lockheed Martin L-1011 TriStar 500",
+    "id": "arc_00009VMF8AibOVIXTVmwvz"
+  },
+  {
+    "iataCode": "LOH",
+    "name": "Lockheed Martin L-182/L-282/L-382 (L-100)Hercules",
+    "id": "arc_00009VMF8AibOVIXTVmww5"
+  },
+  {
+    "iataCode": "LOF",
+    "name": "Lockheed Martin L-188 Electra",
+    "id": "arc_00009oBdrPiW5WkC9haUE9"
+  },
+  {
+    "iataCode": "LOE",
+    "name": "Lockheed Martin L-188 Electra",
+    "id": "arc_00009VMF8AibOVIXTVmww4"
+  },
+  {
+    "iataCode": "MD9",
+    "name": "MD Helicopters Inc MD 900 Explorer",
+    "id": "arc_00009oBdrPis4D1mAnkll3"
+  },
+  {
+    "iataCode": "MIH",
+    "name": "Mil Mi-8/Mi-17/Mi-171/Mi-172",
+    "id": "arc_00009VMF8AibOVIXTVmwwH"
+  },
+  {
+    "iataCode": "MU2",
+    "name": "Mitsubishi Aircraft Corporation MU-2",
+    "id": "arc_00009VMF8AibOVIXTVmwwI"
+  },
+  {
+    "iataCode": "YS1",
+    "name": "NAMC YS-11",
+    "id": "arc_00009VMF8AibOVIXTVmwwl"
+  },
+  {
+    "iataCode": "P18",
+    "name": "Piaggio Aero P180 Avanti II",
+    "id": "arc_00009oBdrPis4D1mAnkll5"
+  },
+  {
+    "iataCode": "PL2",
+    "name": "Pilatus PC-12",
+    "id": "arc_00009VMF8AibOVIXTVmwwP"
+  },
+  {
+    "iataCode": "PL6",
+    "name": "Pilatus PC-6 Turbo Porter",
+    "id": "arc_00009oBdrPis4D1mAnkll7"
+  },
+  {
+    "iataCode": "PAG",
+    "name": "Piper (Light aircraft)",
+    "id": "arc_00009VMF8AibOVIXTVmwwO"
+  },
+  {
+    "iataCode": "PA1",
+    "name": "Piper (Light aircraft-single piston engine)",
+    "id": "arc_00009VMF8AibOVIXTVmwwM"
+  },
+  {
+    "iataCode": "PA2",
+    "name": "Piper (Light aircraft-twin piston engines)",
+    "id": "arc_00009VMF8AibOVIXTVmwwN"
+  },
+  {
+    "iataCode": "PAT",
+    "name": "Piper (Light aircraft-twin turboprop engines)",
+    "id": "arc_00009oBdrPis4D1mAnkll6"
+  },
+  {
+    "iataCode": "S20",
+    "name": "Saab 2000",
+    "id": "arc_00009VMF8AibOVIXTVmwwR"
+  },
+  {
+    "iataCode": "SFF",
+    "name": "Saab 340",
+    "id": "arc_00009oBdrPis4D1mAnkllA"
+  },
+  {
+    "iataCode": "SFA",
+    "name": "Saab 340",
+    "id": "arc_00009oBdrPis4D1mAnklmV"
+  },
+  {
+    "iataCode": "SF3",
+    "name": "Saab 340",
+    "id": "arc_00009VMF8AibOVIXTVmwwS"
+  },
+  {
+    "iataCode": "SFB",
+    "name": "Saab 340B",
+    "id": "arc_00009VMF8AibOVIXTVmwwT"
+  },
+  {
+    "iataCode": "SY8",
+    "name": "Shaanxi Y-8",
+    "id": "arc_00009oBdrPis4D1mAnkllF"
+  },
+  {
+    "iataCode": "SH3",
+    "name": "Shorts 330 (SD3-30)",
+    "id": "arc_00009VMF8AibOVIXTVmwwV"
+  },
+  {
+    "iataCode": "SH6",
+    "name": "Shorts 360 (SD3-60)",
+    "id": "arc_00009VMF8AibOVIXTVmwwW"
+  },
+  {
+    "iataCode": "SHS",
+    "name": "Shorts Skyvan (SC-7)",
+    "id": "arc_00009oBdrPis4D1mAnkllB"
+  },
+  {
+    "iataCode": "S58",
+    "name": "Sikorsky S-58T",
+    "id": "arc_00009VMF8AibOVIXTVmwwX"
+  },
+  {
+    "iataCode": "S61",
+    "name": "Sikorsky S-61",
+    "id": "arc_00009VMF8AibOVIXTVmwwY"
+  },
+  {
+    "iataCode": "S76",
+    "name": "Sikorsky S-76",
+    "id": "arc_00009VMF8AibOVIXTVmwwZ"
+  },
+  {
+    "iataCode": "TBM",
+    "name": "SOCATA TBM-700",
+    "id": "arc_00009oBdrPis4D1mAnkllI"
+  },
+  {
+    "iataCode": "SU1",
+    "name": "Sukhoi Superjet 100",
+    "id": "arc_00009oBdrPis4D1mAnklmT"
+  },
+  {
+    "iataCode": "SU7",
+    "name": "Sukhoi Superjet 100-75",
+    "id": "arc_00009oBdrPis4D1mAnkllC"
+  },
+  {
+    "iataCode": "SU9",
+    "name": "Sukhoi Superjet 100-95",
+    "id": "arc_00009oBdrPis4D1mAnkllD"
+  },
+  {
+    "iataCode": "S9S",
+    "name": "Sukhoi Superjet 100-95 (Saberlets)",
+    "id": "arc_00009oBdrPis4D1mAnklmU"
+  },
+  {
+    "iataCode": "BUS",
+    "name": "Surface Equipment-Bus",
+    "id": "arc_00009VMF8AhtR8jNRJSNpU"
+  },
+  {
+    "iataCode": "HOV",
+    "name": "Surface Equipment-Hovercraft",
+    "id": "arc_00009oBdrPiW5WkC9haUE6"
+  },
+  {
+    "iataCode": "LCH",
+    "name": "Surface Equipment-Launch/Boat",
+    "id": "arc_00009VMF8AibOVIXTVmww2"
+  },
+  {
+    "iataCode": "LMO",
+    "name": "Surface Equipment-Limousine",
+    "id": "arc_00009VMF8AibOVIXTVmww3"
+  },
+  {
+    "iataCode": "RFS",
+    "name": "Surface Equipment-Road Feeder Service (Truck)",
+    "id": "arc_00009oBdrPis4D1mAnkll9"
+  },
+  {
+    "iataCode": "TRN",
+    "name": "Surface Equipment-Train",
+    "id": "arc_00009VMF8AibOVIXTVmwwe"
+  },
+  {
+    "iataCode": "TRS",
+    "name": "Surface Equipment - Train High Speed Train",
+    "id": "arc_00009oBdrPis4D1mAnklmY"
+  },
+  {
+    "iataCode": "TPT",
+    "name": "Tecnam P2012 Traveler",
+    "id": "arc_00009oBdrPis4D1mAnklmW"
+  },
+  {
+    "iataCode": "T12",
+    "name": "Tecnam P2012 Traveler",
+    "id": "arc_00009oBdrPis4D1mAnklmX"
+  },
+  {
+    "iataCode": "TU3",
+    "name": "Tupolev Tu-134",
+    "id": "arc_00009VMF8AibOVIXTVmwwc"
+  },
+  {
+    "iataCode": "TU5",
+    "name": "Tupolev Tu-154",
+    "id": "arc_00009VMF8AibOVIXTVmwwd"
+  },
+  {
+    "iataCode": "T2F",
+    "name": "Tupolev Tu-204",
+    "id": "arc_00009oBdrPis4D1mAnkllG"
+  },
+  {
+    "iataCode": "T20",
+    "name": "Tupolev Tu-204/Tu-214",
+    "id": "arc_00009VMF8AibOVIXTVmwwb"
+  },
+  {
+    "iataCode": "T34",
+    "name": "Tupolev Tu-334",
+    "id": "arc_00009oBdrPis4D1mAnkllH"
+  },
+  {
+    "iataCode": "ACT",
+    "name": "Twin (Aero) Turbo Commander/Jetprop Commander",
+    "id": "arc_00009oBdrPiW5WkC9haUD4"
+  },
+  {
+    "iataCode": "ACP",
+    "name": "Twin Commander Aircraft",
+    "id": "arc_00009oBdrPiW5WkC9haUD3"
+  },
+  {
+    "iataCode": "ACD",
+    "name": "Twin Commander Aircraft/Turbo Commander/Jetprop Commander",
+    "id": "arc_00009VMF8AhXSSRnQDI6HW"
+  },
+  {
+    "iataCode": "VCV",
+    "name": "Vickers Viscount",
+    "id": "arc_00009VMF8AibOVIXTVmwwf"
+  },
+  {
+    "iataCode": "PN6",
+    "name": "Vulcanair (Partenavia) P.68",
+    "id": "arc_00009VMF8AibOVIXTVmwwQ"
+  },
+  {
+    "iataCode": "MA6",
+    "name": "Xian Yunshuji MA-60",
+    "id": "arc_00009oBdrPiW5WkC9haUED"
+  },
+  {
+    "iataCode": "M6F",
+    "name": "Xian Yunshuji MA600",
+    "id": "arc_00009oBdrPis4D1mAnklmS"
+  },
+  {
+    "iataCode": "YN7",
+    "name": "Xian Yunshuji Y7",
+    "id": "arc_00009VMF8AibOVIXTVmwwk"
+  },
+  {
+    "iataCode": "YK4",
+    "name": "Yakovlev Yak-40",
+    "id": "arc_00009VMF8AibOVIXTVmwwi"
+  },
+  {
+    "iataCode": "YK2",
+    "name": "Yakovlev Yak-42/Yak-142",
+    "id": "arc_00009VMF8AibOVIXTVmwwh"
+  }
+]

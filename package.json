@@ -7,6 +7,8 @@
     "generate-airports": "node scripts/generate_airports_json.js",
     "generate-airlines": "node scripts/generate_airlines_json.js",
     "generate-aircraft": "node scripts/generate_aircraft_json.js",
+    "transform-data": "node scripts/transform-data.js",
+    "prebuild": "npm run transform-data",
     "start": "node src/index.js",
     "dev": "nodemon -I --exec node --loader ts-node/esm ./src/index.ts",
     "build": "tsc",
