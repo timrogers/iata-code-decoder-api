@@ -7,6 +7,7 @@ import Fastify, {
   RawReplyDefaultExpression,
 } from 'fastify';
 import fastifyCompress from '@fastify/compress';
+import rateLimitPlugin from '@fastify/rate-limit';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -197,6 +198,88 @@ function createMcpServer(): Server {
 // Register compression plugin
 await app.register(fastifyCompress);
 
+// Rate limiting configuration
+const RATE_LIMIT_CONFIG = {
+  global: {
+    max: parseInt(process.env.GLOBAL_RATE_LIMIT_MAX || '1000', 10),
+    timeWindow: process.env.GLOBAL_RATE_LIMIT_WINDOW || '15 minutes',
+  },
+  rest: {
+    max: parseInt(process.env.REST_RATE_LIMIT_MAX || '100', 10),
+    timeWindow: process.env.REST_RATE_LIMIT_WINDOW || '1 minute',
+  },
+  mcp: {
+    max: parseInt(process.env.MCP_RATE_LIMIT_MAX || '200', 10),
+    timeWindow: process.env.MCP_RATE_LIMIT_WINDOW || '1 minute',
+  },
+  health: {
+    max: parseInt(process.env.HEALTH_RATE_LIMIT_MAX || '60', 10),
+    timeWindow: process.env.HEALTH_RATE_LIMIT_WINDOW || '1 minute',
+  },
+};
+
+// Parse allowlist from environment
+const allowedIPs = (process.env.RATE_LIMIT_ALLOWLIST || '')
+  .split(',')
+  .map((ip) => ip.trim())
+  .filter(Boolean);
+
+// Register global rate limiting
+await app.register(rateLimitPlugin, {
+  global: true,
+  max: RATE_LIMIT_CONFIG.global.max,
+  timeWindow: RATE_LIMIT_CONFIG.global.timeWindow,
+
+  // Custom allowList to skip rate limiting for development and allowlisted IPs
+  allowList: (request) => {
+    if (process.env.NODE_ENV === 'development') {
+      return true;
+    }
+    const clientIp = request.ip;
+    return allowedIPs.includes(clientIp);
+  },
+
+  // Custom key generator to handle X-Forwarded-For header
+  keyGenerator: (request) => {
+    const forwardedFor = request.headers['x-forwarded-for'];
+    if (forwardedFor && typeof forwardedFor === 'string') {
+      return forwardedFor.split(',')[0].trim();
+    }
+    return request.ip;
+  },
+
+  // Custom error response
+  errorResponseBuilder: (request, context) => ({
+    statusCode: 429,
+    error: 'Too Many Requests',
+    message: `Rate limit exceeded. Please try again in ${Math.ceil(context.ttl / 1000)} seconds.`,
+    retryAfter: Math.ceil(context.ttl / 1000),
+  }),
+
+  // Add rate limit info to logs
+  onExceeding: (request, key) => {
+    request.log.warn(
+      {
+        ip: key,
+        endpoint: request.url,
+        method: request.method,
+      },
+      'Client approaching rate limit',
+    );
+  },
+
+  onExceeded: (request, key) => {
+    request.log.error(
+      {
+        ip: key,
+        endpoint: request.url,
+        method: request.method,
+      },
+      'Rate limit exceeded',
+    );
+  },
+});
+
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
@@ -257,9 +340,38 @@ const queryStringSchema = {
   },
 };
 
+// Rate limit configurations for different endpoint types
+const healthRateLimitConfig = {
+  config: {
+    rateLimit: {
+      max: RATE_LIMIT_CONFIG.health.max,
+      timeWindow: RATE_LIMIT_CONFIG.health.timeWindow,
+    },
+  },
+};
+
+const restApiRateLimitConfig = {
+  config: {
+    rateLimit: {
+      max: RATE_LIMIT_CONFIG.rest.max,
+      timeWindow: RATE_LIMIT_CONFIG.rest.timeWindow,
+    },
+  },
+};
+
+const mcpRateLimitConfig = {
+  config: {
+    rateLimit: {
+      max: RATE_LIMIT_CONFIG.mcp.max,
+      timeWindow: RATE_LIMIT_CONFIG.mcp.timeWindow,
+    },
+  },
+};
+
 app.get(
   '/health',
   {
+    ...healthRateLimitConfig,
     schema: healthSchema,
   },
   async (request: FastifyRequest, reply: FastifyReply) => {
@@ -275,6 +387,7 @@ app.get(
 app.get<{ Querystring: QueryParams }>(
   '/airports',
   {
+    ...restApiRateLimitConfig,
     schema: {
       querystring: queryStringSchema,
       response: {
@@ -301,6 +414,7 @@ app.get<{ Querystring: QueryParams }>(
 app.get<{ Querystring: QueryParams }>(
   '/airlines',
   {
+    ...restApiRateLimitConfig,
     schema: {
       querystring: queryStringSchema,
       response: {
@@ -328,6 +442,7 @@ app.get<{ Querystring: QueryParams }>(
 app.get<{ Querystring: QueryParams }>(
   '/aircraft',
   {
+    ...restApiRateLimitConfig,
     schema: {
       querystring: queryStringSchema,
       response: {
@@ -360,6 +475,7 @@ interface McpRequest {
 
 app.post<McpRequest>(
   '/mcp',
+  mcpRateLimitConfig,
   async (request: FastifyRequest<McpRequest>, reply: FastifyReply) => {
     try {
       // Check for existing session ID
@@ -452,6 +568,7 @@ const handleSessionRequest = async (
 // Handle GET requests for server-to-client notifications via SSE
 app.get<McpRequest>(
   '/mcp',
+  mcpRateLimitConfig,
   async (request: FastifyRequest<McpRequest>, reply: FastifyReply) => {
     return handleSessionRequest(request, reply);
   },
@@ -460,6 +577,7 @@ app.get<McpRequest>(
 // Handle DELETE requests for session termination
 app.delete<McpRequest>(
   '/mcp',
+  mcpRateLimitConfig,
   async (request: FastifyRequest<McpRequest>, reply: FastifyReply) => {
     return handleSessionRequest(request, reply);
   },
