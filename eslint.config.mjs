@@ -16,7 +16,7 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/node_modules', 'src/**/*.js'],
+    ignores: ['**/node_modules', 'src/**/*.js', '.github/**'],
   },
   ...compat.extends(
     'eslint:recommended',
@@ -43,6 +43,6 @@ export default [
       'prettier/prettier': 2,
     },
 
-    ignores: ['**/node_modules', 'src/**/*.js'],
+    ignores: ['**/node_modules', 'src/**/*.js', '.github/**'],
   },
 ];
