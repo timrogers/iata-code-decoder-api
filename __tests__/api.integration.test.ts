@@ -445,8 +445,6 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       });
 
       expect(res.headers['access-control-allow-origin']).toBe('*');
-      expect(res.headers['access-control-allow-methods']).toContain('GET');
-      expect(res.headers['access-control-allow-headers']).toContain('Content-Type');
     });
 
     it('returns 204 for preflight OPTIONS with CORS headers', async () => {
@@ -461,6 +459,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
 
       expect(res.statusCode).toBe(204);
       expect(res.headers['access-control-allow-origin']).toBe('*');
+      expect(res.headers['access-control-allow-methods']).toContain('GET');
     });
 
     it('includes CORS headers on error responses', async () => {

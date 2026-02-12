@@ -7,6 +7,7 @@ import Fastify, {
   RawReplyDefaultExpression,
 } from 'fastify';
 import fastifyCompress from '@fastify/compress';
+import fastifyCors from '@fastify/cors';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -197,20 +198,8 @@ function createMcpServer(): Server {
 // Register compression plugin
 await app.register(fastifyCompress);
 
-// CORS: allow cross-origin requests from any domain
-const ALLOWED_METHODS = 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
-const ALLOWED_HEADERS = 'Content-Type, Authorization, Accept';
-
-app.addHook('onSend', async (_req: FastifyRequest, reply: FastifyReply) => {
-  void reply.header('Access-Control-Allow-Origin', '*');
-  void reply.header('Access-Control-Allow-Methods', ALLOWED_METHODS);
-  void reply.header('Access-Control-Allow-Headers', ALLOWED_HEADERS);
-});
-
-// Handle preflight requests for any route
-app.options('/*', async (_req: FastifyRequest, reply: FastifyReply) => {
-  return reply.status(204).send();
-});
+// Enable CORS for all origins
+await app.register(fastifyCors, { origin: '*' });
 
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
