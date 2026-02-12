@@ -7,6 +7,7 @@ import Fastify, {
   RawReplyDefaultExpression,
 } from 'fastify';
 import fastifyCompress from '@fastify/compress';
+import fastifyCors from '@fastify/cors';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -196,6 +197,9 @@ function createMcpServer(): Server {
 
 // Register compression plugin
 await app.register(fastifyCompress);
+
+// Enable CORS for all origins
+await app.register(fastifyCors, { origin: '*' });
 
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
