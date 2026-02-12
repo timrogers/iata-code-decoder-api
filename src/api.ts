@@ -197,6 +197,21 @@ function createMcpServer(): Server {
 // Register compression plugin
 await app.register(fastifyCompress);
 
+// CORS: allow cross-origin requests from any domain
+const ALLOWED_METHODS = 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
+const ALLOWED_HEADERS = 'Content-Type, Authorization, Accept';
+
+app.addHook('onSend', async (_req: FastifyRequest, reply: FastifyReply) => {
+  void reply.header('access-control-allow-origin', '*');
+  void reply.header('access-control-allow-methods', ALLOWED_METHODS);
+  void reply.header('access-control-allow-headers', ALLOWED_HEADERS);
+});
+
+// Handle preflight requests for any route
+app.options('/*', async (_req: FastifyRequest, reply: FastifyReply) => {
+  return reply.status(204).send();
+});
+
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,

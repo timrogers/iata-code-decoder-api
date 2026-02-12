@@ -437,6 +437,43 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
   });
 
+  describe('Cross-Origin Resource Sharing (CORS)', () => {
+    it('sets wildcard origin header on standard responses', async () => {
+      const res = await app.inject({
+        method: 'GET',
+        url: '/health',
+      });
+
+      expect(res.headers['access-control-allow-origin']).toBe('*');
+      expect(res.headers['access-control-allow-methods']).toContain('GET');
+      expect(res.headers['access-control-allow-headers']).toContain('Content-Type');
+    });
+
+    it('returns 204 for preflight OPTIONS with CORS headers', async () => {
+      const res = await app.inject({
+        method: 'OPTIONS',
+        url: '/airports',
+        headers: {
+          origin: 'https://test-origin.example.org',
+          'access-control-request-method': 'GET',
+        },
+      });
+
+      expect(res.statusCode).toBe(204);
+      expect(res.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('includes CORS headers on error responses', async () => {
+      const res = await app.inject({
+        method: 'GET',
+        url: '/airports/INVALID_CODE_TOO_LONG',
+      });
+
+      expect(res.statusCode).toBe(404);
+      expect(res.headers['access-control-allow-origin']).toBe('*');
+    });
+  });
+
   describe('Edge Cases and Error Handling', () => {
     it('should handle non-existent endpoints with 404', async () => {
       const response = await app.inject({
