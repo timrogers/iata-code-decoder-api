@@ -202,9 +202,9 @@ const ALLOWED_METHODS = 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
 const ALLOWED_HEADERS = 'Content-Type, Authorization, Accept';
 
 app.addHook('onSend', async (_req: FastifyRequest, reply: FastifyReply) => {
-  void reply.header('access-control-allow-origin', '*');
-  void reply.header('access-control-allow-methods', ALLOWED_METHODS);
-  void reply.header('access-control-allow-headers', ALLOWED_HEADERS);
+  void reply.header('Access-Control-Allow-Origin', '*');
+  void reply.header('Access-Control-Allow-Methods', ALLOWED_METHODS);
+  void reply.header('Access-Control-Allow-Headers', ALLOWED_HEADERS);
 });
 
 // Handle preflight requests for any route
