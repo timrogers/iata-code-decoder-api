@@ -197,6 +197,18 @@ function createMcpServer(): Server {
 // Register compression plugin
 await app.register(fastifyCompress);
 
+// Allow CORS requests from any origin
+app.addHook('onSend', async (_request, reply, payload) => {
+  reply.header('Access-Control-Allow-Origin', '*');
+  reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
+  return payload;
+});
+
+app.options('/*', async (_request, reply) => {
+  reply.status(204).send();
+});
+
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
