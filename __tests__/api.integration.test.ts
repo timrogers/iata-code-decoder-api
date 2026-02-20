@@ -457,4 +457,19 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.json()).toHaveProperty('data');
     });
   });
+
+  describe('CORS', () => {
+    it('should include Access-Control-Allow-Origin header on responses', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('https://specific-domain.com');
+    });
+  });
 });
