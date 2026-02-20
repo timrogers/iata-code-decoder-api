@@ -457,4 +457,85 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.json()).toHaveProperty('data');
     });
   });
+
+  describe('Rate Limiting', () => {
+    describe('Rate Limit Headers', () => {
+      it('should include rate limit headers in successful responses', async () => {
+        const response = await app.inject({
+          method: 'GET',
+          url: '/airports?query=LHR',
+        });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.headers['x-ratelimit-limit']).toBeDefined();
+        expect(response.headers['x-ratelimit-remaining']).toBeDefined();
+        expect(response.headers['x-ratelimit-reset']).toBeDefined();
+      });
+
+      it('should include rate limit headers for health endpoint', async () => {
+        const response = await app.inject({
+          method: 'GET',
+          url: '/health',
+        });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.headers['x-ratelimit-limit']).toBeDefined();
+        expect(response.headers['x-ratelimit-remaining']).toBeDefined();
+        expect(response.headers['x-ratelimit-reset']).toBeDefined();
+      });
+
+      it('should include rate limit headers for MCP endpoint', async () => {
+        const response = await app.inject({
+          method: 'POST',
+          url: '/mcp',
+          payload: {
+            jsonrpc: '2.0',
+            method: 'tools/list',
+            id: 1,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // Status may vary, but headers should be present
+        expect(response.headers['x-ratelimit-limit']).toBeDefined();
+        expect(response.headers['x-ratelimit-remaining']).toBeDefined();
+        expect(response.headers['x-ratelimit-reset']).toBeDefined();
+      });
+    });
+
+    describe('Rate Limit Values', () => {
+      it('should have different limits for different endpoint types', async () => {
+        const healthResponse = await app.inject({
+          method: 'GET',
+          url: '/health',
+        });
+
+        const airportsResponse = await app.inject({
+          method: 'GET',
+          url: '/airports?query=LHR',
+        });
+
+        const mcpResponse = await app.inject({
+          method: 'POST',
+          url: '/mcp',
+          payload: {
+            jsonrpc: '2.0',
+            method: 'tools/list',
+            id: 1,
+          },
+        });
+
+        // Health endpoint should have limit of 60/min
+        expect(healthResponse.headers['x-ratelimit-limit']).toBe('60');
+
+        // REST endpoints should have limit of 100/min
+        expect(airportsResponse.headers['x-ratelimit-limit']).toBe('100');
+
+        // MCP endpoint should have limit of 200/min
+        expect(mcpResponse.headers['x-ratelimit-limit']).toBe('200');
+      });
+    });
+  });
 });
