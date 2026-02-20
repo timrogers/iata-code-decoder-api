@@ -1,0 +1,54 @@
+[
+  {
+    "path": "/",
+    "method": "GET",
+    "description": "Root endpoint"
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "description": "Health check"
+  },
+  {
+    "path": "/api/users",
+    "method": "GET",
+    "description": "Get all users"
+  },
+  {
+    "path": "/api/users/123",
+    "method": "GET",
+    "description": "Get user by ID"
+  },
+  {
+    "path": "/api/users",
+    "method": "POST",
+    "body": {
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "description": "Create new user"
+  },
+  {
+    "path": "/api/users/123",
+    "method": "PUT",
+    "body": {
+      "name": "Jane Doe",
+      "email": "jane@example.com"
+    },
+    "description": "Update user"
+  },
+  {
+    "path": "/api/users/123",
+    "method": "DELETE",
+    "description": "Delete user"
+  },
+  {
+    "path": "/api/search",
+    "method": "GET",
+    "params": {
+      "q": "test",
+      "limit": "10"
+    },
+    "description": "Search endpoint with query params"
+  }
+]
