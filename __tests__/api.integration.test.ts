@@ -469,7 +469,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       });
 
       expect(response.statusCode).toBe(200);
-      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-origin']).toBe('foo');
     });
   });
 });
