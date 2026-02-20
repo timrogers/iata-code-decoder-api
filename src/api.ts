@@ -7,6 +7,7 @@ import Fastify, {
   RawReplyDefaultExpression,
 } from 'fastify';
 import fastifyCompress from '@fastify/compress';
+import fastifyCors from '@fastify/cors';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -197,21 +198,8 @@ function createMcpServer(): Server {
 // Register compression plugin
 await app.register(fastifyCompress);
 
-// Add CORS headers to all responses
-app.addHook('onSend', (_request, reply, _payload, done) => {
-  reply.header('Access-Control-Allow-Origin', '*');
-  done();
-});
-
-// Handle CORS preflight requests
-app.options('*', (_request, reply) => {
-  reply
-    .header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    .header('Access-Control-Allow-Headers', '*')
-    .header('Access-Control-Max-Age', '86400')
-    .code(204)
-    .send();
-});
+// Register CORS plugin
+await app.register(fastifyCors, { origin: '*' });
 
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
