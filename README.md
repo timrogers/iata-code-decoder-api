@@ -53,6 +53,57 @@ The test suite covers:
 - Error handling and edge cases
 - Request validation
 - Response formatting and headers
+- Rate limiting functionality
+
+## Rate Limiting
+
+This API implements rate limiting to ensure fair usage and protect against abuse.
+
+### Rate Limits
+
+The following rate limits are applied per IP address:
+
+| Endpoint | Limit | Window | Description |
+|----------|-------|--------|-------------|
+| **Global** | 1000 requests | 15 minutes | Baseline protection across all endpoints |
+| **REST APIs** | 100 requests | 1 minute | `/airports`, `/airlines`, `/aircraft` |
+| **MCP Server** | 200 requests | 1 minute | `/mcp` (POST, GET, DELETE) |
+| **Health Check** | 60 requests | 1 minute | `/health` |
+
+### Rate Limit Headers
+
+All API responses include rate limit information in the following headers:
+
+- `X-RateLimit-Limit`: Maximum number of requests allowed in the time window
+- `X-RateLimit-Remaining`: Number of requests remaining in the current window
+- `X-RateLimit-Reset`: Unix timestamp when the rate limit resets
+
+### Rate Limit Exceeded
+
+When rate limits are exceeded, the API returns HTTP status code `429 Too Many Requests` with the following response:
+
+```json
+{
+  "statusCode": 429,
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded. Please try again in 45 seconds.",
+  "retryAfter": 45
+}
+```
+
+The response also includes a `Retry-After` header indicating how many seconds to wait before making another request.
+
+### Configuration
+
+Rate limits can be customized using environment variables. See `.env.example` for available options:
+
+- `GLOBAL_RATE_LIMIT_MAX` and `GLOBAL_RATE_LIMIT_WINDOW`
+- `REST_RATE_LIMIT_MAX` and `REST_RATE_LIMIT_WINDOW`
+- `MCP_RATE_LIMIT_MAX` and `MCP_RATE_LIMIT_WINDOW`
+- `HEALTH_RATE_LIMIT_MAX` and `HEALTH_RATE_LIMIT_WINDOW`
+- `RATE_LIMIT_ALLOWLIST` - Comma-separated list of IP addresses to exempt from rate limiting
+
+**Development Mode**: Rate limiting is automatically disabled when `NODE_ENV=development`.
 
 ## Model Context Protocol (MCP) server
 
