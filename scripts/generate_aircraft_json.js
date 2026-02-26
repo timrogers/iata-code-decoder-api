@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 import { Duffel } from '@duffel/api';
+import { cameliseKeys } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,8 +28,8 @@ const fetchAndWriteAircraft = async () => {
 
     // `aircraftResponse` can contain properties that aren't defined in the
     // `Aircraft` type. If this is the case, they'll still be included in our
-    // list and written to the file.
-    aircraft.push(aircraftResponse.data);
+    // list and written to the file. Keys are camelised to avoid runtime transformation.
+    aircraft.push(cameliseKeys(aircraftResponse.data));
 
     // We artificially sleep after each airport - even though each response
     // contains many airports - just to avoid hitting the rate limit and
