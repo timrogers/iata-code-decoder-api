@@ -457,4 +457,69 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.json()).toHaveProperty('data');
     });
   });
+
+  describe('CORS', () => {
+    it('should include CORS headers allowing any origin on /health', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should include CORS headers allowing any origin on /airports', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=LHR',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should include CORS headers allowing any origin on /airlines', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airlines?query=BA',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should include CORS headers allowing any origin on /aircraft', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/aircraft?query=777',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should handle preflight OPTIONS requests', async () => {
+      const response = await app.inject({
+        method: 'OPTIONS',
+        url: '/airports',
+        headers: {
+          origin: 'https://example.com',
+          'access-control-request-method': 'GET',
+        },
+      });
+
+      expect(response.statusCode).toBe(204);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-methods']).toBeDefined();
+    });
+  });
 });
