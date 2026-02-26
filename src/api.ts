@@ -204,11 +204,12 @@ const filterObjectsByPartialIataCode = (
 ): Keyable[] => {
   if (partialIataCode.length > iataCodeLength) {
     return [];
-  } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
   }
+
+  // Pre-lowercase the query once for efficiency
+  const lowerQuery = partialIataCode.toLowerCase();
+
+  return objects.filter((object) => object.iataCode.toLowerCase().startsWith(lowerQuery));
 };
 
 // Query parameter interface

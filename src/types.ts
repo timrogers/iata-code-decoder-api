@@ -6,7 +6,7 @@ export interface City {
 }
 
 export interface Airport {
-  time_zone: string;
+  timeZone: string;
   name: string;
   longitude: number;
   latitude: number;
@@ -16,6 +16,7 @@ export interface Airport {
   iataCountryCode: string;
   cityName: string;
   city: City | null;
+  iataCityCode: string;
 }
 
 export interface Aircraft {
