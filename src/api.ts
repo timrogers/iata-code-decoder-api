@@ -6,6 +6,7 @@ import Fastify, {
   RawRequestDefaultExpression,
   RawReplyDefaultExpression,
 } from 'fastify';
+import fastifyCors from '@fastify/cors';
 import fastifyCompress from '@fastify/compress';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
@@ -193,6 +194,9 @@ function createMcpServer(): Server {
 
   return server;
 }
+
+// Register CORS plugin to allow requests from any origin
+await app.register(fastifyCors, { origin: '*' });
 
 // Register compression plugin
 await app.register(fastifyCompress);
