@@ -130,6 +130,62 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
     });
+
+    it('should return Navi Mumbai International Airport (NMI)', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=NMI',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body.data.length).toBe(1);
+      expect(body.data[0].iataCode).toBe('NMI');
+      expect(body.data[0].name).toBe('Navi Mumbai International Airport');
+      expect(body.data[0].iataCountryCode).toBe('IN');
+    });
+
+    it('should return Noida International Airport (DXN)', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=DXN',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body.data.length).toBe(1);
+      expect(body.data[0].iataCode).toBe('DXN');
+      expect(body.data[0].name).toBe('Noida International Airport');
+      expect(body.data[0].iataCountryCode).toBe('IN');
+    });
+
+    it('should return Western Sydney International Airport (WSI)', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=WSI',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body.data.length).toBe(1);
+      expect(body.data[0].iataCode).toBe('WSI');
+      expect(body.data[0].name).toBe('Western Sydney International Airport');
+      expect(body.data[0].iataCountryCode).toBe('AU');
+    });
+
+    it('should return Long Thanh International Airport (LTH)', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=LTH',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body.data.length).toBe(1);
+      expect(body.data[0].iataCode).toBe('LTH');
+      expect(body.data[0].name).toBe('Long Thanh International Airport');
+      expect(body.data[0].iataCountryCode).toBe('VN');
+    });
   });
 
   describe('GET /airlines', () => {
