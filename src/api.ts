@@ -197,6 +197,20 @@ function createMcpServer(): Server {
 // Register compression plugin
 await app.register(fastifyCompress);
 
+// Add CORS headers to all responses
+app.addHook('onSend', async (_request: FastifyRequest, reply: FastifyReply) => {
+  reply.header('Access-Control-Allow-Origin', '*');
+});
+
+// Handle CORS preflight requests
+app.options('*', async (_request: FastifyRequest, reply: FastifyReply) => {
+  reply.header('Access-Control-Allow-Origin', '*');
+  reply.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  reply.header('Access-Control-Allow-Headers', 'Content-Type, mcp-session-id');
+  reply.header('Access-Control-Max-Age', String(ONE_DAY_IN_SECONDS));
+  reply.code(204).send();
+});
+
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
