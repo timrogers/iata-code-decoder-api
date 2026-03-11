@@ -18,6 +18,11 @@ const duffel = new Duffel({
 });
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// Convert snake_case object keys to camelCase at data-generation time
+// so the API runtime avoids doing this transformation on every startup.
+const convertKeyCase = (s) => s.replace(/_([a-z])/gi, (_, c) => c.toUpperCase());
+const reshapeKeys = (o) =>
+  Object.fromEntries(Object.entries(o).map(([k, v]) => [convertKeyCase(k), v]));
 
 const fetchAndWriteAirlines = async () => {
   let airlines = [];
@@ -25,10 +30,11 @@ const fetchAndWriteAirlines = async () => {
   for await (const airlineResponse of duffel.airlines.listWithGenerator()) {
     console.log(`Loaded airline ${airlineResponse.data.iata_code} ✅`);
 
-    // `airlineResponse` can contain properties that aren't defined in the
-    // `Airline` type. If this is the case, they'll still be included in our
-    // list and written to the file.
-    airlines.push(airlineResponse.data);
+    // Pre-transform keys to camelCase and filter out entries with no IATA code
+    const entry = reshapeKeys(airlineResponse.data);
+    if (entry.iataCode !== undefined && entry.iataCode !== null) {
+      airlines.push(entry);
+    }
 
     // We artificially sleep after each airport - even though each response
     // contains many airports - just to avoid hitting the rate limit and
