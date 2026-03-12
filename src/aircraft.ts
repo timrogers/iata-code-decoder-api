@@ -1,5 +1,6 @@
 import { Aircraft } from './types.js';
-import AIRCRAFT_DATA from './../data/aircraft.json' with { type: 'json' };
-import { cameliseKeys } from './utils.js';
+// Data is pre-generated with camelCase keys — no runtime transformation needed
+import AIRCRAFT from './../data/aircraft.json' with { type: 'json' };
 
-export const AIRCRAFT = AIRCRAFT_DATA.map(cameliseKeys) as Aircraft[];
+export { AIRCRAFT };
+export type { Aircraft };

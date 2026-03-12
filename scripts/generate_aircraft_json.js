@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 import { Duffel } from '@duffel/api';
+import { toCamelCaseKeys } from './camelise_helpers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,10 +26,9 @@ const fetchAndWriteAircraft = async () => {
   for await (const aircraftResponse of duffel.aircraft.listWithGenerator()) {
     console.log(`Loaded aircraft ${aircraftResponse.data.iata_code} ✅`);
 
-    // `aircraftResponse` can contain properties that aren't defined in the
-    // `Aircraft` type. If this is the case, they'll still be included in our
-    // list and written to the file.
-    aircraft.push(aircraftResponse.data);
+    // Convert keys to camelCase at generation time so the server skips
+    // runtime transformation on startup.
+    aircraft.push(toCamelCaseKeys(aircraftResponse.data));
 
     // We artificially sleep after each airport - even though each response
     // contains many airports - just to avoid hitting the rate limit and

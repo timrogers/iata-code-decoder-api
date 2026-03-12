@@ -1,12 +1,10 @@
-import { Airline, Keyable } from './types.js';
+import { Airline } from './types.js';
+// Data is pre-generated with camelCase keys — no runtime transformation needed
 import AIRLINES_DATA from './../data/airlines.json' with { type: 'json' };
-import { cameliseKeys } from './utils.js';
 
 // We want to filter out airlines returned by the Duffel API with no IATA code,
 // since these aren't useful for IATA code decoding
-const hasIataCode = (airline: Keyable): boolean =>
+const hasIataCode = (airline: { iataCode?: string }): boolean =>
   airline.iataCode !== undefined && airline.iataCode !== null;
 
-export const AIRLINES: Airline[] = AIRLINES_DATA.map(cameliseKeys).filter(
-  hasIataCode,
-) as Airline[];
+export const AIRLINES: Airline[] = AIRLINES_DATA.filter(hasIataCode) as Airline[];
