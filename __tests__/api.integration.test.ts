@@ -328,6 +328,85 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
   });
 
+  describe('GET /all', () => {
+    it('should return airports, airlines and aircraft in one response', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/all',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body).toHaveProperty('data');
+      expect(body.data).toHaveProperty('airports');
+      expect(body.data).toHaveProperty('airlines');
+      expect(body.data).toHaveProperty('aircraft');
+      expect(Array.isArray(body.data.airports)).toBe(true);
+      expect(Array.isArray(body.data.airlines)).toBe(true);
+      expect(Array.isArray(body.data.aircraft)).toBe(true);
+    });
+
+    it('should return non-empty arrays for all categories', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/all',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body.data.airports.length).toBeGreaterThan(0);
+      expect(body.data.airlines.length).toBeGreaterThan(0);
+      expect(body.data.aircraft.length).toBeGreaterThan(0);
+    });
+
+    it('should return valid airport objects', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/all',
+      });
+
+      const body = response.json();
+      const airport = body.data.airports[0];
+      expect(airport.iataCode).toBeDefined();
+      expect(airport.name).toBeDefined();
+    });
+
+    it('should return valid airline objects', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/all',
+      });
+
+      const body = response.json();
+      const airline = body.data.airlines[0];
+      expect(airline.iataCode).toBeDefined();
+      expect(airline.name).toBeDefined();
+    });
+
+    it('should return valid aircraft objects', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/all',
+      });
+
+      const body = response.json();
+      const aircraft = body.data.aircraft[0];
+      expect(aircraft.iataCode).toBeDefined();
+      expect(aircraft.name).toBeDefined();
+    });
+
+    it('should have proper cache headers', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/all',
+      });
+
+      expect(response.headers['content-type']).toMatch(/json/);
+      expect(response.headers['cache-control']).toMatch(/public/);
+      expect(response.headers['cache-control']).toMatch(/max-age=86400/);
+    });
+  });
+
   describe('MCP Endpoints', () => {
     describe('POST /mcp', () => {
       it('should handle initialization request', async () => {

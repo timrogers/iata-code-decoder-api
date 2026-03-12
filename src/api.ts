@@ -351,6 +351,44 @@ app.get<{ Querystring: QueryParams }>(
   },
 );
 
+// Combined response schema
+const allDataResponseSchema = {
+  type: 'object',
+  properties: {
+    data: {
+      type: 'object',
+      properties: {
+        airports: { type: 'array' },
+        airlines: { type: 'array' },
+        aircraft: { type: 'array' },
+      },
+    },
+  },
+};
+
+app.get(
+  '/all',
+  {
+    schema: {
+      response: {
+        200: allDataResponseSchema,
+      },
+    },
+  },
+  async (request: FastifyRequest, reply: FastifyReply) => {
+    reply.header('Content-Type', 'application/json');
+    reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
+
+    return {
+      data: {
+        airports: AIRPORTS,
+        airlines: AIRLINES,
+        aircraft: AIRCRAFT,
+      },
+    };
+  },
+);
+
 // MCP over HTTP endpoints
 // Interface for raw request/response access needed by MCP SDK
 interface McpRequest {
