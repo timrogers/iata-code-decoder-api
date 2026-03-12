@@ -2,7 +2,7 @@ export interface RateLimitResult {
   allowed: boolean;
   limit: number;
   remaining: number;
-  resetSeconds: number;
+  resetAt: number; // Unix timestamp (seconds) when the window resets
 }
 
 interface RateLimitEntry {
@@ -18,6 +18,10 @@ export class RateLimiter {
   constructor(limit: number, windowMs: number) {
     this.limit = limit;
     this.windowMs = windowMs;
+    // Periodically remove expired entries to prevent unbounded memory growth.
+    // .unref() ensures the interval doesn't prevent the process from exiting.
+    const cleanupInterval = setInterval(() => this.pruneExpired(), windowMs);
+    if (cleanupInterval.unref) cleanupInterval.unref();
   }
 
   check(key: string): RateLimitResult {
@@ -30,20 +34,30 @@ export class RateLimiter {
         allowed: true,
         limit: this.limit,
         remaining: this.limit - 1,
-        resetSeconds: Math.ceil(this.windowMs / 1000),
+        resetAt: Math.floor((now + this.windowMs) / 1000),
       };
     }
 
+    // All requests within the window are counted, including rejected ones,
+    // so that clients cannot bypass the limit by sending bursts of requests.
     entry.count++;
-    const elapsed = now - entry.windowStart;
-    const resetSeconds = Math.ceil((this.windowMs - elapsed) / 1000);
+    const resetAt = Math.floor((entry.windowStart + this.windowMs) / 1000);
 
     return {
       allowed: entry.count <= this.limit,
       limit: this.limit,
       remaining: Math.max(0, this.limit - entry.count),
-      resetSeconds,
+      resetAt,
     };
+  }
+
+  private pruneExpired(): void {
+    const now = Date.now();
+    for (const [key, entry] of this.store) {
+      if (now - entry.windowStart >= this.windowMs) {
+        this.store.delete(key);
+      }
+    }
   }
 }
 

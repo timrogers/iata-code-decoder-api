@@ -250,21 +250,19 @@ function createRateLimitPreHandler(rateLimiter: RateLimiter) {
     if (allowedIPs.includes(clientIp)) return;
 
     const result = rateLimiter.check(clientIp);
+    const retryAfterSeconds = Math.max(0, result.resetAt - Math.floor(Date.now() / 1000));
 
     reply.header('x-ratelimit-limit', result.limit.toString());
     reply.header('x-ratelimit-remaining', result.remaining.toString());
-    reply.header(
-      'x-ratelimit-reset',
-      (Math.floor(Date.now() / 1000) + result.resetSeconds).toString(),
-    );
+    reply.header('x-ratelimit-reset', result.resetAt.toString());
 
     if (!result.allowed) {
-      reply.header('retry-after', result.resetSeconds.toString());
+      reply.header('retry-after', retryAfterSeconds.toString());
       reply.code(429).send({
         statusCode: 429,
         error: 'Too Many Requests',
-        message: `Rate limit exceeded. Please try again in ${result.resetSeconds} seconds.`,
-        retryAfter: result.resetSeconds,
+        message: `Rate limit exceeded. Please try again in ${retryAfterSeconds} seconds.`,
+        retryAfter: retryAfterSeconds,
       });
     }
   };
