@@ -461,6 +461,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['access-control-allow-origin']).toBe('*');
       expect(response.headers['access-control-allow-methods']).toMatch(/GET/);
       expect(response.headers['access-control-allow-headers']).toMatch(/Content-Type/i);
+      expect(response.headers['access-control-max-age']).toBe('86400');
     });
   });
 

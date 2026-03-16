@@ -208,6 +208,7 @@ app.options('*', (_request, reply) => {
     .header('Access-Control-Allow-Origin', '*')
     .header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     .header('Access-Control-Allow-Headers', 'Content-Type, Authorization, mcp-session-id')
+    .header('Access-Control-Max-Age', String(ONE_DAY_IN_SECONDS))
     .code(204)
     .send();
 });
