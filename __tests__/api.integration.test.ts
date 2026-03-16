@@ -437,6 +437,43 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
   });
 
+  describe('CORS Headers', () => {
+    it('should include Access-Control-Allow-Origin: * on GET responses', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should include Access-Control-Allow-Origin: * on data endpoint responses', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=LHR',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should respond to preflight OPTIONS request with CORS headers', async () => {
+      const response = await app.inject({
+        method: 'OPTIONS',
+        url: '/airports',
+        headers: {
+          'Access-Control-Request-Method': 'GET',
+          Origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(204);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-methods']).toBeDefined();
+    });
+  });
+
   describe('Edge Cases and Error Handling', () => {
     it('should handle non-existent endpoints with 404', async () => {
       const response = await app.inject({
