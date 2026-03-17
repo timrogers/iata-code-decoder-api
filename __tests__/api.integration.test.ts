@@ -457,20 +457,18 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['access-control-allow-origin']).toBe('*');
     });
 
-    it('should handle OPTIONS requests with correct headers', async () => {
+    it('should handle OPTIONS preflight requests', async () => {
       const response = await app.inject({
         method: 'OPTIONS',
         url: '/airports',
+        headers: {
+          'access-control-request-method': 'GET',
+          origin: 'http://example.com',
+        },
       });
 
       expect(response.statusCode).toBe(204);
       expect(response.headers['access-control-allow-origin']).toBe('*');
-      expect(response.headers['access-control-allow-methods']).toBe(
-        'GET, POST, PUT, DELETE, OPTIONS',
-      );
-      expect(response.headers['access-control-allow-headers']).toBe(
-        'Content-Type, mcp-session-id',
-      );
     });
   });
 
