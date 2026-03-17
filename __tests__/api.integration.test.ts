@@ -437,6 +437,43 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
   });
 
+  describe('CORS Headers', () => {
+    it('should have Access-Control-Allow-Origin: * on GET requests', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should have Access-Control-Allow-Origin: * on POST requests', async () => {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/mcp',
+        payload: {},
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should handle OPTIONS requests with correct headers', async () => {
+      const response = await app.inject({
+        method: 'OPTIONS',
+        url: '/airports',
+      });
+
+      expect(response.statusCode).toBe(204);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-methods']).toBe(
+        'GET, POST, PUT, DELETE, OPTIONS',
+      );
+      expect(response.headers['access-control-allow-headers']).toBe(
+        'Content-Type, mcp-session-id',
+      );
+    });
+  });
+
   describe('Edge Cases and Error Handling', () => {
     it('should handle non-existent endpoints with 404', async () => {
       const response = await app.inject({
