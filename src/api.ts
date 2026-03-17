@@ -6,7 +6,6 @@ import Fastify, {
   RawRequestDefaultExpression,
   RawReplyDefaultExpression,
 } from 'fastify';
-import fastifyCors from '@fastify/cors';
 import fastifyCompress from '@fastify/compress';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
@@ -195,8 +194,21 @@ function createMcpServer(): Server {
   return server;
 }
 
-// Register CORS plugin to allow requests from any origin
-await app.register(fastifyCors, { origin: '*' });
+// Add CORS headers to all responses
+app.addHook('onSend', async (_request, reply) => {
+  reply.header('Access-Control-Allow-Origin', '*');
+});
+
+// Handle CORS preflight requests
+app.options('*', async (_request, reply) => {
+  reply
+    .header('Access-Control-Allow-Origin', '*')
+    .header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    .header('Access-Control-Allow-Headers', 'Content-Type, Authorization, mcp-session-id')
+    .header('Access-Control-Max-Age', '86400')
+    .code(204)
+    .send();
+});
 
 // Register compression plugin
 await app.register(fastifyCompress);
