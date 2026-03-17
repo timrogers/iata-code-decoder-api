@@ -195,11 +195,15 @@ function createMcpServer(): Server {
   return server;
 }
 
-// Register CORS plugin
-await app.register(fastifyCors, { origin: '*' });
-
 // Register compression plugin
 await app.register(fastifyCompress);
+
+// Register CORS plugin
+await app.register(fastifyCors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'mcp-session-id'],
+});
 
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
