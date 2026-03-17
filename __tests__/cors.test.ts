@@ -30,8 +30,7 @@ describe('CORS Support', () => {
       },
     });
 
-    // @fastify/cors might return 204 or 200 depending on config, but it should be successful
-    expect(response.statusCode).toBeLessThan(300);
+    expect(response.statusCode).toBe(204);
     expect(response.headers['access-control-allow-origin']).toBe('*');
     expect(response.headers['access-control-allow-methods']).toContain('GET');
   });
