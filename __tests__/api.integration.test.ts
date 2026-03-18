@@ -464,7 +464,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
         method: 'GET',
         url: '/health',
         headers: {
-          origin: 'https://evil.example.com',
+          origin: 'https://other-domain.com',
         },
       });
 
@@ -477,7 +477,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
         method: 'OPTIONS',
         url: '/airports',
         headers: {
-          origin: 'https://evil.example.com',
+          origin: 'https://other-domain.com',
           'access-control-request-method': 'GET',
         },
       });
