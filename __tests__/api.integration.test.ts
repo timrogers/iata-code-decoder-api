@@ -457,4 +457,46 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.json()).toHaveProperty('data');
     });
   });
+
+  describe('CORS', () => {
+    it('should include Access-Control-Allow-Origin header on regular requests', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=LHR',
+        headers: {
+          origin: 'https://example.com',
+        },
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should respond to preflight OPTIONS requests', async () => {
+      const response = await app.inject({
+        method: 'OPTIONS',
+        url: '/airports',
+        headers: {
+          origin: 'https://example.com',
+          'access-control-request-method': 'GET',
+        },
+      });
+
+      expect(response.statusCode).toBe(204);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+
+    it('should allow any origin', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+        headers: {
+          origin: 'https://another-domain.org',
+        },
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['access-control-allow-origin']).toBe('*');
+    });
+  });
 });
