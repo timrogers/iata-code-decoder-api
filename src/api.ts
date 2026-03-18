@@ -6,6 +6,7 @@ import Fastify, {
   RawRequestDefaultExpression,
   RawReplyDefaultExpression,
 } from 'fastify';
+import fastifyCors from '@fastify/cors';
 import fastifyCompress from '@fastify/compress';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
@@ -193,6 +194,16 @@ function createMcpServer(): Server {
 
   return server;
 }
+
+// Parse allowed CORS origins from environment variable
+const corsAllowedOrigins = process.env.CORS_ALLOWED_ORIGINS
+  ? process.env.CORS_ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
+  : [];
+
+// Register CORS plugin with configured origins (no wildcard by default)
+await app.register(fastifyCors, {
+  origin: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : false,
+});
 
 // Register compression plugin
 await app.register(fastifyCompress);
