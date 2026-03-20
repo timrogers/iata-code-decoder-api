@@ -50,6 +50,7 @@ The project includes comprehensive integration tests using Jest and Fastify's in
 The test suite covers:
 - All REST API endpoints (`/health`, `/airports`, `/airlines`, `/aircraft`)
 - MCP server endpoints (`/mcp`)
+- CORS headers
 - Error handling and edge cases
 - Request validation
 - Response formatting and headers
