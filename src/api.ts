@@ -8,6 +8,7 @@ import Fastify, {
 } from 'fastify';
 import fastifyCompress from '@fastify/compress';
 import fastifyCors from '@fastify/cors';
+import fastifyRateLimit from '@fastify/rate-limit';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -197,6 +198,18 @@ function createMcpServer(): Server {
 
 // Register CORS plugin to allow requests from any origin
 await app.register(fastifyCors, { origin: '*' });
+
+// Register rate limiting plugin based on IP address
+const DEFAULT_RATE_LIMIT_MAX = 100;
+const DEFAULT_RATE_LIMIT_TIME_WINDOW_MS = 60000; // 1 minute
+
+await app.register(fastifyRateLimit, {
+  max: parseInt(process.env.RATE_LIMIT_MAX || String(DEFAULT_RATE_LIMIT_MAX), 10),
+  timeWindow: parseInt(
+    process.env.RATE_LIMIT_TIME_WINDOW || String(DEFAULT_RATE_LIMIT_TIME_WINDOW_MS),
+    10,
+  ),
+});
 
 // Register compression plugin
 await app.register(fastifyCompress);

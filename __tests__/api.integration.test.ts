@@ -485,4 +485,54 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['access-control-allow-origin']).toBe('*');
     });
   });
+
+  describe('Rate Limiting', () => {
+    it('should include rate limit headers in responses', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['x-ratelimit-limit']).toBeDefined();
+      expect(response.headers['x-ratelimit-remaining']).toBeDefined();
+    });
+
+    it('should return 429 when rate limit is exceeded', async () => {
+      // The default rate limit is 100 requests per minute.
+      // We need a separate Fastify instance with a very low limit to test this.
+      const { default: Fastify } = await import('fastify');
+      const { default: fastifyCors } = await import('@fastify/cors');
+      const { default: fastifyRateLimit } = await import('@fastify/rate-limit');
+
+      const testApp = Fastify({ logger: false });
+      await testApp.register(fastifyCors, { origin: '*' });
+      await testApp.register(fastifyRateLimit, { max: 2, timeWindow: 60000 });
+
+      testApp.get('/test', async () => {
+        return { ok: true };
+      });
+
+      await testApp.ready();
+
+      // First two requests should succeed
+      const res1 = await testApp.inject({ method: 'GET', url: '/test' });
+      expect(res1.statusCode).toBe(200);
+      expect(res1.headers['x-ratelimit-limit']).toBe('2');
+      expect(res1.headers['x-ratelimit-remaining']).toBe('1');
+
+      const res2 = await testApp.inject({ method: 'GET', url: '/test' });
+      expect(res2.statusCode).toBe(200);
+      expect(res2.headers['x-ratelimit-remaining']).toBe('0');
+
+      // Third request should be rate limited
+      const res3 = await testApp.inject({ method: 'GET', url: '/test' });
+      expect(res3.statusCode).toBe(429);
+      const body = res3.json();
+      expect(body).toHaveProperty('error');
+      expect(res3.headers['retry-after']).toBeDefined();
+
+      await testApp.close();
+    });
+  });
 });
