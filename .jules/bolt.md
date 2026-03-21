@@ -1,0 +1,3 @@
+## 2025-03-21 - [Prefix Map Optimization for IATA Code Lookups]
+**Learning:** The current implementation uses `Array.prototype.filter` to search for airports, airlines, and aircraft by their IATA codes (or partial codes). This results in an O(N) time complexity for every request. While the datasets are relatively small (up to ~10k records), these are static datasets that can be pre-indexed at startup.
+**Action:** Replace O(N) array filtering with a pre-computed `Map<string, Keyable[]>` where keys are all possible prefixes of the IATA codes. This will reduce lookup complexity to O(1) (constant time relative to the number of records).
