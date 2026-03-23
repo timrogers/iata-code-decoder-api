@@ -12,7 +12,7 @@ import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
-import { Keyable } from './types.js';
+import { PrefixIndex } from './prefixIndex.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import {
   CallToolRequestSchema,
@@ -123,7 +123,7 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+          const airports = airportIndex.lookup(query);
           return {
             content: [
               {
@@ -143,7 +143,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+          const airlines = airlineIndex.lookup(query);
           return {
             content: [
               {
@@ -163,7 +163,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+          const aircraft = aircraftIndex.lookup(query);
           return {
             content: [
               {
@@ -201,19 +201,10 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
-const filterObjectsByPartialIataCode = (
-  objects: Keyable[],
-  partialIataCode: string,
-  iataCodeLength: number,
-): Keyable[] => {
-  if (partialIataCode.length > iataCodeLength) {
-    return [];
-  } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
-  }
-};
+// Pre-computed prefix indexes for O(1) lookups instead of O(n) filtering
+const airportIndex = new PrefixIndex(AIRPORTS, 3);
+const airlineIndex = new PrefixIndex(AIRLINES, 2);
+const aircraftIndex = new PrefixIndex(AIRCRAFT, 3);
 
 // Query parameter interface
 interface QueryParams {
@@ -296,7 +287,7 @@ app.get<{ Querystring: QueryParams }>(
       return QUERY_MUST_BE_PROVIDED_ERROR;
     } else {
       const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+      const airports = airportIndex.lookup(query);
       return { data: airports };
     }
   },
@@ -320,7 +311,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: AIRLINES };
     } else {
       const query = request.query.query;
-      const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+      const airlines = airlineIndex.lookup(query);
 
       return {
         data: airlines,
@@ -349,7 +340,7 @@ app.get<{ Querystring: QueryParams }>(
       return QUERY_MUST_BE_PROVIDED_ERROR;
     } else {
       const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+      const aircraft = aircraftIndex.lookup(query);
       return { data: aircraft };
     }
   },
