@@ -26,10 +26,9 @@ export class PrefixIndex {
   lookup(query: string): Keyable[] {
     const normalized = query.toLowerCase();
 
-    // For over-length queries, use the longest valid prefix for a best-effort match
+    // Queries longer than any IATA code can never match
     if (normalized.length > this.maxKeyLength) {
-      const truncated = normalized.substring(0, this.maxKeyLength);
-      return this.index.get(truncated) ?? [];
+      return [];
     }
 
     return this.index.get(normalized) ?? [];
