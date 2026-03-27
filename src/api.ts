@@ -201,6 +201,30 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
+/**
+ * Creates a Map where keys are IATA code prefixes and values are arrays of objects matching that prefix.
+ * This allows for O(1) lookups instead of O(N) filtering.
+ */
+const createPrefixMap = (objects: Keyable[]): Map<string, Keyable[]> => {
+  const map = new Map<string, Keyable[]>();
+  for (const obj of objects) {
+    const code = obj.iataCode.toLowerCase();
+    for (let i = 1; i <= code.length; i++) {
+      const prefix = code.substring(0, i);
+      if (!map.has(prefix)) {
+        map.set(prefix, []);
+      }
+      map.get(prefix)!.push(obj);
+    }
+  }
+  return map;
+};
+
+// Pre-compute prefix maps for performance
+const AIRPORT_MAP = createPrefixMap(AIRPORTS);
+const AIRLINE_MAP = createPrefixMap(AIRLINES);
+const AIRCRAFT_MAP = createPrefixMap(AIRCRAFT);
+
 const filterObjectsByPartialIataCode = (
   objects: Keyable[],
   partialIataCode: string,
@@ -208,11 +232,27 @@ const filterObjectsByPartialIataCode = (
 ): Keyable[] => {
   if (partialIataCode.length > iataCodeLength) {
     return [];
-  } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
   }
+
+  // If the query is empty, return all objects to maintain existing API behavior
+  if (partialIataCode === '') {
+    return objects;
+  }
+
+  // Use the pre-computed map for O(1) performance
+  let map: Map<string, Keyable[]> | undefined;
+  if (objects === AIRPORTS) map = AIRPORT_MAP;
+  else if (objects === AIRLINES) map = AIRLINE_MAP;
+  else if (objects === AIRCRAFT) map = AIRCRAFT_MAP;
+
+  if (map) {
+    return map.get(partialIataCode.toLowerCase()) || [];
+  }
+
+  // Fallback to O(N) filtering if map isn't available
+  return objects.filter((object) =>
+    object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
+  );
 };
 
 // Query parameter interface
