@@ -102,3 +102,7 @@ The server provides three tools:
 - **Input**: `query` - The IATA aircraft code or partial code to search for
 - **Returns**: JSON object with matching aircraft including name and IATA code
 
+## About the author
+
+This project is built by [Tim Rogers](https://timrogers.co.uk), a product manager and software engineer based in London 🇬🇧. He is currently working on [GitHub Copilot](https://github.com/github). He founded and sold his own startup, [Reward Flight Finder](https://rewardflightfinder.com), and helped to build two [Y Combinator Top Companies](https://www.ycombinator.com/topcompanies) from the ground up: [GoCardless](https://gocardless.com) and [Duffel](https://duffel.com).
+
