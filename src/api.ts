@@ -35,6 +35,10 @@ const QUERY_MUST_BE_PROVIDED_ERROR = {
   },
 };
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+const CORS_OPTIONS = {
+  origin: '*',
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+};
 
 // Map to store MCP transports by session ID
 const mcpTransports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
@@ -196,7 +200,7 @@ function createMcpServer(): Server {
 }
 
 // Register CORS plugin to allow requests from any origin
-await app.register(fastifyCors, { origin: '*' });
+await app.register(fastifyCors, CORS_OPTIONS);
 
 // Register compression plugin
 await app.register(fastifyCompress);
