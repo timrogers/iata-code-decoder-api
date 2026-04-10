@@ -458,6 +458,40 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     });
   });
 
+  describe('Rate Limiting', () => {
+    it('should include rate limit headers in responses', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['x-ratelimit-limit']).toBe('60');
+      expect(response.headers['x-ratelimit-remaining']).toBeDefined();
+      expect(response.headers['x-ratelimit-reset']).toBeDefined();
+    });
+
+    it('should return 429 when rate limit is exceeded', async () => {
+      // Send 60 requests to exhaust the rate limit
+      for (let i = 0; i < 60; i++) {
+        await app.inject({
+          method: 'GET',
+          url: '/health',
+        });
+      }
+
+      // The 61st request should be rate limited
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+      });
+
+      expect(response.statusCode).toBe(429);
+      const body = response.json();
+      expect(body).toHaveProperty('message');
+    });
+  });
+
   describe('CORS', () => {
     it('should include Access-Control-Allow-Origin: * header on responses', async () => {
       const response = await app.inject({
