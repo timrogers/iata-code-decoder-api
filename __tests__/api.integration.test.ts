@@ -1,4 +1,11 @@
-import app from '../src/api.js';
+import type { FastifyInstance } from 'fastify';
+
+let app: FastifyInstance;
+
+beforeAll(async () => {
+  process.env.ALLOWED_ORIGINS = 'https://example.com';
+  ({ default: app } = await import('../src/api.js'));
+});
 
 describe('IATA Code Decoder API - Integration Tests', () => {
   // Close the Fastify app after all tests
@@ -459,7 +466,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
   });
 
   describe('CORS', () => {
-    it('should include Access-Control-Allow-Origin: * header on responses', async () => {
+    it('should include Access-Control-Allow-Origin header for allowed origins', async () => {
       const response = await app.inject({
         method: 'GET',
         url: '/health',
@@ -468,7 +475,19 @@ describe('IATA Code Decoder API - Integration Tests', () => {
         },
       });
 
-      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-origin']).toBe('https://example.com');
+    });
+
+    it('should not include Access-Control-Allow-Origin for disallowed origins', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/health',
+        headers: {
+          origin: 'https://malicious.example',
+        },
+      });
+
+      expect(response.headers['access-control-allow-origin']).toBeUndefined();
     });
 
     it('should handle preflight OPTIONS requests', async () => {
@@ -482,7 +501,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       });
 
       expect(response.statusCode).toBe(204);
-      expect(response.headers['access-control-allow-origin']).toBe('*');
+      expect(response.headers['access-control-allow-origin']).toBe('https://example.com');
     });
   });
 });

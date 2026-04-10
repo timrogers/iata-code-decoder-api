@@ -8,6 +8,7 @@ import Fastify, {
 } from 'fastify';
 import fastifyCompress from '@fastify/compress';
 import fastifyCors from '@fastify/cors';
+import dotenv from 'dotenv';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -22,6 +23,8 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { IncomingMessage, ServerResponse } from 'node:http';
+
+dotenv.config();
 
 const app: FastifyInstance<
   RawServerDefault,
@@ -195,8 +198,37 @@ function createMcpServer(): Server {
   return server;
 }
 
-// Register CORS plugin to allow requests from any origin
-await app.register(fastifyCors, { origin: '*' });
+const parseAllowedOrigins = (origins: string | undefined): string[] =>
+  origins
+    ?.split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0) ?? [];
+
+const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS);
+
+const corsOrigin =
+  allowedOrigins.length === 0
+    ? false
+    : (
+        origin: string | undefined,
+        callback: (error: Error | null, allow: boolean) => void,
+      ) => {
+        if (!origin) {
+          callback(null, false);
+          return;
+        }
+
+        const isAllowed = allowedOrigins.some(
+          (allowedOrigin) => allowedOrigin.toLowerCase() === origin.toLowerCase(),
+        );
+
+        callback(null, isAllowed);
+      };
+
+await app.register(fastifyCors, {
+  origin: corsOrigin,
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+});
 
 // Register compression plugin
 await app.register(fastifyCompress);
