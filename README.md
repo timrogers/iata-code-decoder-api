@@ -21,6 +21,10 @@ The cached data is updated regularly thanks to the power of GitHub Actions 👼
 3. Start the application by running `npm run dev`. You'll see a message once the app is ready to go.
 4. Hit <http://localhost:4000/airports?query=LHR> in your browser. You'll see information about Heathrow airport 🥳
 
+### CORS configuration
+
+By default, the API does not send CORS headers. To explicitly allow cross-origin requests, set an `ALLOWED_ORIGINS` environment variable to a comma-separated list of origins (for example, `https://example.com,https://another.example`). Only requests from origins in this list will receive CORS headers.
+
 ### Running locally with Docker
 
 1. Build the Docker image with `docker build . -t timrogers/iata-code-decoder-api`
@@ -101,4 +105,3 @@ The server provides three tools:
 - **Description**: Look up aircraft information by IATA code (3-letter code like 777, A320, etc.)
 - **Input**: `query` - The IATA aircraft code or partial code to search for
 - **Returns**: JSON object with matching aircraft including name and IATA code
-
