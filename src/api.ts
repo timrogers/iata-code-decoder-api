@@ -283,7 +283,6 @@ app.get<{ Querystring: QueryParams }>(
       querystring: queryStringSchema,
       response: {
         200: dataResponseSchema,
-        400: errorResponseSchema,
       },
     },
   },
@@ -292,8 +291,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      reply.code(400);
-      return QUERY_MUST_BE_PROVIDED_ERROR;
+      return { data: AIRPORTS };
     } else {
       const query = request.query.query;
       const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
