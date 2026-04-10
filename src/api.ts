@@ -291,14 +291,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      const allAirports = [...AIRPORTS].sort((a, b) => {
-        // Sort by the sum of character codes in the IATA code for a deterministic
-        // but non-alphabetical ordering that distributes results geographically
-        const sumA = a.iataCode.split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
-        const sumB = b.iataCode.split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
-        return sumA - sumB;
-      });
-      return { data: allAirports };
+      return { data: AIRPORTS };
     } else {
       const query = request.query.query;
       const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
