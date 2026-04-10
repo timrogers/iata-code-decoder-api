@@ -8,6 +8,7 @@ import Fastify, {
 } from 'fastify';
 import fastifyCompress from '@fastify/compress';
 import fastifyCors from '@fastify/cors';
+import fastifyRateLimit from '@fastify/rate-limit';
 import { randomUUID } from 'node:crypto';
 import { AIRPORTS } from './airports.js';
 import { AIRLINES } from './airlines.js';
@@ -198,6 +199,39 @@ function createMcpServer(): Server {
 // Register CORS plugin to allow requests from any origin
 await app.register(fastifyCors, { origin: '*' });
 
+// Register rate limiting plugin (only when env vars are set)
+const rateLimitMax = process.env.RATE_LIMIT_MAX
+  ? parseInt(process.env.RATE_LIMIT_MAX, 10)
+  : undefined;
+const rateLimitTimeWindow = process.env.RATE_LIMIT_TIME_WINDOW_MS
+  ? parseInt(process.env.RATE_LIMIT_TIME_WINDOW_MS, 10)
+  : undefined;
+
+if (rateLimitMax !== undefined && rateLimitTimeWindow !== undefined) {
+  await app.register(fastifyRateLimit, {
+    max: rateLimitMax,
+    timeWindow: rateLimitTimeWindow,
+    errorResponseBuilder: (_req, context) => {
+      const err = new Error(`Rate limit exceeded. Try again in ${context.after}.`);
+      (err as Error & { statusCode: number }).statusCode = context.statusCode;
+      return err;
+    },
+  });
+
+  app.setErrorHandler((error, _request, reply) => {
+    const err = error as Error & { statusCode?: number };
+    if (err.statusCode === 429) {
+      reply.code(429).send({
+        data: {
+          error: err.message,
+        },
+      });
+    } else {
+      reply.send(error);
+    }
+  });
+}
+
 // Register compression plugin
 await app.register(fastifyCompress);
 
@@ -265,6 +299,9 @@ app.get(
   '/health',
   {
     schema: healthSchema,
+    config: {
+      rateLimit: false,
+    },
   },
   async (request: FastifyRequest, reply: FastifyReply) => {
     reply.header('Content-Type', 'application/json');

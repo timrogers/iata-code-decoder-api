@@ -50,9 +50,30 @@ The project includes comprehensive integration tests using Jest and Fastify's in
 The test suite covers:
 - All REST API endpoints (`/health`, `/airports`, `/airlines`, `/aircraft`)
 - MCP server endpoints (`/mcp`)
+- Rate limiting
 - Error handling and edge cases
 - Request validation
 - Response formatting and headers
+
+### Rate limiting
+
+The API supports optional rate limiting powered by `@fastify/rate-limit`. Rate limiting is configured through environment variables and is **disabled by default**.
+
+| Variable | Description | Example |
+|---|---|---|
+| `RATE_LIMIT_MAX` | Maximum number of requests allowed per time window | `100` |
+| `RATE_LIMIT_TIME_WINDOW_MS` | Time window duration in milliseconds | `60000` (1 minute) |
+
+Both variables must be set to enable rate limiting. When either is absent, the API allows unlimited requests.
+
+When rate limiting is enabled:
+- All routes except `/health` are rate-limited.
+- Requests are keyed by IP address.
+- Standard `RateLimit-*` and `Retry-After` headers are included in responses.
+- Requests that exceed the limit receive HTTP **429** with a JSON body:
+  ```json
+  { "data": { "error": "Rate limit exceeded. Try again in 1 minute." } }
+  ```
 
 ## Model Context Protocol (MCP) server
 
