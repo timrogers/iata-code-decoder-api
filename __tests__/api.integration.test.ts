@@ -43,7 +43,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       const body = response.json();
       expect(body).toHaveProperty('data');
       expect(Array.isArray(body.data)).toBe(true);
-      expect(body.data.length).toBeGreaterThan(100);
+      expect(body.data.length).toBe(9027);
     });
 
     it('should return all airports when query parameter is empty', async () => {
@@ -56,7 +56,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       const body = response.json();
       expect(body).toHaveProperty('data');
       expect(Array.isArray(body.data)).toBe(true);
-      expect(body.data.length).toBeGreaterThan(100);
+      expect(body.data.length).toBe(9027);
     });
 
     it('should return airports matching the query (LHR)', async () => {
