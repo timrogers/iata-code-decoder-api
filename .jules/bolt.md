@@ -1,0 +1,3 @@
+## 2025-05-14 - O(1) Prefix Map for IATA Lookups
+**Learning:** Linear scans (O(N)) on static IATA datasets (e.g., ~9,000 airports) are a bottleneck for high-throughput APIs. Pre-computing a prefix-based Map at startup allows for O(1) lookups, significantly improving performance. Additionally, Fastify's default logging is quite heavy; when benchmarking algorithmic changes, disabling it temporarily helps isolate the performance gain of the logic itself.
+**Action:** Always consider pre-processing static datasets into appropriate data structures (Maps/Sets) at startup to avoid repeated expensive computations in request handlers.
