@@ -23,11 +23,39 @@ import {
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { IncomingMessage, ServerResponse } from 'node:http';
 
+/**
+ * Creates a Map where keys are all possible prefixes of the IATA code for each object.
+ * This allows for O(1) lookup of objects by partial IATA code.
+ */
+const createPrefixMap = (objects: Keyable[]): Map<string, Keyable[]> => {
+  const map = new Map<string, Keyable[]>();
+
+  // Initialize empty string key to contain all objects
+  map.set('', objects);
+
+  for (const object of objects) {
+    const code = object.iataCode.toLowerCase();
+    for (let i = 1; i <= code.length; i++) {
+      const prefix = code.substring(0, i);
+      const existing = map.get(prefix) || [];
+      existing.push(object);
+      map.set(prefix, existing);
+    }
+  }
+
+  return map;
+};
+
 const app: FastifyInstance<
   RawServerDefault,
   RawRequestDefaultExpression,
   RawReplyDefaultExpression
 > = Fastify({ logger: true });
+
+// Pre-calculate Maps for O(1) prefix-based lookups
+const AIRPORT_MAP = createPrefixMap(AIRPORTS);
+const AIRLINE_MAP = createPrefixMap(AIRLINES);
+const AIRCRAFT_MAP = createPrefixMap(AIRCRAFT);
 
 const QUERY_MUST_BE_PROVIDED_ERROR = {
   data: {
@@ -123,7 +151,7 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+          const airports = filterObjectsByPartialIataCode(AIRPORT_MAP, query, 3);
           return {
             content: [
               {
@@ -143,7 +171,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+          const airlines = filterObjectsByPartialIataCode(AIRLINE_MAP, query, 2);
           return {
             content: [
               {
@@ -163,7 +191,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+          const aircraft = filterObjectsByPartialIataCode(AIRCRAFT_MAP, query, 3);
           return {
             content: [
               {
@@ -201,17 +229,19 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
+/**
+ * Filters objects by their IATA code using a pre-calculated prefix Map.
+ * Provides O(1) lookup complexity.
+ */
 const filterObjectsByPartialIataCode = (
-  objects: Keyable[],
+  map: Map<string, Keyable[]>,
   partialIataCode: string,
   iataCodeLength: number,
 ): Keyable[] => {
   if (partialIataCode.length > iataCodeLength) {
     return [];
   } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
+    return map.get(partialIataCode.toLowerCase()) || [];
   }
 };
 
@@ -296,7 +326,7 @@ app.get<{ Querystring: QueryParams }>(
       return QUERY_MUST_BE_PROVIDED_ERROR;
     } else {
       const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+      const airports = filterObjectsByPartialIataCode(AIRPORT_MAP, query, 3);
       return { data: airports };
     }
   },
@@ -320,7 +350,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: AIRLINES };
     } else {
       const query = request.query.query;
-      const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+      const airlines = filterObjectsByPartialIataCode(AIRLINE_MAP, query, 2);
 
       return {
         data: airlines,
@@ -349,7 +379,7 @@ app.get<{ Querystring: QueryParams }>(
       return QUERY_MUST_BE_PROVIDED_ERROR;
     } else {
       const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+      const aircraft = filterObjectsByPartialIataCode(AIRCRAFT_MAP, query, 3);
       return { data: aircraft };
     }
   },
