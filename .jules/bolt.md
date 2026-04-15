@@ -1,0 +1,3 @@
+## 2026-04-15 - Prefix-based Map for IATA Lookups
+**Learning:** Linear scans (O(N)) on static IATA datasets (e.g., ~10,000 airports) were a significant bottleneck for high-frequency lookups. Replacing them with prefix-based Maps (O(1)) yielded a ~12x throughput increase for exact matches. However, broad matches (e.g., query 'L') are now bottlenecked by JSON serialization and network transmission (~50-60 MB/s), rather than the lookup algorithm itself.
+**Action:** When optimizing lookups on static datasets with short, predictable keys (like IATA codes), use pre-computed prefix Maps to achieve sub-millisecond average latency. Always verify the new bottleneck (e.g., payload size) once the algorithmic bottleneck is removed.
