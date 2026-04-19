@@ -220,6 +220,19 @@ interface QueryParams {
   query?: string;
 }
 
+// Root endpoint schema
+const rootSchema = {
+  response: {
+    200: {
+      type: 'object',
+      required: ['documentation_url'],
+      properties: {
+        documentation_url: { type: 'string' },
+      },
+    },
+  },
+};
+
 // Health endpoint schema
 const healthSchema = {
   response: {
@@ -260,6 +273,16 @@ const queryStringSchema = {
     query: { type: 'string' },
   },
 };
+
+app.get(
+  '/',
+  {
+    schema: rootSchema,
+  },
+  async (request: FastifyRequest, reply: FastifyReply) => {
+    return { documentation_url: 'https://github.com/timrogers/iata-code-decoder-api' };
+  },
+);
 
 app.get(
   '/health',
