@@ -232,6 +232,18 @@ const healthSchema = {
   },
 };
 
+// Root endpoint schema
+const rootSchema = {
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        documentation_url: { type: 'string' },
+      },
+    },
+  },
+};
+
 // Data response schema
 const dataResponseSchema = {
   type: 'object',
@@ -260,6 +272,18 @@ const queryStringSchema = {
     query: { type: 'string' },
   },
 };
+
+app.get(
+  '/',
+  {
+    schema: rootSchema,
+  },
+  async () => {
+    return {
+      documentation_url: 'https://github.com/timrogers/iata-code-decoder-api',
+    };
+  },
+);
 
 app.get(
   '/health',
