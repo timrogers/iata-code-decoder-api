@@ -278,9 +278,7 @@ app.get(
   {
     schema: rootSchema,
   },
-  async (request: FastifyRequest, reply: FastifyReply) => {
-    reply.header('Content-Type', 'application/json');
-
+  async () => {
     return {
       documentation_url: 'https://github.com/timrogers/iata-code-decoder-api',
     };
