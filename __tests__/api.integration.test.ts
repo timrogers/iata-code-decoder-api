@@ -6,6 +6,21 @@ describe('IATA Code Decoder API - Integration Tests', () => {
     await app.close();
   });
 
+  describe('GET /', () => {
+    it('should return 200 with a documentation URL', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.json()).toEqual({
+        documentation_url: 'https://github.com/timrogers/iata-code-decoder-api',
+      });
+      expect(response.headers['content-type']).toMatch(/json/);
+    });
+  });
+
   describe('GET /health', () => {
     it('should return 200 with success status', async () => {
       const response = await app.inject({

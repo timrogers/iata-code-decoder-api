@@ -261,6 +261,17 @@ const queryStringSchema = {
   },
 };
 
+app.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
+  reply.header('Content-Type', 'application/json');
+  reply.header('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  reply.header('Pragma', 'no-cache');
+  reply.header('Expires', '0');
+
+  return {
+    documentation_url: 'https://github.com/timrogers/iata-code-decoder-api',
+  };
+});
+
 app.get(
   '/health',
   {
