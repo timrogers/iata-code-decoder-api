@@ -34,14 +34,3 @@ jobs:
         with:
           commit_message: Add latest airline, aircraft and airport data from Duffel
           file_pattern: 'data/*.json'
-      - name: Trigger deploy if data changed
-        uses: actions/github-script@v9
-        if: steps.commit.outputs.changes_detected == 'true'
-        with:
-          script: |
-            await github.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'main_iata-code-decoder-api-docker.yml',
-              ref: 'main'
-            });
