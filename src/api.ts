@@ -9,7 +9,7 @@ import Fastify, {
 import fastifyCompress from '@fastify/compress';
 import fastifyCors from '@fastify/cors';
 import { randomUUID } from 'node:crypto';
-import { AIRPORTS } from './airports.js';
+import { getAirports } from './airports.js';
 import { AIRLINES } from './airlines.js';
 import { AIRCRAFT } from './aircraft.js';
 import { Keyable } from './types.js';
@@ -123,7 +123,7 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+          const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
           return {
             content: [
               {
@@ -320,7 +320,7 @@ app.get<{ Querystring: QueryParams }>(
       return QUERY_MUST_BE_PROVIDED_ERROR;
     } else {
       const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+      const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
       return { data: airports };
     }
   },
