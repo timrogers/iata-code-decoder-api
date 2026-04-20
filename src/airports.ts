@@ -14,4 +14,12 @@ const airportDataToAirport = (airport: object): Airport => {
   }
 };
 
-export const AIRPORTS: Airport[] = AIRPORTS_DATA.map(airportDataToAirport);
+let airports: Airport[] | undefined;
+
+export const getAirports = (): Airport[] => {
+  if (!airports) {
+    airports = AIRPORTS_DATA.map(airportDataToAirport);
+  }
+
+  return airports;
+};
