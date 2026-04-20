@@ -7,6 +7,12 @@ import { cameliseKeys } from './utils.js';
 const hasIataCode = (airline: Keyable): boolean =>
   airline.iataCode !== undefined && airline.iataCode !== null;
 
-export const AIRLINES: Airline[] = AIRLINES_DATA.map(cameliseKeys).filter(
-  hasIataCode,
-) as Airline[];
+let airlines: Airline[] | undefined;
+
+export const getAirlines = (): Airline[] => {
+  if (!airlines) {
+    airlines = AIRLINES_DATA.map(cameliseKeys).filter(hasIataCode) as Airline[];
+  }
+
+  return airlines;
+};
