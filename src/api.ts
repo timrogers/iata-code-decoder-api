@@ -29,11 +29,6 @@ const app: FastifyInstance<
   RawReplyDefaultExpression
 > = Fastify({ logger: true });
 
-const QUERY_MUST_BE_PROVIDED_ERROR = {
-  data: {
-    error: 'A search query must be provided via the `query` querystring parameter',
-  },
-};
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 
 // Map to store MCP transports by session ID
@@ -253,19 +248,6 @@ const dataResponseSchema = {
   },
 };
 
-// Error response schema
-const errorResponseSchema = {
-  type: 'object',
-  properties: {
-    data: {
-      type: 'object',
-      properties: {
-        error: { type: 'string' },
-      },
-    },
-  },
-};
-
 // Query schema
 const queryStringSchema = {
   type: 'object',
@@ -308,7 +290,6 @@ app.get<{ Querystring: QueryParams }>(
       querystring: queryStringSchema,
       response: {
         200: dataResponseSchema,
-        400: errorResponseSchema,
       },
     },
   },
@@ -317,8 +298,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      reply.code(400);
-      return QUERY_MUST_BE_PROVIDED_ERROR;
+      return { data: getAirports() };
     } else {
       const query = request.query.query;
       const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
@@ -361,7 +341,6 @@ app.get<{ Querystring: QueryParams }>(
       querystring: queryStringSchema,
       response: {
         200: dataResponseSchema,
-        400: errorResponseSchema,
       },
     },
   },
@@ -370,8 +349,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      reply.code(400);
-      return QUERY_MUST_BE_PROVIDED_ERROR;
+      return { data: getAircraft() };
     } else {
       const query = request.query.query;
       const aircraft = filterObjectsByPartialIataCode(getAircraft(), query, 3);
