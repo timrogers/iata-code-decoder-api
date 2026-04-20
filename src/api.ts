@@ -9,9 +9,9 @@ import Fastify, {
 import fastifyCompress from '@fastify/compress';
 import fastifyCors from '@fastify/cors';
 import { randomUUID } from 'node:crypto';
-import { AIRPORTS } from './airports.js';
-import { AIRLINES } from './airlines.js';
-import { AIRCRAFT } from './aircraft.js';
+import { getAirports } from './airports.js';
+import { getAirlines } from './airlines.js';
+import { getAircraft } from './aircraft.js';
 import { Keyable } from './types.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import {
@@ -123,7 +123,7 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+          const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
           return {
             content: [
               {
@@ -143,7 +143,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+          const airlines = filterObjectsByPartialIataCode(getAirlines(), query, 2);
           return {
             content: [
               {
@@ -163,7 +163,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+          const aircraft = filterObjectsByPartialIataCode(getAircraft(), query, 3);
           return {
             content: [
               {
@@ -320,7 +320,7 @@ app.get<{ Querystring: QueryParams }>(
       return QUERY_MUST_BE_PROVIDED_ERROR;
     } else {
       const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(AIRPORTS, query, 3);
+      const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
       return { data: airports };
     }
   },
@@ -341,10 +341,10 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: AIRLINES };
+      return { data: getAirlines() };
     } else {
       const query = request.query.query;
-      const airlines = filterObjectsByPartialIataCode(AIRLINES, query, 2);
+      const airlines = filterObjectsByPartialIataCode(getAirlines(), query, 2);
 
       return {
         data: airlines,
@@ -373,7 +373,7 @@ app.get<{ Querystring: QueryParams }>(
       return QUERY_MUST_BE_PROVIDED_ERROR;
     } else {
       const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(AIRCRAFT, query, 3);
+      const aircraft = filterObjectsByPartialIataCode(getAircraft(), query, 3);
       return { data: aircraft };
     }
   },
