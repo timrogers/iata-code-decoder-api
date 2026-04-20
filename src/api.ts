@@ -188,6 +188,7 @@ function createMcpServer(): Server {
     } catch (error) {
       throw new Error(
         `Error executing tool ${name}: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       );
     }
   });
