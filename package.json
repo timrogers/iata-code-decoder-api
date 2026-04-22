@@ -48,7 +48,7 @@
     "prettier": "3.8.3",
     "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^6.0.3"
   },
   "repository": "timrogers/iata-code-decoder-api"
 }
