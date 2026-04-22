@@ -118,7 +118,7 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
+          const airports = filterObjectsByPartialIataCode(airportsMap, query, 3);
           return {
             content: [
               {
@@ -138,7 +138,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(getAirlines(), query, 2);
+          const airlines = filterObjectsByPartialIataCode(airlinesMap, query, 2);
           return {
             content: [
               {
@@ -158,7 +158,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(getAircraft(), query, 3);
+          const aircraft = filterObjectsByPartialIataCode(aircraftMap, query, 3);
           return {
             content: [
               {
@@ -197,18 +197,52 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
+/**
+ * Creates a Map where keys are all possible lowercase prefixes of the IATA codes
+ * in the provided dataset. This enables O(1) lookups for partial matches.
+ */
+const createPrefixMap = (objects: Keyable[]): Map<string, Keyable[]> => {
+  const map = new Map<string, Keyable[]>();
+
+  // Initialize empty string key with the full dataset for empty queries
+  map.set('', objects);
+
+  for (const object of objects) {
+    const code = object.iataCode.toLowerCase();
+    for (let i = 1; i <= code.length; i++) {
+      const prefix = code.slice(0, i);
+      let existing = map.get(prefix);
+      if (!existing) {
+        existing = [];
+        map.set(prefix, existing);
+      }
+      existing.push(object);
+    }
+  }
+
+  return map;
+};
+
+// Pre-calculate prefix maps for O(1) lookup
+const airportsMap = createPrefixMap(getAirports());
+const airlinesMap = createPrefixMap(getAirlines());
+const aircraftMap = createPrefixMap(getAircraft());
+
+/**
+ * Filters objects by partial IATA code using a pre-calculated prefix map.
+ * This provides O(1) lookup time regardless of the dataset size.
+ */
 const filterObjectsByPartialIataCode = (
-  objects: Keyable[],
+  prefixMap: Map<string, Keyable[]>,
   partialIataCode: string,
   iataCodeLength: number,
 ): Keyable[] => {
-  if (partialIataCode.length > iataCodeLength) {
+  const normalizedQuery = partialIataCode.toLowerCase();
+  if (normalizedQuery.length > iataCodeLength) {
     return [];
-  } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
   }
+
+  return prefixMap.get(normalizedQuery) || [];
 };
 
 // Query parameter interface
@@ -301,7 +335,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: getAirports() };
     } else {
       const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
+      const airports = filterObjectsByPartialIataCode(airportsMap, query, 3);
       return { data: airports };
     }
   },
@@ -325,7 +359,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: getAirlines() };
     } else {
       const query = request.query.query;
-      const airlines = filterObjectsByPartialIataCode(getAirlines(), query, 2);
+      const airlines = filterObjectsByPartialIataCode(airlinesMap, query, 2);
 
       return {
         data: airlines,
@@ -352,7 +386,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: getAircraft() };
     } else {
       const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(getAircraft(), query, 3);
+      const aircraft = filterObjectsByPartialIataCode(aircraftMap, query, 3);
       return { data: aircraft };
     }
   },
