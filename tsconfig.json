@@ -4,7 +4,9 @@
         "esModuleInterop": true,
         "target": "ES2022",
         "module": "ESNext",
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "ignoreDeprecations": "6.0",
+        "types": ["node", "jest"]
     },
     "include": ["src"],
     "exclude": ["node_modules"]
