@@ -118,7 +118,11 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
+          const airports = filterObjectsByPartialIataCode(
+            getAirportsCache().prefixMap,
+            query,
+            3,
+          );
           return {
             content: [
               {
@@ -138,7 +142,11 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
+          const airlines = filterObjectsByPartialIataCode(
+            getAirlinesCache().prefixMap,
+            query,
+            2,
+          );
           return {
             content: [
               {
@@ -158,7 +166,11 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);
+          const aircraft = filterObjectsByPartialIataCode(
+            getAircraftCache().prefixMap,
+            query,
+            3,
+          );
           return {
             content: [
               {
@@ -224,26 +236,68 @@ const createPrefixMap = (
 };
 
 /**
- * Lazily creates and memoizes a prefix map for a dataset so the underlying
- * loader and indexing work only happen on first use.
+ * Pre-built, immutable cache for a dataset. Holds:
+ *   - the prefix map for O(1) candidate lookup by lowercase prefix,
+ *   - a pre-serialized JSON `{"data":[...]}` body for every known prefix, and
+ *   - a pre-serialized JSON `{"data":[...]}` body for the unfiltered list.
+ *
+ * Pre-serialization eliminates per-request JSON.stringify and Fastify schema
+ * serialization for these read-only endpoints, which is the dominant cost when
+ * returning thousands of records.
  */
-const createPrefixMapGetter = (
-  loader: () => ObjectWithIataCode[],
-): (() => Map<string, ObjectWithIataCode[]>) => {
-  let prefixMap: Map<string, ObjectWithIataCode[]> | undefined;
+interface DatasetCache {
+  prefixMap: Map<string, ObjectWithIataCode[]>;
+  serializedByPrefix: Map<string, string>;
+  serializedAll: string;
+}
 
-  return (): Map<string, ObjectWithIataCode[]> => {
-    if (!prefixMap) {
-      prefixMap = createPrefixMap(loader());
-    }
-    return prefixMap;
+const EMPTY_DATA_RESPONSE = '{"data":[]}';
+
+const buildDatasetCache = (objects: ObjectWithIataCode[]): DatasetCache => {
+  const prefixMap = createPrefixMap(objects);
+  const serializedByPrefix = new Map<string, string>();
+  for (const [prefix, bucket] of prefixMap) {
+    serializedByPrefix.set(prefix, JSON.stringify({ data: bucket }));
+  }
+  return {
+    prefixMap,
+    serializedByPrefix,
+    serializedAll: JSON.stringify({ data: objects }),
   };
 };
 
-// Lazily initialize prefix maps on first use
-const getAirportsMap = createPrefixMapGetter(getAirports);
-const getAirlinesMap = createPrefixMapGetter(getAirlines);
-const getAircraftMap = createPrefixMapGetter(getAircraft);
+/**
+ * Lazily creates and memoizes a dataset cache so the underlying loader,
+ * indexing, and serialization work only happen on first use.
+ */
+const createDatasetCacheGetter = (
+  loader: () => ObjectWithIataCode[],
+): (() => DatasetCache) => {
+  let cache: DatasetCache | undefined;
+
+  return (): DatasetCache => {
+    if (!cache) {
+      cache = buildDatasetCache(loader());
+    }
+    return cache;
+  };
+};
+
+// Lazily initialize dataset caches on first use
+const getAirportsCache = createDatasetCacheGetter(getAirports);
+const getAirlinesCache = createDatasetCacheGetter(getAirlines);
+const getAircraftCache = createDatasetCacheGetter(getAircraft);
+
+/**
+ * Eagerly populate every dataset cache. Call this from your startup code
+ * (after `listen` resolves) to make the first user-facing request fast without
+ * delaying server readiness.
+ */
+export const warmDatasetCaches = (): void => {
+  getAirportsCache();
+  getAirlinesCache();
+  getAircraftCache();
+};
 
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
@@ -260,6 +314,24 @@ const filterObjectsByPartialIataCode = (
   }
 
   return prefixMap.get(normalizedQuery) || [];
+};
+
+/**
+ * Returns a pre-serialized JSON body for a query against a dataset cache.
+ * Returns an empty `{"data":[]}` response when the query is longer than the
+ * IATA code length or when no candidates match the prefix.
+ */
+const serializedResponseForQuery = (
+  cache: DatasetCache,
+  partialIataCode: string,
+  iataCodeLength: number,
+): string => {
+  const normalizedQuery = partialIataCode.toLowerCase();
+  if (normalizedQuery.length > iataCodeLength) {
+    return EMPTY_DATA_RESPONSE;
+  }
+
+  return cache.serializedByPrefix.get(normalizedQuery) ?? EMPTY_DATA_RESPONSE;
 };
 
 // Query parameter interface
@@ -291,13 +363,9 @@ const rootSchema = {
   },
 };
 
-// Data response schema
-const dataResponseSchema = {
-  type: 'object',
-  properties: {
-    data: { type: 'array' },
-  },
-};
+// Note: The data endpoints below send pre-serialized JSON strings directly
+// (skipping per-request JSON.stringify and Fastify response serialization), so
+// no `response` schema is attached to them.
 
 // Query schema
 const queryStringSchema = {
@@ -339,22 +407,17 @@ app.get<{ Querystring: QueryParams }>(
   {
     schema: {
       querystring: queryStringSchema,
-      response: {
-        200: dataResponseSchema,
-      },
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
     reply.header('Content-Type', 'application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
+    const cache = getAirportsCache();
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirports() };
-    } else {
-      const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
-      return { data: airports };
+      return reply.send(cache.serializedAll);
     }
+    return reply.send(serializedResponseForQuery(cache, request.query.query, 3));
   },
 );
 
@@ -363,25 +426,17 @@ app.get<{ Querystring: QueryParams }>(
   {
     schema: {
       querystring: queryStringSchema,
-      response: {
-        200: dataResponseSchema,
-      },
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
     reply.header('Content-Type', 'application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
+    const cache = getAirlinesCache();
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirlines() };
-    } else {
-      const query = request.query.query;
-      const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
-
-      return {
-        data: airlines,
-      };
+      return reply.send(cache.serializedAll);
     }
+    return reply.send(serializedResponseForQuery(cache, request.query.query, 2));
   },
 );
 
@@ -390,22 +445,17 @@ app.get<{ Querystring: QueryParams }>(
   {
     schema: {
       querystring: queryStringSchema,
-      response: {
-        200: dataResponseSchema,
-      },
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
     reply.header('Content-Type', 'application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
+    const cache = getAircraftCache();
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAircraft() };
-    } else {
-      const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);
-      return { data: aircraft };
+      return reply.send(cache.serializedAll);
     }
+    return reply.send(serializedResponseForQuery(cache, request.query.query, 3));
   },
 );
 
