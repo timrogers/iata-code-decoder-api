@@ -12,7 +12,7 @@ import { randomUUID } from 'node:crypto';
 import { getAirports } from './airports.js';
 import { getAirlines } from './airlines.js';
 import { getAircraft } from './aircraft.js';
-import { Keyable } from './types.js';
+import { ObjectWithIataCode } from './types.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import {
   CallToolRequestSchema,
@@ -118,7 +118,7 @@ function createMcpServer(): Server {
     try {
       switch (name) {
         case 'lookup_airport': {
-          const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
+          const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
           return {
             content: [
               {
@@ -138,7 +138,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_airline': {
-          const airlines = filterObjectsByPartialIataCode(getAirlines(), query, 2);
+          const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
           return {
             content: [
               {
@@ -158,7 +158,7 @@ function createMcpServer(): Server {
         }
 
         case 'lookup_aircraft': {
-          const aircraft = filterObjectsByPartialIataCode(getAircraft(), query, 3);
+          const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);
           return {
             content: [
               {
@@ -197,18 +197,69 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
+/**
+ * Creates a Map where keys are all possible non-empty lowercase prefixes of the
+ * IATA codes in the provided dataset. This enables O(1) access to the candidate
+ * list for a given prefix (overall query cost is still O(k) for k results).
+ */
+const createPrefixMap = (
+  objects: ObjectWithIataCode[],
+): Map<string, ObjectWithIataCode[]> => {
+  const map = new Map<string, ObjectWithIataCode[]>();
+
+  for (const object of objects) {
+    const code = object.iataCode.toLowerCase();
+    for (let i = 1; i <= code.length; i++) {
+      const prefix = code.slice(0, i);
+      let existing = map.get(prefix);
+      if (!existing) {
+        existing = [];
+        map.set(prefix, existing);
+      }
+      existing.push(object);
+    }
+  }
+
+  return map;
+};
+
+/**
+ * Lazily creates and memoizes a prefix map for a dataset so the underlying
+ * loader and indexing work only happen on first use.
+ */
+const createPrefixMapGetter = (
+  loader: () => ObjectWithIataCode[],
+): (() => Map<string, ObjectWithIataCode[]>) => {
+  let prefixMap: Map<string, ObjectWithIataCode[]> | undefined;
+
+  return (): Map<string, ObjectWithIataCode[]> => {
+    if (!prefixMap) {
+      prefixMap = createPrefixMap(loader());
+    }
+    return prefixMap;
+  };
+};
+
+// Lazily initialize prefix maps on first use
+const getAirportsMap = createPrefixMapGetter(getAirports);
+const getAirlinesMap = createPrefixMapGetter(getAirlines);
+const getAircraftMap = createPrefixMapGetter(getAircraft);
+
+/**
+ * Filters objects by partial IATA code using a pre-calculated prefix map,
+ * providing O(1) access to the matching candidate list.
+ */
 const filterObjectsByPartialIataCode = (
-  objects: Keyable[],
+  prefixMap: Map<string, ObjectWithIataCode[]>,
   partialIataCode: string,
   iataCodeLength: number,
-): Keyable[] => {
-  if (partialIataCode.length > iataCodeLength) {
+): ObjectWithIataCode[] => {
+  const normalizedQuery = partialIataCode.toLowerCase();
+  if (normalizedQuery.length > iataCodeLength) {
     return [];
-  } else {
-    return objects.filter((object) =>
-      object.iataCode.toLowerCase().startsWith(partialIataCode.toLowerCase()),
-    );
   }
+
+  return prefixMap.get(normalizedQuery) || [];
 };
 
 // Query parameter interface
@@ -301,7 +352,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: getAirports() };
     } else {
       const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(getAirports(), query, 3);
+      const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
       return { data: airports };
     }
   },
@@ -325,7 +376,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: getAirlines() };
     } else {
       const query = request.query.query;
-      const airlines = filterObjectsByPartialIataCode(getAirlines(), query, 2);
+      const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
 
       return {
         data: airlines,
@@ -352,7 +403,7 @@ app.get<{ Querystring: QueryParams }>(
       return { data: getAircraft() };
     } else {
       const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(getAircraft(), query, 3);
+      const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);
       return { data: aircraft };
     }
   },
