@@ -291,11 +291,47 @@ const rootSchema = {
   },
 };
 
-// Data response schema
-const dataResponseSchema = {
+// Define schemas for entities to enable fast-json-stringify optimizations
+const airportSchema = {
   type: 'object',
   properties: {
-    data: { type: 'array' },
+    id: { type: 'string' },
+    name: { type: 'string' },
+    iataCode: { type: 'string' },
+    icaoCode: { type: 'string', nullable: true },
+    iataCountryCode: { type: 'string' },
+    cityName: { type: 'string' },
+    latitude: { type: 'number' },
+    longitude: { type: 'number' },
+    timeZone: { type: 'string', nullable: true },
+    city: {
+      type: 'object',
+      nullable: true,
+      properties: {
+        id: { type: 'string' },
+        name: { type: 'string' },
+        iataCode: { type: 'string' },
+        iataCountryCode: { type: 'string' },
+      },
+    },
+  },
+};
+
+const airlineSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    name: { type: 'string' },
+    iataCode: { type: 'string' },
+  },
+};
+
+const aircraftSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    name: { type: 'string' },
+    iataCode: { type: 'string' },
   },
 };
 
@@ -340,7 +376,15 @@ app.get<{ Querystring: QueryParams }>(
     schema: {
       querystring: queryStringSchema,
       response: {
-        200: dataResponseSchema,
+        200: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: airportSchema,
+            },
+          },
+        },
       },
     },
   },
@@ -364,7 +408,15 @@ app.get<{ Querystring: QueryParams }>(
     schema: {
       querystring: queryStringSchema,
       response: {
-        200: dataResponseSchema,
+        200: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: airlineSchema,
+            },
+          },
+        },
       },
     },
   },
@@ -391,7 +443,15 @@ app.get<{ Querystring: QueryParams }>(
     schema: {
       querystring: queryStringSchema,
       response: {
-        200: dataResponseSchema,
+        200: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: aircraftSchema,
+            },
+          },
+        },
       },
     },
   },
