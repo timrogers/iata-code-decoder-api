@@ -27,7 +27,7 @@ const app: FastifyInstance<
   RawServerDefault,
   RawRequestDefaultExpression,
   RawReplyDefaultExpression
-> = Fastify({ logger: false });
+> = Fastify({ logger: true });
 
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 
@@ -297,7 +297,7 @@ const airportSchema = {
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
-    icaoCode: { type: 'string' },
+    icaoCode: { type: ['string', 'null'] },
     name: { type: 'string' },
     latitude: { type: 'number' },
     longitude: { type: 'number' },
