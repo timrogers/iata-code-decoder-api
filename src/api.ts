@@ -267,6 +267,52 @@ interface QueryParams {
   query?: string;
 }
 
+// Detailed JSON schemas for performance optimization. Providing these schemas to Fastify
+// enables the use of `fast-json-stringify`, which pre-compiles serialization logic
+// into highly efficient functions, significantly improving throughput for large responses.
+const airportSchema = {
+  type: 'object',
+  properties: {
+    timeZone: { type: 'string' },
+    name: { type: 'string' },
+    longitude: { type: 'number' },
+    latitude: { type: 'number' },
+    id: { type: 'string' },
+    icaoCode: { type: 'string' },
+    iataCode: { type: 'string' },
+    iataCountryCode: { type: 'string' },
+    cityName: { type: 'string' },
+    iataCityCode: { type: 'string' },
+    city: {
+      type: ['object', 'null'],
+      properties: {
+        name: { type: 'string' },
+        id: { type: 'string' },
+        iataCode: { type: 'string' },
+        iataCountryCode: { type: 'string' },
+      },
+    },
+  },
+};
+
+const airlineSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    name: { type: 'string' },
+    iataCode: { type: 'string' },
+  },
+};
+
+const aircraftSchema = {
+  type: 'object',
+  properties: {
+    iataCode: { type: 'string' },
+    id: { type: 'string' },
+    name: { type: 'string' },
+  },
+};
+
 // Health endpoint schema
 const healthSchema = {
   response: {
@@ -288,14 +334,6 @@ const rootSchema = {
         documentation_url: { type: 'string' },
       },
     },
-  },
-};
-
-// Data response schema
-const dataResponseSchema = {
-  type: 'object',
-  properties: {
-    data: { type: 'array' },
   },
 };
 
@@ -340,7 +378,15 @@ app.get<{ Querystring: QueryParams }>(
     schema: {
       querystring: queryStringSchema,
       response: {
-        200: dataResponseSchema,
+        200: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: airportSchema,
+            },
+          },
+        },
       },
     },
   },
@@ -364,7 +410,15 @@ app.get<{ Querystring: QueryParams }>(
     schema: {
       querystring: queryStringSchema,
       response: {
-        200: dataResponseSchema,
+        200: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: airlineSchema,
+            },
+          },
+        },
       },
     },
   },
@@ -391,7 +445,15 @@ app.get<{ Querystring: QueryParams }>(
     schema: {
       querystring: queryStringSchema,
       response: {
-        200: dataResponseSchema,
+        200: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: aircraftSchema,
+            },
+          },
+        },
       },
     },
   },
