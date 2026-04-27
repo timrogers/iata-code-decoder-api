@@ -265,6 +265,7 @@ const filterObjectsByPartialIataCode = (
 // Query parameter interface
 interface QueryParams {
   query?: string;
+  country?: string;
 }
 
 // Health endpoint schema
@@ -339,6 +340,7 @@ const queryStringSchema = {
   type: 'object',
   properties: {
     query: { type: 'string' },
+    country: { type: 'string' },
   },
 };
 
@@ -391,13 +393,23 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Content-Type', 'application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-    if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirports() };
-    } else {
+    let airports = getAirports();
+
+    // Filter by IATA code query if provided
+    if (request.query.query !== undefined && request.query.query !== '') {
       const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
-      return { data: airports };
+      airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
     }
+
+    // Filter by country if provided
+    if (request.query.country !== undefined && request.query.country !== '') {
+      const countryCode = request.query.country.toUpperCase();
+      airports = airports.filter(
+        (airport) => airport.iataCountryCode === countryCode,
+      );
+    }
+
+    return { data: airports };
   },
 );
 

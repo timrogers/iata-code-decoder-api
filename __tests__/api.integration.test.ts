@@ -143,6 +143,93 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
     });
+
+    it('should filter airports by country code (GB)', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?country=GB',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body).toHaveProperty('data');
+      expect(Array.isArray(body.data)).toBe(true);
+      expect(body.data.length).toBeGreaterThan(0);
+
+      // All returned airports should be in GB
+      body.data.forEach((airport: { iataCountryCode: string }) => {
+        expect(airport.iataCountryCode).toBe('GB');
+      });
+    });
+
+    it('should filter airports by country code (US)', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?country=US',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body).toHaveProperty('data');
+      expect(Array.isArray(body.data)).toBe(true);
+      expect(body.data.length).toBeGreaterThan(0);
+
+      // All returned airports should be in US
+      body.data.forEach((airport: { iataCountryCode: string }) => {
+        expect(airport.iataCountryCode).toBe('US');
+      });
+    });
+
+    it('should filter airports by country code case-insensitively', async () => {
+      const responseUpper = await app.inject({
+        method: 'GET',
+        url: '/airports?country=gb',
+      });
+      const responseLower = await app.inject({
+        method: 'GET',
+        url: '/airports?country=GB',
+      });
+
+      expect(responseUpper.json()).toEqual(responseLower.json());
+    });
+
+    it('should combine query and country filters', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=L&country=GB',
+      });
+
+      expect(response.statusCode).toBe(200);
+      const body = response.json();
+      expect(body).toHaveProperty('data');
+      expect(Array.isArray(body.data)).toBe(true);
+
+      // All returned airports should start with 'L' and be in GB
+      body.data.forEach((airport: { iataCode: string; iataCountryCode: string }) => {
+        expect(airport.iataCode.toUpperCase()).toMatch(/^L/);
+        expect(airport.iataCountryCode).toBe('GB');
+      });
+    });
+
+    it('should return empty array for non-existent country code', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?country=ZZ',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.json()).toEqual({ data: [] });
+    });
+
+    it('should return empty array when combining filters results in no matches', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/airports?query=LHR&country=US',
+      });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.json()).toEqual({ data: [] });
+    });
   });
 
   describe('GET /airlines', () => {
