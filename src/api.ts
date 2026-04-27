@@ -301,7 +301,7 @@ const airportSchema = {
     name: { type: 'string' },
     latitude: { type: 'number' },
     longitude: { type: 'number' },
-    time_zone: { type: 'string' },
+    timeZone: { type: ['string', 'null'] },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {
@@ -312,8 +312,23 @@ const airportSchema = {
         iataCountryCode: { type: 'string' },
         name: { type: 'string' },
       },
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
     },
   },
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'timeZone',
+    'iataCountryCode',
+    'cityName',
+    'city',
+  ],
+  additionalProperties: false,
 };
 
 const airlineSchema = {
@@ -323,6 +338,8 @@ const airlineSchema = {
     iataCode: { type: 'string' },
     name: { type: 'string' },
   },
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
 };
 
 const aircraftSchema = {
@@ -332,6 +349,8 @@ const aircraftSchema = {
     iataCode: { type: 'string' },
     name: { type: 'string' },
   },
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
 };
 
 // Query schema
