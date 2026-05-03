@@ -5,13 +5,15 @@ import { cameliseKeys } from './utils.js';
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
 
+  // We ensure both time_zone and timeZone are present for backward compatibility
+  // and to satisfy the optimized Fastify response schema.
+  camelisedAirport.time_zone = (airport as { time_zone: string }).time_zone;
+
   if (camelisedAirport.city) {
-    return Object.assign(camelisedAirport, {
-      city: cameliseKeys(camelisedAirport.city),
-    }) as Airport;
-  } else {
-    return camelisedAirport as Airport;
+    camelisedAirport.city = cameliseKeys(camelisedAirport.city) as Airport['city'];
   }
+
+  return camelisedAirport;
 };
 
 let airports: Airport[] | undefined;
