@@ -15,7 +15,8 @@
     "prettier": "prettier src/**/*.ts",
     "prettier-fix": "prettier src/**/*.ts --write",
     "eslint": "eslint .",
-    "eslint-fix": "eslint . --fix"
+    "eslint-fix": "eslint . --fix",
+    "fetch:caffeine": "bash scripts/fetch_caffeinesoftware.sh"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
