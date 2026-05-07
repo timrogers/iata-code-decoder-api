@@ -26,7 +26,10 @@ export interface Aircraft {
 }
 
 export interface Airline {
+  conditionsOfCarriageUrl?: string | null;
   id: string;
+  logoLockupUrl?: string | null;
+  logoSymbolUrl?: string | null;
   name: string;
   iataCode: string;
 }

@@ -17,15 +17,14 @@ type RawAirlineWithIataCode = RawAirline & { iata_code: string };
 const hasIataCode = (airline: RawAirline): airline is RawAirlineWithIataCode =>
   airline.iata_code !== undefined && airline.iata_code !== null;
 
-const airlineDataToAirline = (airline: RawAirlineWithIataCode): Airline =>
-  ({
-    conditionsOfCarriageUrl: airline.conditions_of_carriage_url,
-    iataCode: airline.iata_code,
-    id: airline.id,
-    logoLockupUrl: airline.logo_lockup_url,
-    logoSymbolUrl: airline.logo_symbol_url,
-    name: airline.name,
-  }) as Airline;
+const airlineDataToAirline = (airline: RawAirlineWithIataCode): Airline => ({
+  conditionsOfCarriageUrl: airline.conditions_of_carriage_url,
+  iataCode: airline.iata_code,
+  id: airline.id,
+  logoLockupUrl: airline.logo_lockup_url,
+  logoSymbolUrl: airline.logo_symbol_url,
+  name: airline.name,
+});
 
 let airlines: Airline[] | undefined;
 

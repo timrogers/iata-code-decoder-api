@@ -7,18 +7,18 @@ interface RawAircraft {
   name: string;
 }
 
-const aircraftDataToAircraft = (aircraft: RawAircraft): Aircraft =>
-  ({
-    iataCode: aircraft.iata_code,
-    id: aircraft.id,
-    name: aircraft.name,
-  }) as Aircraft;
+const aircraftDataToAircraft = (aircraft: RawAircraft): Aircraft => ({
+  iataCode: aircraft.iata_code,
+  id: aircraft.id,
+  name: aircraft.name,
+});
 
 let aircraft: Aircraft[] | undefined;
 
 export const getAircraft = (): Aircraft[] => {
   if (!aircraft) {
-    aircraft = AIRCRAFT_DATA.map((entry) => aircraftDataToAircraft(entry as RawAircraft));
+    const aircraftData = AIRCRAFT_DATA as RawAircraft[];
+    aircraft = aircraftData.map(aircraftDataToAircraft);
   }
 
   return aircraft;
