@@ -1,7 +1,6 @@
 import { getAirports } from '../src/airports.js';
 import { getAirlines } from '../src/airlines.js';
 import { getAircraft } from '../src/aircraft.js';
-import * as fs from 'node:fs';
 
 describe('Data loaders', () => {
   it('should cache airport data after first load', () => {
@@ -32,9 +31,9 @@ describe('Data loaders', () => {
   });
 
   it('should only read airport data from disk once', async () => {
-    const readFileSpy = jest.spyOn(fs, 'readFileSync');
-
     jest.resetModules();
+    const fs = await import('node:fs');
+    const readFileSpy = jest.spyOn(fs, 'readFileSync');
     const { getAirports } = await import('../src/airports.js');
     getAirports();
     getAirports();
@@ -48,9 +47,9 @@ describe('Data loaders', () => {
   });
 
   it('should only read airline data from disk once', async () => {
-    const readFileSpy = jest.spyOn(fs, 'readFileSync');
-
     jest.resetModules();
+    const fs = await import('node:fs');
+    const readFileSpy = jest.spyOn(fs, 'readFileSync');
     const { getAirlines } = await import('../src/airlines.js');
     getAirlines();
     getAirlines();
@@ -64,9 +63,9 @@ describe('Data loaders', () => {
   });
 
   it('should only read aircraft data from disk once', async () => {
-    const readFileSpy = jest.spyOn(fs, 'readFileSync');
-
     jest.resetModules();
+    const fs = await import('node:fs');
+    const readFileSpy = jest.spyOn(fs, 'readFileSync');
     const { getAircraft } = await import('../src/aircraft.js');
     getAircraft();
     getAircraft();
