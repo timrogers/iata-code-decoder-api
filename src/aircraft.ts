@@ -1,12 +1,18 @@
 import { Aircraft } from './types.js';
-import AIRCRAFT_DATA from './../data/aircraft.json' with { type: 'json' };
+import { createRequire } from 'node:module';
 import { cameliseKeys } from './utils.js';
 
 let aircraft: Aircraft[] | undefined;
+let aircraftData: object[] | undefined;
 
 export const getAircraft = (): Aircraft[] => {
   if (!aircraft) {
-    aircraft = AIRCRAFT_DATA.map(cameliseKeys) as Aircraft[];
+    if (!aircraftData) {
+      const require = createRequire(import.meta.url);
+      aircraftData = require('./../data/aircraft.json') as object[];
+    }
+
+    aircraft = aircraftData.map(cameliseKeys) as Aircraft[];
   }
 
   return aircraft;
