@@ -240,10 +240,31 @@ const createPrefixMapGetter = (
   };
 };
 
+/**
+ * Lazily creates and memoizes the serialized JSON body for immutable collection
+ * responses so large "list all" requests don't re-encode the same payload.
+ */
+const createSerializedCollectionResponseGetter = <T>(
+  loader: () => T[],
+): (() => string) => {
+  let serializedResponse: string | undefined;
+
+  return (): string => {
+    if (!serializedResponse) {
+      serializedResponse = JSON.stringify({ data: loader() });
+    }
+
+    return serializedResponse;
+  };
+};
+
 // Lazily initialize prefix maps on first use
 const getAirportsMap = createPrefixMapGetter(getAirports);
 const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
+const getSerializedAirportsResponse = createSerializedCollectionResponseGetter(getAirports);
+const getSerializedAirlinesResponse = createSerializedCollectionResponseGetter(getAirlines);
+const getSerializedAircraftResponse = createSerializedCollectionResponseGetter(getAircraft);
 
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
@@ -392,7 +413,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirports() };
+      return reply.send(getSerializedAirportsResponse());
     } else {
       const query = request.query.query;
       const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
@@ -424,7 +445,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirlines() };
+      return reply.send(getSerializedAirlinesResponse());
     } else {
       const query = request.query.query;
       const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
@@ -459,7 +480,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAircraft() };
+      return reply.send(getSerializedAircraftResponse());
     } else {
       const query = request.query.query;
       const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);

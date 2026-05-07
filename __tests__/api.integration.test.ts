@@ -143,6 +143,22 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
     });
+
+    it('should return identical cached responses for repeated full dataset requests', async () => {
+      const firstResponse = await app.inject({
+        method: 'GET',
+        url: '/airports',
+      });
+      const secondResponse = await app.inject({
+        method: 'GET',
+        url: '/airports',
+      });
+
+      expect(firstResponse.body).toBe(secondResponse.body);
+      expect(firstResponse.headers['content-type']).toMatch(/json/);
+      expect(firstResponse.headers['cache-control']).toMatch(/public/);
+      expect(firstResponse.headers['cache-control']).toMatch(/max-age=86400/);
+    });
   });
 
   describe('GET /airlines', () => {
@@ -240,6 +256,22 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
     });
+
+    it('should return identical cached responses for repeated full dataset requests', async () => {
+      const firstResponse = await app.inject({
+        method: 'GET',
+        url: '/airlines',
+      });
+      const secondResponse = await app.inject({
+        method: 'GET',
+        url: '/airlines',
+      });
+
+      expect(firstResponse.body).toBe(secondResponse.body);
+      expect(firstResponse.headers['content-type']).toMatch(/json/);
+      expect(firstResponse.headers['cache-control']).toMatch(/public/);
+      expect(firstResponse.headers['cache-control']).toMatch(/max-age=86400/);
+    });
   });
 
   describe('GET /aircraft', () => {
@@ -336,6 +368,22 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(response.headers['content-type']).toMatch(/json/);
       expect(response.headers['cache-control']).toMatch(/public/);
       expect(response.headers['cache-control']).toMatch(/max-age=86400/);
+    });
+
+    it('should return identical cached responses for repeated full dataset requests', async () => {
+      const firstResponse = await app.inject({
+        method: 'GET',
+        url: '/aircraft',
+      });
+      const secondResponse = await app.inject({
+        method: 'GET',
+        url: '/aircraft',
+      });
+
+      expect(firstResponse.body).toBe(secondResponse.body);
+      expect(firstResponse.headers['content-type']).toMatch(/json/);
+      expect(firstResponse.headers['cache-control']).toMatch(/public/);
+      expect(firstResponse.headers['cache-control']).toMatch(/max-age=86400/);
     });
   });
 
