@@ -262,9 +262,12 @@ const createSerializedCollectionResponseGetter = <T>(
 const getAirportsMap = createPrefixMapGetter(getAirports);
 const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
-const getSerializedAirportsResponse = createSerializedCollectionResponseGetter(getAirports);
-const getSerializedAirlinesResponse = createSerializedCollectionResponseGetter(getAirlines);
-const getSerializedAircraftResponse = createSerializedCollectionResponseGetter(getAircraft);
+const getSerializedAirportsResponse =
+  createSerializedCollectionResponseGetter(getAirports);
+const getSerializedAirlinesResponse =
+  createSerializedCollectionResponseGetter(getAirlines);
+const getSerializedAircraftResponse =
+  createSerializedCollectionResponseGetter(getAircraft);
 
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
