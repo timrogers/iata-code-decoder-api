@@ -123,15 +123,11 @@ function createMcpServer(): Server {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(
-                  {
-                    query,
-                    results: airports,
-                    count: airports.length,
-                  },
-                  null,
-                  2,
-                ),
+                text: JSON.stringify({
+                  query,
+                  results: airports,
+                  count: airports.length,
+                }),
               },
             ],
           };
@@ -143,15 +139,11 @@ function createMcpServer(): Server {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(
-                  {
-                    query,
-                    results: airlines,
-                    count: airlines.length,
-                  },
-                  null,
-                  2,
-                ),
+                text: JSON.stringify({
+                  query,
+                  results: airlines,
+                  count: airlines.length,
+                }),
               },
             ],
           };
@@ -163,15 +155,11 @@ function createMcpServer(): Server {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify(
-                  {
-                    query,
-                    results: aircraft,
-                    count: aircraft.length,
-                  },
-                  null,
-                  2,
-                ),
+                text: JSON.stringify({
+                  query,
+                  results: aircraft,
+                  count: aircraft.length,
+                }),
               },
             ],
           };
