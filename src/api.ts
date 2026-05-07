@@ -246,6 +246,33 @@ const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
 
 /**
+ * Lazily creates and memoizes a JSON string response body for static payloads,
+ * avoiding repeated per-request serialization for high-traffic endpoints.
+ */
+const createSerializedJsonResponseGetter = (
+  loader: () => Record<string, unknown>,
+): (() => string) => {
+  let responseBody: string | undefined;
+
+  return (): string => {
+    if (!responseBody) {
+      responseBody = JSON.stringify(loader());
+    }
+    return responseBody;
+  };
+};
+
+const getAirportsResponseBody = createSerializedJsonResponseGetter(() => ({
+  data: getAirports(),
+}));
+const getAirlinesResponseBody = createSerializedJsonResponseGetter(() => ({
+  data: getAirlines(),
+}));
+const getAircraftResponseBody = createSerializedJsonResponseGetter(() => ({
+  data: getAircraft(),
+}));
+
+/**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
  * providing O(1) access to the matching candidate list.
  */
@@ -392,7 +419,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirports() };
+      return reply.send(getAirportsResponseBody());
     } else {
       const query = request.query.query;
       const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
@@ -424,7 +451,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirlines() };
+      return reply.send(getAirlinesResponseBody());
     } else {
       const query = request.query.query;
       const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
@@ -459,7 +486,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAircraft() };
+      return reply.send(getAircraftResponseBody());
     } else {
       const query = request.query.query;
       const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);
