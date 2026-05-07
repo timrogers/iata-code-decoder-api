@@ -30,8 +30,7 @@ const cityDataToCity = (city: RawCity): City =>
     name: city.name,
   }) as City;
 
-const airportDataToAirport = (airport: RawAirport): Airport =>
-  ({
+const airportDataToAirport = (airport: RawAirport): Airport => ({
     city: airport.city ? cityDataToCity(airport.city) : null,
     cityName: airport.city_name,
     iataCityCode: airport.iata_city_code,
@@ -43,7 +42,7 @@ const airportDataToAirport = (airport: RawAirport): Airport =>
     longitude: airport.longitude,
     name: airport.name,
     timeZone: airport.time_zone,
-  }) as unknown as Airport;
+  });
 
 let airports: Airport[] | undefined;
 

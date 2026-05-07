@@ -10,12 +10,14 @@ interface RawAirline {
   name: string;
 }
 
+type RawAirlineWithIataCode = RawAirline & { iata_code: string };
+
 // We want to filter out airlines returned by the Duffel API with no IATA code,
 // since these aren't useful for IATA code decoding
-const hasIataCode = (airline: RawAirline): boolean =>
+const hasIataCode = (airline: RawAirline): airline is RawAirlineWithIataCode =>
   airline.iata_code !== undefined && airline.iata_code !== null;
 
-const airlineDataToAirline = (airline: RawAirline): Airline =>
+const airlineDataToAirline = (airline: RawAirlineWithIataCode): Airline =>
   ({
     conditionsOfCarriageUrl: airline.conditions_of_carriage_url,
     iataCode: airline.iata_code,
@@ -29,9 +31,8 @@ let airlines: Airline[] | undefined;
 
 export const getAirlines = (): Airline[] => {
   if (!airlines) {
-    airlines = AIRLINES_DATA.filter((airline) => hasIataCode(airline as RawAirline)).map(
-      (airline) => airlineDataToAirline(airline as RawAirline),
-    );
+    const airlineData = AIRLINES_DATA as RawAirline[];
+    airlines = airlineData.filter(hasIataCode).map(airlineDataToAirline);
   }
 
   return airlines;
