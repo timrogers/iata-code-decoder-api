@@ -412,7 +412,7 @@ app.get<{ Querystring: QueryParams }>(
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
-    reply.header('Content-Type', 'application/json');
+    reply.type('application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
@@ -444,7 +444,7 @@ app.get<{ Querystring: QueryParams }>(
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
-    reply.header('Content-Type', 'application/json');
+    reply.type('application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
@@ -479,7 +479,7 @@ app.get<{ Querystring: QueryParams }>(
     },
   },
   async (request: FastifyRequest<{ Querystring: QueryParams }>, reply: FastifyReply) => {
-    reply.header('Content-Type', 'application/json');
+    reply.type('application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
