@@ -5,13 +5,16 @@ import { cameliseKeys } from './utils.js';
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
 
+  // Restore time_zone for backward compatibility while also having camelCase timeZone
+  // This satisfies Fastify's optimized serialization schema
+  const rawData = airport as Record<string, unknown>;
+  camelisedAirport.time_zone = rawData.time_zone as string;
+
   if (camelisedAirport.city) {
-    return Object.assign(camelisedAirport, {
-      city: cameliseKeys(camelisedAirport.city),
-    }) as Airport;
-  } else {
-    return camelisedAirport as Airport;
+    camelisedAirport.city = cameliseKeys(camelisedAirport.city) as Airport['city'];
   }
+
+  return camelisedAirport;
 };
 
 let airports: Airport[] | undefined;
