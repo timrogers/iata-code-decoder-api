@@ -1,3 +1,14 @@
+import { jest } from '@jest/globals';
+
+const unstableMockModule = (
+  jest as typeof jest & {
+    unstable_mockModule: (
+      moduleName: string,
+      factory: () => unknown,
+    ) => Promise<typeof jest>;
+  }
+).unstable_mockModule;
+
 describe('Lazy data loading', () => {
   beforeEach(() => {
     jest.resetModules();
@@ -19,7 +30,7 @@ describe('Lazy data loading', () => {
     ]);
     const createRequireMock = jest.fn(() => requireMock);
 
-    jest.unstable_mockModule('node:module', () => ({
+    await unstableMockModule('node:module', () => ({
       createRequire: createRequireMock,
     }));
 
@@ -52,7 +63,7 @@ describe('Lazy data loading', () => {
     ]);
     const createRequireMock = jest.fn(() => requireMock);
 
-    jest.unstable_mockModule('node:module', () => ({
+    await unstableMockModule('node:module', () => ({
       createRequire: createRequireMock,
     }));
 
@@ -81,7 +92,7 @@ describe('Lazy data loading', () => {
     ]);
     const createRequireMock = jest.fn(() => requireMock);
 
-    jest.unstable_mockModule('node:module', () => ({
+    await unstableMockModule('node:module', () => ({
       createRequire: createRequireMock,
     }));
 
