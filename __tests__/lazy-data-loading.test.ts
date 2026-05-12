@@ -1,10 +1,25 @@
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+
 describe('Lazy data loading', () => {
+  const unstableMockModule = (
+    moduleName: string,
+    moduleFactory: () => unknown,
+  ) =>
+    (
+      jest as unknown as {
+        unstable_mockModule: (
+          moduleName: string,
+          moduleFactory: () => unknown,
+        ) => typeof jest;
+      }
+    ).unstable_mockModule(moduleName, moduleFactory);
+
   beforeEach(() => {
     jest.resetModules();
   });
 
   it('loads airports data only on first getter call', async () => {
-    const requireMock = jest.fn(() => [
+    const requireMock = jest.fn((_path: string) => [
       {
         id: 'lhr',
         iata_code: 'LHR',
@@ -19,7 +34,7 @@ describe('Lazy data loading', () => {
     ]);
     const createRequireMock = jest.fn(() => requireMock);
 
-    jest.unstable_mockModule('node:module', () => ({
+    unstableMockModule('node:module', () => ({
       createRequire: createRequireMock,
     }));
 
@@ -38,7 +53,7 @@ describe('Lazy data loading', () => {
   });
 
   it('loads airlines data only on first getter call', async () => {
-    const requireMock = jest.fn(() => [
+    const requireMock = jest.fn((_path: string) => [
       {
         id: 'ba',
         iata_code: 'BA',
@@ -52,7 +67,7 @@ describe('Lazy data loading', () => {
     ]);
     const createRequireMock = jest.fn(() => requireMock);
 
-    jest.unstable_mockModule('node:module', () => ({
+    unstableMockModule('node:module', () => ({
       createRequire: createRequireMock,
     }));
 
@@ -72,7 +87,7 @@ describe('Lazy data loading', () => {
   });
 
   it('loads aircraft data only on first getter call', async () => {
-    const requireMock = jest.fn(() => [
+    const requireMock = jest.fn((_path: string) => [
       {
         id: 'a320',
         iata_code: '320',
@@ -81,7 +96,7 @@ describe('Lazy data loading', () => {
     ]);
     const createRequireMock = jest.fn(() => requireMock);
 
-    jest.unstable_mockModule('node:module', () => ({
+    unstableMockModule('node:module', () => ({
       createRequire: createRequireMock,
     }));
 
