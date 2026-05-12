@@ -12,40 +12,28 @@ const clearRequireCache = (modulePath: string): string => {
 };
 
 describe('Data loaders', () => {
-  it('should lazily load airport data on first access', async () => {
+  it('should lazily load airport data on first access', () => {
     const airportsDataPath = clearRequireCache('../data/airports.json');
 
-    await jest.isolateModulesAsync(async () => {
-      const { getAirports } = await import('../src/airports.js');
-
-      expect(require.cache[airportsDataPath]).toBeUndefined();
-      getAirports();
-      expect(require.cache[airportsDataPath]).toBeDefined();
-    });
+    expect(require.cache[airportsDataPath]).toBeUndefined();
+    getAirports();
+    expect(require.cache[airportsDataPath]).toBeDefined();
   });
 
-  it('should lazily load airline data on first access', async () => {
+  it('should lazily load airline data on first access', () => {
     const airlinesDataPath = clearRequireCache('../data/airlines.json');
 
-    await jest.isolateModulesAsync(async () => {
-      const { getAirlines } = await import('../src/airlines.js');
-
-      expect(require.cache[airlinesDataPath]).toBeUndefined();
-      getAirlines();
-      expect(require.cache[airlinesDataPath]).toBeDefined();
-    });
+    expect(require.cache[airlinesDataPath]).toBeUndefined();
+    getAirlines();
+    expect(require.cache[airlinesDataPath]).toBeDefined();
   });
 
-  it('should lazily load aircraft data on first access', async () => {
+  it('should lazily load aircraft data on first access', () => {
     const aircraftDataPath = clearRequireCache('../data/aircraft.json');
 
-    await jest.isolateModulesAsync(async () => {
-      const { getAircraft } = await import('../src/aircraft.js');
-
-      expect(require.cache[aircraftDataPath]).toBeUndefined();
-      getAircraft();
-      expect(require.cache[aircraftDataPath]).toBeDefined();
-    });
+    expect(require.cache[aircraftDataPath]).toBeUndefined();
+    getAircraft();
+    expect(require.cache[aircraftDataPath]).toBeDefined();
   });
 
   it('should cache airport data after first load', () => {
