@@ -20,7 +20,7 @@
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
   "engines": {
-    "node": "25.x"
+    "node": "26.x"
   },
   "dependencies": {
     "@fastify/compress": "^8.3.1",
@@ -36,7 +36,7 @@
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.7.0",
+    "@types/node": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^8.59.3",
     "@typescript-eslint/parser": "^8.59.3",
     "autocannon": "^8.0.0",
