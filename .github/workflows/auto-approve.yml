@@ -1,0 +1,43 @@
+name: Auto-approve PRs with test changes
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Get changed files
+        id: changed-files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            const testFilePatterns = [
+              /\/__tests__\//,
+              /\.test\.[jt]sx?$/,
+              /\.spec\.[jt]sx?$/,
+            ];
+            const hasTestFile = files.some(f =>
+              testFilePatterns.some(pattern => pattern.test(f.filename))
+            );
+            core.setOutput('has_test_file', hasTestFile.toString());
+
+      - name: Approve PR
+        if: steps.changed-files.outputs.has_test_file == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE',
+            });
