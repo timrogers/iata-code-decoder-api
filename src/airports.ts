@@ -5,12 +5,17 @@ import { cameliseKeys } from './utils.js';
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
 
-  if (camelisedAirport.city) {
-    return Object.assign(camelisedAirport, {
-      city: cameliseKeys(camelisedAirport.city),
+  // Restore the original snake_case time_zone key for backward compatibility
+  // and schema requirements, as cameliseKeys only provides timeZone.
+  const time_zone = (airport as { time_zone: string }).time_zone;
+  const airportWithTimeZone = Object.assign(camelisedAirport, { time_zone });
+
+  if (airportWithTimeZone.city) {
+    return Object.assign(airportWithTimeZone, {
+      city: cameliseKeys(airportWithTimeZone.city),
     }) as Airport;
   } else {
-    return camelisedAirport as Airport;
+    return airportWithTimeZone as Airport;
   }
 };
 
