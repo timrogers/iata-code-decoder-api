@@ -6,9 +6,7 @@ const snakeCaseToCamelCase = (string: string): string => {
     return cached;
   }
 
-  const result = string.replace(/(_[a-z])/gi, ($1) =>
-    $1.toUpperCase().replace('-', '').replace('_', ''),
-  );
+  const result = string.replace(/_([a-z])/gi, (_, letter) => letter.toUpperCase());
   memo.set(string, result);
   return result;
 };
