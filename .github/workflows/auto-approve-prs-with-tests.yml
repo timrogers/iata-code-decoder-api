@@ -1,0 +1,45 @@
+name: Auto-approve PRs with tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for test files and approve
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const testFilePatterns = [
+              /^__tests__\//,
+              /\.test\.(ts|js|tsx|jsx)$/,
+              /\.spec\.(ts|js|tsx|jsx)$/,
+            ];
+
+            const hasTestFiles = files.some(file =>
+              testFilePatterns.some(pattern => pattern.test(file.filename))
+            );
+
+            if (hasTestFiles) {
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                event: 'APPROVE',
+                body: 'Auto-approved: this PR includes test file changes.',
+              });
+              console.log('PR approved - test files detected.');
+            } else {
+              console.log('PR not approved - no test files detected.');
+            }
