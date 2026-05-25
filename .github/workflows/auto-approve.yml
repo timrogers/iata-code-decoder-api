@@ -1,0 +1,36 @@
+name: Auto-approve PRs with test changes
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for test file changes
+        id: check-tests
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          FILES=$(git diff --name-only "$BASE" "$HEAD")
+          echo "Changed files:"
+          echo "$FILES"
+          if echo "$FILES" | grep -qE '(^|/)__tests__/|\.test\.(ts|js)$|\.spec\.(ts|js)$'; then
+            echo "has_tests=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_tests=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Approve PR
+        if: steps.check-tests.outputs.has_tests == 'true'
+        run: gh pr review ${{ github.event.pull_request.number }} --approve --body "Auto-approved: this PR includes changes to test files."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
