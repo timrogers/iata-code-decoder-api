@@ -197,6 +197,19 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
+// Eagerly warm up the prefix maps after the server is ready. This moves the
+// expensive O(N) loading and indexing work to startup, eliminating cold-start
+// latency for the first user request.
+app.addHook('onReady', async () => {
+  app.log.info('Warming up prefix map caches...');
+  const start = performance.now();
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+  const duration = performance.now() - start;
+  app.log.info(`Prefix map caches warmed in ${duration.toFixed(2)}ms`);
+});
+
 /**
  * Creates a Map where keys are all possible non-empty lowercase prefixes of the
  * IATA codes in the provided dataset. This enables O(1) access to the candidate
@@ -294,6 +307,20 @@ const rootSchema = {
 // Detailed schemas for optimized serialization via fast-json-stringify
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'timeZone',
+    'iataCountryCode',
+    'cityName',
+    'city',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -302,10 +329,13 @@ const airportSchema = {
     latitude: { type: 'number' },
     longitude: { type: 'number' },
     time_zone: { type: 'string' },
+    timeZone: { type: 'string' },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,15 +348,29 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'name',
+    'logoSymbolUrl',
+    'logoLockupUrl',
+    'conditionsOfCarriageUrl',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
     name: { type: 'string' },
+    logoSymbolUrl: { type: ['string', 'null'] },
+    logoLockupUrl: { type: ['string', 'null'] },
+    conditionsOfCarriageUrl: { type: ['string', 'null'] },
   },
 };
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
