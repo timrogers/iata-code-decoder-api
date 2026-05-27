@@ -1,0 +1,30 @@
+name: Auto-approve PRs with tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for test files and approve
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          FILES=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files --jq '.[].filename')
+          echo "Changed files:"
+          echo "$FILES"
+
+          if echo "$FILES" | grep -qE '(\.test\.[jt]sx?$|\.spec\.[jt]sx?$|__tests__/)'; then
+            echo "Test files found - approving PR"
+            gh pr review ${{ github.event.pull_request.number }} \
+              --repo ${{ github.repository }} \
+              --approve \
+              --body "Automatically approved: this PR includes test file changes."
+          else
+            echo "No test files found - skipping approval"
+          fi
