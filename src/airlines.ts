@@ -11,7 +11,16 @@ let airlines: Airline[] | undefined;
 
 export const getAirlines = (): Airline[] => {
   if (!airlines) {
-    airlines = AIRLINES_DATA.map(cameliseKeys).filter(hasIataCode) as Airline[];
+    airlines = AIRLINES_DATA.map((airline) => {
+      const camelised = cameliseKeys(airline) as Airline;
+      // Ensure optional fields are at least null for strict schema validation
+      return {
+        ...camelised,
+        logoSymbolUrl: camelised.logoSymbolUrl ?? null,
+        logoLockupUrl: camelised.logoLockupUrl ?? null,
+        conditionsOfCarriageUrl: camelised.conditionsOfCarriageUrl ?? null,
+      };
+    }).filter(hasIataCode);
   }
 
   return airlines;
