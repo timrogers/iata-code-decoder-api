@@ -1,0 +1,39 @@
+name: Auto-approve PRs with tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for test files and approve
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const hasTestFile = files.some(({ filename }) =>
+              /(__tests__|\.test\.|\.spec\.)/.test(filename)
+            );
+
+            if (!hasTestFile) {
+              console.log('No test files found — skipping approval.');
+              return;
+            }
+
+            console.log('Test files found — approving PR.');
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE',
+            });
