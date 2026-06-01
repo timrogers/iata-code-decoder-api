@@ -1,0 +1,31 @@
+name: Auto-approve PRs with tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: tj-actions/changed-files@v46
+        id: changed-files
+        with:
+          files: |
+            __tests__/**
+            **/*.test.ts
+            **/*.test.js
+            **/*.spec.ts
+            **/*.spec.js
+
+      - name: Approve PR
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: gh pr review ${{ github.event.pull_request.number }} --approve --body "Approved automatically: this PR includes test file changes."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
