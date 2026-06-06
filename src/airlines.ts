@@ -1,6 +1,8 @@
 import { Airline, Keyable } from './types.js';
-import AIRLINES_DATA from './../data/airlines.json' with { type: 'json' };
+import * as fs from 'node:fs';
 import { cameliseKeys } from './utils.js';
+
+const AIRLINES_DATA_URL = new URL('../data/airlines.json', import.meta.url);
 
 // We want to filter out airlines returned by the Duffel API with no IATA code,
 // since these aren't useful for IATA code decoding
@@ -11,7 +13,10 @@ let airlines: Airline[] | undefined;
 
 export const getAirlines = (): Airline[] => {
   if (!airlines) {
-    airlines = AIRLINES_DATA.map(cameliseKeys).filter(hasIataCode) as Airline[];
+    const airlinesData = JSON.parse(
+      fs.readFileSync(AIRLINES_DATA_URL, 'utf-8'),
+    ) as Keyable[];
+    airlines = airlinesData.map(cameliseKeys).filter(hasIataCode) as Airline[];
   }
 
   return airlines;
