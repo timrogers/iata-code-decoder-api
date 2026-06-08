@@ -1,0 +1,30 @@
+name: Auto-approve PRs with test files
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Approve if PR includes test files
+        run: |
+          has_tests=$(gh pr view ${{ github.event.pull_request.number }} \
+            --repo ${{ github.repository }} \
+            --json files \
+            --jq '[.files[].path] | map(select(test("(__tests__/|\\.test\\.(ts|js)$|\\.spec\\.(ts|js)$)"))) | length > 0')
+
+          if [ "$has_tests" = "true" ]; then
+            gh pr review ${{ github.event.pull_request.number }} \
+              --repo ${{ github.repository }} \
+              --approve \
+              --body "Automatically approved: this PR includes test file changes."
+          else
+            echo "No test files changed — skipping approval."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
