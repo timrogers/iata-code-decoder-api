@@ -6,12 +6,12 @@ export interface City {
 }
 
 export interface Airport {
-  time_zone: string;
+  timeZone: string | null;
   name: string;
   longitude: number;
   latitude: number;
   id: string;
-  icaoCode: string;
+  icaoCode: string | null;
   iataCode: string;
   iataCountryCode: string;
   cityName: string;
