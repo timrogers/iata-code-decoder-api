@@ -1,0 +1,38 @@
+name: Auto-approve PRs with test files
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for test files
+        id: check-tests
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const hasTestFile = files.some(f => f.filename.startsWith('__tests__/') && f.filename.endsWith('.test.ts'));
+            core.setOutput('has_test_file', hasTestFile ? 'true' : 'false');
+
+      - name: Approve PR
+        if: steps.check-tests.outputs.has_test_file == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE',
+            });
