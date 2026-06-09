@@ -292,8 +292,22 @@ const rootSchema = {
 };
 
 // Detailed schemas for optimized serialization via fast-json-stringify
+// additionalProperties: false and required fields allow for peak performance
 const airportSchema = {
   type: 'object',
+  additionalProperties: false,
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'timeZone',
+    'iataCountryCode',
+    'cityName',
+  ],
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -302,10 +316,13 @@ const airportSchema = {
     latitude: { type: 'number' },
     longitude: { type: 'number' },
     time_zone: { type: 'string' },
+    timeZone: { type: 'string' },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      additionalProperties: false,
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,15 +335,22 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  additionalProperties: false,
+  required: ['id', 'iataCode', 'name'],
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
     name: { type: 'string' },
+    logoSymbolUrl: { type: ['string', 'null'] },
+    logoLockupUrl: { type: ['string', 'null'] },
+    conditionsOfCarriageUrl: { type: ['string', 'null'] },
   },
 };
 
 const aircraftSchema = {
   type: 'object',
+  additionalProperties: false,
+  required: ['id', 'iataCode', 'name'],
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
