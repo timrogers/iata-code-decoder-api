@@ -5,6 +5,12 @@ import { cameliseKeys } from './utils.js';
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
 
+  // Restore the original snake_case property for backward compatibility and
+  // to satisfy the response schema while having the camelCase version as well.
+  if ('time_zone' in airport) {
+    camelisedAirport.time_zone = (airport as Record<string, string>).time_zone;
+  }
+
   if (camelisedAirport.city) {
     return Object.assign(camelisedAirport, {
       city: cameliseKeys(camelisedAirport.city),

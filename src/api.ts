@@ -197,6 +197,15 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
+// Eagerly warm up the prefix Map caches during server startup to eliminate cold-start latency.
+app.addHook('onReady', async () => {
+  app.log.info('Warming up prefix Map caches...');
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+  app.log.info('Caches warmed up successfully.');
+});
+
 /**
  * Creates a Map where keys are all possible non-empty lowercase prefixes of the
  * IATA codes in the provided dataset. This enables O(1) access to the candidate
@@ -294,6 +303,19 @@ const rootSchema = {
 // Detailed schemas for optimized serialization via fast-json-stringify
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'timeZone',
+    'iataCountryCode',
+    'cityName',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -302,10 +324,13 @@ const airportSchema = {
     latitude: { type: 'number' },
     longitude: { type: 'number' },
     time_zone: { type: 'string' },
+    timeZone: { type: 'string' },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,6 +343,8 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -327,6 +354,8 @@ const airlineSchema = {
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
