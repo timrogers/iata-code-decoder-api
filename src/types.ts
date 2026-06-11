@@ -7,11 +7,12 @@ export interface City {
 
 export interface Airport {
   time_zone: string;
+  timeZone: string;
   name: string;
   longitude: number;
   latitude: number;
   id: string;
-  icaoCode: string;
+  icaoCode: string | null;
   iataCode: string;
   iataCountryCode: string;
   cityName: string;
@@ -28,6 +29,9 @@ export interface Airline {
   id: string;
   name: string;
   iataCode: string;
+  logoSymbolUrl: string | null;
+  logoLockupUrl: string | null;
+  conditionsOfCarriageUrl: string | null;
 }
 
 export interface ObjectWithIataCode {
