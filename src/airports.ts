@@ -3,7 +3,12 @@ import AIRPORTS_DATA from './../data/airports.json' with { type: 'json' };
 import { cameliseKeys } from './utils.js';
 
 const airportDataToAirport = (airport: object): Airport => {
-  const camelisedAirport = cameliseKeys(airport) as Airport;
+  const camelisedAirport = cameliseKeys(airport) as unknown as Airport;
+
+  // Preserve time_zone for backward compatibility and to satisfy strict Fastify schemas.
+  // We use type assertion to handle the raw data access safely.
+  const rawAirport = airport as Record<string, unknown>;
+  camelisedAirport.time_zone = (rawAirport.time_zone as string) ?? '';
 
   if (camelisedAirport.city) {
     return Object.assign(camelisedAirport, {
