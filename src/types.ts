@@ -28,6 +28,9 @@ export interface Airline {
   id: string;
   name: string;
   iataCode: string;
+  logoSymbolUrl?: string | null;
+  logoLockupUrl?: string | null;
+  conditionsOfCarriageUrl?: string | null;
 }
 
 export interface ObjectWithIataCode {

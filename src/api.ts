@@ -245,6 +245,15 @@ const getAirportsMap = createPrefixMapGetter(getAirports);
 const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
 
+// Eagerly warm the caches when the server is ready, so the first request is fast
+app.addHook('onReady', async () => {
+  app.log.info('Warming up caches...');
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+  app.log.info('Caches warmed!');
+});
+
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
  * providing O(1) access to the matching candidate list.
@@ -294,6 +303,19 @@ const rootSchema = {
 // Detailed schemas for optimized serialization via fast-json-stringify
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'iataCountryCode',
+    'cityName',
+    'city',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -303,9 +325,11 @@ const airportSchema = {
     longitude: { type: 'number' },
     time_zone: { type: 'string' },
     iataCountryCode: { type: 'string' },
-    cityName: { type: 'string' },
+    cityName: { type: ['string', 'null'] },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,15 +342,22 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
     name: { type: 'string' },
+    logoSymbolUrl: { type: ['string', 'null'] },
+    logoLockupUrl: { type: ['string', 'null'] },
+    conditionsOfCarriageUrl: { type: ['string', 'null'] },
   },
 };
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
