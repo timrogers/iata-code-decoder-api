@@ -208,6 +208,8 @@ const createPrefixMap = (
   const map = new Map<string, ObjectWithIataCode[]>();
 
   for (const object of objects) {
+    if (!object.iataCode) continue;
+
     const code = object.iataCode.toLowerCase();
     for (let i = 1; i <= code.length; i++) {
       const prefix = code.slice(0, i);
@@ -294,23 +296,38 @@ const rootSchema = {
 // Detailed schemas for optimized serialization via fast-json-stringify
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'iataCountryCode',
+    'cityName',
+    'city',
+  ],
+  additionalProperties: false,
   properties: {
-    id: { type: 'string' },
-    iataCode: { type: 'string' },
+    id: { type: ['string', 'null'] },
+    iataCode: { type: ['string', 'null'] },
     icaoCode: { type: ['string', 'null'] },
-    name: { type: 'string' },
-    latitude: { type: 'number' },
-    longitude: { type: 'number' },
+    name: { type: ['string', 'null'] },
+    latitude: { type: ['number', 'null'] },
+    longitude: { type: ['number', 'null'] },
     time_zone: { type: 'string' },
-    iataCountryCode: { type: 'string' },
-    cityName: { type: 'string' },
+    iataCountryCode: { type: ['string', 'null'] },
+    cityName: { type: ['string', 'null'] },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
-        id: { type: 'string' },
-        iataCode: { type: 'string' },
-        iataCountryCode: { type: 'string' },
-        name: { type: 'string' },
+        id: { type: ['string', 'null'] },
+        iataCode: { type: ['string', 'null'] },
+        iataCountryCode: { type: ['string', 'null'] },
+        name: { type: ['string', 'null'] },
       },
     },
   },
@@ -318,19 +335,26 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
-    id: { type: 'string' },
-    iataCode: { type: 'string' },
-    name: { type: 'string' },
+    id: { type: ['string', 'null'] },
+    iataCode: { type: ['string', 'null'] },
+    name: { type: ['string', 'null'] },
+    logoSymbolUrl: { type: ['string', 'null'] },
+    logoLockupUrl: { type: ['string', 'null'] },
+    conditionsOfCarriageUrl: { type: ['string', 'null'] },
   },
 };
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
-    id: { type: 'string' },
-    iataCode: { type: 'string' },
-    name: { type: 'string' },
+    id: { type: ['string', 'null'] },
+    iataCode: { type: ['string', 'null'] },
+    name: { type: ['string', 'null'] },
   },
 };
 
@@ -581,5 +605,18 @@ app.delete<McpRequest>(
     return handleSessionRequest(request, reply);
   },
 );
+
+// Eagerly warm the prefix maps once the server is ready to handle traffic
+app.addHook('onReady', async () => {
+  app.log.info('Warming prefix maps...');
+  const start = performance.now();
+
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+
+  const duration = performance.now() - start;
+  app.log.info(`Prefix maps warmed in ${duration.toFixed(2)}ms`);
+});
 
 export default app;
