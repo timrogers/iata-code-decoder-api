@@ -291,9 +291,24 @@ const rootSchema = {
   },
 };
 
-// Detailed schemas for optimized serialization via fast-json-stringify
+// Detailed schemas for optimized serialization via fast-json-stringify.
+// We include both time_zone and timeZone for backward compatibility and alignment with data models.
+// Using 'required' and 'additionalProperties: false' allows fast-json-stringify to generate more efficient code.
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'timeZone',
+    'iataCountryCode',
+    'cityName',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -302,10 +317,13 @@ const airportSchema = {
     latitude: { type: 'number' },
     longitude: { type: 'number' },
     time_zone: { type: 'string' },
+    timeZone: { type: 'string' },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,6 +336,8 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -327,6 +347,8 @@ const airlineSchema = {
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -581,5 +603,11 @@ app.delete<McpRequest>(
     return handleSessionRequest(request, reply);
   },
 );
+
+// Warm up caches at startup to ensure the first requests are fast.
+// This triggers the lazy loading and indexing of datasets.
+getAirportsMap();
+getAirlinesMap();
+getAircraftMap();
 
 export default app;
