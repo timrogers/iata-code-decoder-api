@@ -1,37 +1,40 @@
 export interface City {
-  name: string;
-  id: string;
-  iataCode: string;
-  iataCountryCode: string;
+  name: string | null;
+  id: string | null;
+  iataCode: string | null;
+  iataCountryCode: string | null;
 }
 
 export interface Airport {
   time_zone: string;
-  name: string;
-  longitude: number;
-  latitude: number;
-  id: string;
-  icaoCode: string;
-  iataCode: string;
-  iataCountryCode: string;
-  cityName: string;
+  name: string | null;
+  longitude: number | null;
+  latitude: number | null;
+  id: string | null;
+  icaoCode: string | null;
+  iataCode: string | null;
+  iataCountryCode: string | null;
+  cityName: string | null;
   city: City | null;
 }
 
 export interface Aircraft {
-  iataCode: string;
-  id: string;
-  name: string;
+  iataCode: string | null;
+  id: string | null;
+  name: string | null;
 }
 
 export interface Airline {
-  id: string;
-  name: string;
-  iataCode: string;
+  id: string | null;
+  name: string | null;
+  iataCode: string | null;
+  logoSymbolUrl?: string | null;
+  logoLockupUrl?: string | null;
+  conditionsOfCarriageUrl?: string | null;
 }
 
 export interface ObjectWithIataCode {
-  iataCode: string;
+  iataCode: string | null;
 }
 
 export interface Keyable {

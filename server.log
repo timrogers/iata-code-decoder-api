@@ -1,0 +1,8 @@
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+{"level":30,"time":1782334449665,"pid":91065,"hostname":"devbox","msg":"Warming prefix maps..."}
+✈️  IATA Code Decoder API running on port 3000
+{"level":30,"time":1782334449698,"pid":91065,"hostname":"devbox","msg":"Prefix maps warmed in 32.55ms"}
+{"level":30,"time":1782334449709,"pid":91065,"hostname":"devbox","msg":"Server listening at http://127.0.0.1:3000"}
+{"level":30,"time":1782334449709,"pid":91065,"hostname":"devbox","msg":"Server listening at http://192.168.0.2:3000"}
+{"level":30,"time":1782334453994,"pid":91065,"hostname":"devbox","reqId":"req-1","req":{"method":"GET","url":"/airports?query=LHR","host":"127.0.0.1:3000","remoteAddress":"127.0.0.1","remotePort":33152},"msg":"incoming request"}
+{"level":30,"time":1782334454001,"pid":91065,"hostname":"devbox","reqId":"req-1","res":{"statusCode":200},"responseTime":6.912658000015654,"msg":"request completed"}
