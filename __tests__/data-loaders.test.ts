@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { getAirports } from '../src/airports.js';
 import { getAirlines } from '../src/airlines.js';
 import { getAircraft } from '../src/aircraft.js';
@@ -33,7 +34,11 @@ describe('Data loaders', () => {
   it('should only read airport data from disk once', async () => {
     jest.resetModules();
     const fs = await import('node:fs');
-    const readFileSpy = jest.spyOn(fs, 'readFileSync');
+    const readFileSpy = jest.fn(fs.readFileSync);
+    jest.unstable_mockModule('node:fs', () => ({
+      ...fs,
+      readFileSync: readFileSpy,
+    }));
     const { getAirports } = await import('../src/airports.js');
     getAirports();
     getAirports();
@@ -43,13 +48,17 @@ describe('Data loaders', () => {
     );
 
     expect(airportReads).toHaveLength(1);
-    readFileSpy.mockRestore();
+    jest.unstable_unmockModule('node:fs');
   });
 
   it('should only read airline data from disk once', async () => {
     jest.resetModules();
     const fs = await import('node:fs');
-    const readFileSpy = jest.spyOn(fs, 'readFileSync');
+    const readFileSpy = jest.fn(fs.readFileSync);
+    jest.unstable_mockModule('node:fs', () => ({
+      ...fs,
+      readFileSync: readFileSpy,
+    }));
     const { getAirlines } = await import('../src/airlines.js');
     getAirlines();
     getAirlines();
@@ -59,13 +68,17 @@ describe('Data loaders', () => {
     );
 
     expect(airlineReads).toHaveLength(1);
-    readFileSpy.mockRestore();
+    jest.unstable_unmockModule('node:fs');
   });
 
   it('should only read aircraft data from disk once', async () => {
     jest.resetModules();
     const fs = await import('node:fs');
-    const readFileSpy = jest.spyOn(fs, 'readFileSync');
+    const readFileSpy = jest.fn(fs.readFileSync);
+    jest.unstable_mockModule('node:fs', () => ({
+      ...fs,
+      readFileSync: readFileSpy,
+    }));
     const { getAircraft } = await import('../src/aircraft.js');
     getAircraft();
     getAircraft();
@@ -75,6 +88,6 @@ describe('Data loaders', () => {
     );
 
     expect(aircraftReads).toHaveLength(1);
-    readFileSpy.mockRestore();
+    jest.unstable_unmockModule('node:fs');
   });
 });
