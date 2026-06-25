@@ -5,13 +5,15 @@ import { cameliseKeys } from './utils.js';
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
 
+  // Restore the original snake_case time_zone field which is required by the
+  // schema, while also keeping the camelCase version for future-proofing.
+  camelisedAirport.time_zone = (airport as { time_zone: string }).time_zone;
+
   if (camelisedAirport.city) {
-    return Object.assign(camelisedAirport, {
-      city: cameliseKeys(camelisedAirport.city),
-    }) as Airport;
-  } else {
-    return camelisedAirport as Airport;
+    camelisedAirport.city = cameliseKeys(camelisedAirport.city) as Airport['city'];
   }
+
+  return camelisedAirport;
 };
 
 let airports: Airport[] | undefined;
