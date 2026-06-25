@@ -207,6 +207,9 @@ const createPrefixMap = (
 ): Map<string, ObjectWithIataCode[]> => {
   const map = new Map<string, ObjectWithIataCode[]>();
 
+  // Map the empty string to the full dataset for O(1) retrieval when no query is provided
+  map.set('', objects);
+
   for (const object of objects) {
     const code = object.iataCode.toLowerCase();
     for (let i = 1; i <= code.length; i++) {
@@ -291,9 +294,24 @@ const rootSchema = {
   },
 };
 
-// Detailed schemas for optimized serialization via fast-json-stringify
+// Detailed schemas for optimized serialization via fast-json-stringify.
+// Using 'required' and 'additionalProperties: false' allows fast-json-stringify
+// to generate the most efficient serialization code possible.
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'timeZone',
+    'iataCountryCode',
+    'cityName',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -302,10 +320,13 @@ const airportSchema = {
     latitude: { type: 'number' },
     longitude: { type: 'number' },
     time_zone: { type: 'string' },
+    timeZone: { type: 'string' },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,6 +339,8 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -327,6 +350,8 @@ const airlineSchema = {
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -377,6 +402,8 @@ app.get<{ Querystring: QueryParams }>(
       response: {
         200: {
           type: 'object',
+          required: ['data'],
+          additionalProperties: false,
           properties: {
             data: {
               type: 'array',
@@ -391,13 +418,9 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Content-Type', 'application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-    if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirports() };
-    } else {
-      const query = request.query.query;
-      const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
-      return { data: airports };
-    }
+    const query = request.query.query || '';
+    const airports = filterObjectsByPartialIataCode(getAirportsMap(), query, 3);
+    return { data: airports };
   },
 );
 
@@ -409,6 +432,8 @@ app.get<{ Querystring: QueryParams }>(
       response: {
         200: {
           type: 'object',
+          required: ['data'],
+          additionalProperties: false,
           properties: {
             data: {
               type: 'array',
@@ -423,16 +448,12 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Content-Type', 'application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-    if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAirlines() };
-    } else {
-      const query = request.query.query;
-      const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
+    const query = request.query.query || '';
+    const airlines = filterObjectsByPartialIataCode(getAirlinesMap(), query, 2);
 
-      return {
-        data: airlines,
-      };
-    }
+    return {
+      data: airlines,
+    };
   },
 );
 
@@ -444,6 +465,8 @@ app.get<{ Querystring: QueryParams }>(
       response: {
         200: {
           type: 'object',
+          required: ['data'],
+          additionalProperties: false,
           properties: {
             data: {
               type: 'array',
@@ -458,13 +481,9 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Content-Type', 'application/json');
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
-    if (request.query.query === undefined || request.query.query === '') {
-      return { data: getAircraft() };
-    } else {
-      const query = request.query.query;
-      const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);
-      return { data: aircraft };
-    }
+    const query = request.query.query || '';
+    const aircraft = filterObjectsByPartialIataCode(getAircraftMap(), query, 3);
+    return { data: aircraft };
   },
 );
 
