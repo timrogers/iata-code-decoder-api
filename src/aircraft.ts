@@ -6,7 +6,14 @@ let aircraft: Aircraft[] | undefined;
 
 export const getAircraft = (): Aircraft[] => {
   if (!aircraft) {
-    aircraft = AIRCRAFT_DATA.map(cameliseKeys) as Aircraft[];
+    aircraft = AIRCRAFT_DATA.map(cameliseKeys).map((aircraft) => {
+      const a = aircraft as Aircraft;
+      return {
+        id: a.id,
+        iataCode: a.iataCode,
+        name: a.name,
+      };
+    });
   }
 
   return aircraft;

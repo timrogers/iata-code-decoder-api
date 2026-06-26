@@ -294,6 +294,19 @@ const rootSchema = {
 // Detailed schemas for optimized serialization via fast-json-stringify
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'iataCountryCode',
+    'cityName',
+    'city',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -301,11 +314,13 @@ const airportSchema = {
     name: { type: 'string' },
     latitude: { type: 'number' },
     longitude: { type: 'number' },
-    time_zone: { type: 'string' },
+    time_zone: { type: ['string', 'null'] },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,6 +333,8 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -327,6 +344,8 @@ const airlineSchema = {
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -581,5 +600,14 @@ app.delete<McpRequest>(
     return handleSessionRequest(request, reply);
   },
 );
+
+// Warm up caches on startup
+app.addHook('onReady', async () => {
+  app.log.info('Warming up prefix map caches...');
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+  app.log.info('Prefix map caches warmed up');
+});
 
 export default app;
