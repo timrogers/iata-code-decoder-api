@@ -301,7 +301,7 @@ const airportSchema = {
     name: { type: 'string' },
     latitude: { type: 'number' },
     longitude: { type: 'number' },
-    time_zone: { type: 'string' },
+    timeZone: { type: 'string' },
     iataCountryCode: { type: 'string' },
     cityName: { type: 'string' },
     city: {

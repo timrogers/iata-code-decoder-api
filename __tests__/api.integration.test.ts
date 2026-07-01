@@ -90,6 +90,7 @@ describe('IATA Code Decoder API - Integration Tests', () => {
       expect(airport.iataCode).toBe('LHR');
       expect(airport.name).toBeDefined();
       expect(airport.cityName).toBeDefined();
+      expect(airport.timeZone).toBe('Europe/London');
     });
 
     it('should return airports matching partial query (L)', async () => {
