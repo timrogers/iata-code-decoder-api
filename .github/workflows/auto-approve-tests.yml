@@ -1,0 +1,40 @@
+name: Auto-approve PRs with tests
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for test file changes and approve
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const isTestFile = (filename) => /(^|\/)(__tests__|tests?)\/.*|\.(test|spec)\.[jt]sx?$/.test(filename);
+            const hasTestChange = files.some(
+              (file) => (file.status === 'added' || file.status === 'modified') && isTestFile(file.filename),
+            );
+
+            if (!hasTestChange) {
+              core.info('No test file was created or updated in this pull request. Skipping approval.');
+              return;
+            }
+
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE',
+              body: 'Auto-approved: this pull request creates or updates at least one test file.',
+            });
