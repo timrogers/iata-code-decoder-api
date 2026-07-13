@@ -582,4 +582,10 @@ app.delete<McpRequest>(
   },
 );
 
+// Optimization: Warm up lazy-loaded caches (Prefix Maps) at startup to
+// eliminate cold-start latency for the first request.
+getAirportsMap();
+getAirlinesMap();
+getAircraftMap();
+
 export default app;
