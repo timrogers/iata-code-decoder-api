@@ -23,7 +23,7 @@
     "node": "25.x"
   },
   "dependencies": {
-    "@fastify/compress": "^9.0.0",
+    "@fastify/compress": "^9.1.0",
     "@fastify/cors": "^11.3.0",
     "@fastify/helmet": "^13.1.0",
     "@fastify/rate-limit": "^11.1.0",
