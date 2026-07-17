@@ -246,6 +246,28 @@ const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
 
 /**
+ * Caches the serialized JSON for "return all" responses. Since the underlying
+ * data is static, serializing the full dataset once and reusing the string on
+ * subsequent requests eliminates the per-request serialization overhead.
+ */
+const createCachedJsonSerializer = (
+  loader: () => ObjectWithIataCode[],
+): (() => string) => {
+  let cached: string | undefined;
+
+  return (): string => {
+    if (!cached) {
+      cached = JSON.stringify({ data: loader() });
+    }
+    return cached;
+  };
+};
+
+const getCachedAllAirportsJson = createCachedJsonSerializer(getAirports);
+const getCachedAllAirlinesJson = createCachedJsonSerializer(getAirlines);
+const getCachedAllAircraftJson = createCachedJsonSerializer(getAircraft);
+
+/**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
  * providing O(1) access to the matching candidate list.
  */
@@ -392,6 +414,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
+      reply.serializer(getCachedAllAirportsJson);
       return { data: getAirports() };
     } else {
       const query = request.query.query;
@@ -424,6 +447,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
+      reply.serializer(getCachedAllAirlinesJson);
       return { data: getAirlines() };
     } else {
       const query = request.query.query;
@@ -459,6 +483,7 @@ app.get<{ Querystring: QueryParams }>(
     reply.header('Cache-Control', `public, max-age=${ONE_DAY_IN_SECONDS}`);
 
     if (request.query.query === undefined || request.query.query === '') {
+      reply.serializer(getCachedAllAircraftJson);
       return { data: getAircraft() };
     } else {
       const query = request.query.query;
