@@ -6,9 +6,8 @@ const snakeCaseToCamelCase = (string: string): string => {
     return cached;
   }
 
-  const result = string.replace(/(_[a-z])/gi, ($1) =>
-    $1.toUpperCase().replace('-', '').replace('_', ''),
-  );
+  // Optimized regex with capture group to directly access the letter after the underscore
+  const result = string.replace(/_([a-z])/gi, (_, letter) => letter.toUpperCase());
   memo.set(string, result);
   return result;
 };
