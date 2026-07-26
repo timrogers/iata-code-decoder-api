@@ -294,6 +294,19 @@ const rootSchema = {
 // Detailed schemas for optimized serialization via fast-json-stringify
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'time_zone',
+    'iataCountryCode',
+    'cityName',
+    'city',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -306,6 +319,8 @@ const airportSchema = {
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,6 +333,8 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -327,6 +344,8 @@ const airlineSchema = {
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -581,5 +600,22 @@ app.delete<McpRequest>(
     return handleSessionRequest(request, reply);
   },
 );
+
+/**
+ * Register an onReady hook to eagerly warm the prefix map caches.
+ * This ensures that the first request after the server starts is fast,
+ * as the indexing work is done during the startup phase.
+ */
+app.addHook('onReady', async () => {
+  app.log.info('Warming up prefix map caches...');
+  const start = Date.now();
+
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+
+  const duration = Date.now() - start;
+  app.log.info(`Caches warmed up in ${duration}ms`);
+});
 
 export default app;
