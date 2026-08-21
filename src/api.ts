@@ -249,6 +249,9 @@ const getAircraftMap = createPrefixMapGetter(getAircraft);
  * Caches the serialized JSON for "return all" responses. Since the underlying
  * data is static, serializing the full dataset once and reusing the string on
  * subsequent requests eliminates the per-request serialization overhead.
+ *
+ * Returns a function that returns the cached JSON string of `{ data: [...] }`
+ * for the full dataset produced by `loader`.
  */
 const createCachedJsonSerializer = (
   loader: () => ObjectWithIataCode[],
