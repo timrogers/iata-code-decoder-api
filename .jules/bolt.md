@@ -5,3 +5,7 @@
 ## 2025-05-15 - Optimized JSON serialization with Fastify schemas
 **Learning:** Fastify's `fast-json-stringify` provides a significant performance boost for large JSON payloads, but it requires detailed response schemas. Without schemas, Fastify falls back to generic `JSON.stringify`, which is much slower for serializing large arrays of objects.
 **Action:** Always define explicit response schemas for data-heavy endpoints in Fastify to leverage high-performance serialization.
+
+## 2025-05-20 - Startup warm-up for lazy-loaded caches
+**Learning:** Lazy-loading large datasets or indices (like prefix Maps) causes a significant "cold-start" latency spike on the first request (e.g., ~44ms vs ~3ms). Shifting this work to the application startup phase ensures that the first user interaction is as fast as subsequent ones.
+**Action:** Explicitly invoke lazy-loading getters during the API's entry point or at the end of the module definition to warm up internal caches before the server starts accepting traffic.
