@@ -6,12 +6,10 @@ const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
 
   if (camelisedAirport.city) {
-    return Object.assign(camelisedAirport, {
-      city: cameliseKeys(camelisedAirport.city),
-    }) as Airport;
-  } else {
-    return camelisedAirport as Airport;
+    camelisedAirport.city = cameliseKeys(camelisedAirport.city) as Airport['city'];
   }
+
+  return camelisedAirport;
 };
 
 let airports: Airport[] | undefined;
