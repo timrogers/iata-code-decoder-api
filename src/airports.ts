@@ -5,6 +5,10 @@ import { cameliseKeys } from './utils.js';
 const airportDataToAirport = (airport: object): Airport => {
   const camelisedAirport = cameliseKeys(airport) as Airport;
 
+  // Map snake_case property from raw data to satisfy the API contract and Fastify schema
+  const rawAirport = airport as Record<string, unknown>;
+  camelisedAirport.time_zone = (rawAirport.time_zone as string) || '';
+
   if (camelisedAirport.city) {
     return Object.assign(camelisedAirport, {
       city: cameliseKeys(camelisedAirport.city),
