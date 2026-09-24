@@ -1,5 +1,5 @@
 import { Airport } from './types.js';
-import AIRPORTS_DATA from './../data/airports.json' with { type: 'json' };
+import { createRequire } from 'node:module';
 import { cameliseKeys } from './utils.js';
 
 const airportDataToAirport = (airport: object): Airport => {
@@ -15,10 +15,16 @@ const airportDataToAirport = (airport: object): Airport => {
 };
 
 let airports: Airport[] | undefined;
+let airportData: object[] | undefined;
 
 export const getAirports = (): Airport[] => {
   if (!airports) {
-    airports = AIRPORTS_DATA.map(airportDataToAirport);
+    if (!airportData) {
+      const require = createRequire(import.meta.url);
+      airportData = require('./../data/airports.json') as object[];
+    }
+
+    airports = airportData.map(airportDataToAirport);
   }
 
   return airports;
