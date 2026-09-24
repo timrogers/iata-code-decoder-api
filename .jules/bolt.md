@@ -5,3 +5,7 @@
 ## 2025-05-15 - Optimized JSON serialization with Fastify schemas
 **Learning:** Fastify's `fast-json-stringify` provides a significant performance boost for large JSON payloads, but it requires detailed response schemas. Without schemas, Fastify falls back to generic `JSON.stringify`, which is much slower for serializing large arrays of objects.
 **Action:** Always define explicit response schemas for data-heavy endpoints in Fastify to leverage high-performance serialization.
+
+## 2025-05-20 - High-performance serialization and cache warming
+**Learning:** Adding `required` properties and `additionalProperties: false` to Fastify schemas allows `fast-json-stringify` to generate even more optimized code. Additionally, eager cache warming at startup eliminates cold-start latency for the first request.
+**Action:** Use strict JSON schemas with `required` and `additionalProperties: false` where possible, and eagerly initialize heavy caches at module load time.
