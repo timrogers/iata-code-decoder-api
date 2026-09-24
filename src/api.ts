@@ -582,4 +582,10 @@ app.delete<McpRequest>(
   },
 );
 
+// Warm up the lazy-loaded prefix maps at startup to eliminate cold-start
+// latency for the first user requests to these datasets.
+getAirportsMap();
+getAirlinesMap();
+getAircraftMap();
+
 export default app;
