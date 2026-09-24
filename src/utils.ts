@@ -1,15 +1,15 @@
 const memo = new Map<string, string>();
 
-const snakeCaseToCamelCase = (string: string): string => {
-  const cached = memo.get(string);
+export const snakeCaseToCamelCase = (value: string): string => {
+  const cached = memo.get(value);
   if (cached !== undefined) {
     return cached;
   }
 
-  const result = string.replace(/(_[a-z])/gi, ($1) =>
+  const result = value.replace(/(_[a-z])/gi, ($1) =>
     $1.toUpperCase().replace('-', '').replace('_', ''),
   );
-  memo.set(string, result);
+  memo.set(value, result);
   return result;
 };
 
