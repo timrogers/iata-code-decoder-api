@@ -32,7 +32,7 @@
     "fastify": "^5.12.5"
   },
   "devDependencies": {
-    "@duffel/api": "^4.29.1",
+    "@duffel/api": "^4.30.0",
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
