@@ -245,6 +245,12 @@ const getAirportsMap = createPrefixMapGetter(getAirports);
 const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
 
+// Warm up the caches by pre-calculating the maps at startup.
+// This reduces cold-start latency for the first request.
+getAirportsMap();
+getAirlinesMap();
+getAircraftMap();
+
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
  * providing O(1) access to the matching candidate list.
