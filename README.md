@@ -10,7 +10,7 @@ This is used by my [IATA Code Decoder extension](https://github.com/timrogers/ra
 
 The data in the API is cached version of the airport, airline and aircraft data from the [Duffel](https://duffel.com) API. We use a cached copy for speed because the Duffel API does not allow you to view all records in one response - you can only see up to 200 at a time.
 
-The cached data is updated regularly thanks to the power of GitHub Actions 👼
+The cached data is updated daily thanks to the power of GitHub Actions 👼
 
 ## Usage
 
@@ -30,7 +30,7 @@ The cached data is updated regularly thanks to the power of GitHub Actions 👼
 
 ### Updating cached data
 
-The cached data is updated regularly and committed to the repository thanks to the power of GitHub Actions. You can also do this locally yourself.
+The cached data is updated daily and committed to the repository thanks to the power of GitHub Actions. You can also do this locally yourself.
 
 1. Make sure you're running at least Node.js v24 (v24.4.1 is recommended).
 2. Install the dependencies by running `npm install`.
@@ -101,4 +101,3 @@ The server provides three tools:
 - **Description**: Look up aircraft information by IATA code (3-letter code like 777, A320, etc.)
 - **Input**: `query` - The IATA aircraft code or partial code to search for
 - **Returns**: JSON object with matching aircraft including name and IATA code
-
