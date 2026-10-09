@@ -245,6 +245,13 @@ const getAirportsMap = createPrefixMapGetter(getAirports);
 const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
 
+// Eagerly warm the prefix maps so the first request doesn't pay the indexing cost
+app.addHook('onReady', async () => {
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+});
+
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
  * providing O(1) access to the matching candidate list.
