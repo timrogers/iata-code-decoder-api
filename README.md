@@ -102,3 +102,5 @@ The server provides three tools:
 - **Input**: `query` - The IATA aircraft code or partial code to search for
 - **Returns**: JSON object with matching aircraft including name and IATA code
 
+---
+_Last reviewed: June 2026_
