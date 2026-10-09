@@ -582,4 +582,17 @@ app.delete<McpRequest>(
   },
 );
 
+/**
+ * Eagerly warm the caches for airports, airlines, and aircraft at startup
+ * to reduce cold-start latency for the first user request by shifting
+ * the indexing cost from request time to startup time.
+ */
+app.addHook('onReady', async () => {
+  app.log.info('Warming up prefix maps...');
+  await getAirportsMap();
+  await getAirlinesMap();
+  await getAircraftMap();
+  app.log.info('Prefix maps warmed up');
+});
+
 export default app;
