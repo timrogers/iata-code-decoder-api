@@ -245,6 +245,15 @@ const getAirportsMap = createPrefixMapGetter(getAirports);
 const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
 
+// Warm up caches on startup
+app.addHook('onReady', async () => {
+  app.log.info('Warming up caches...');
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+  app.log.info('Caches warmed up');
+});
+
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
  * providing O(1) access to the matching candidate list.
@@ -294,6 +303,19 @@ const rootSchema = {
 // Detailed schemas for optimized serialization via fast-json-stringify
 const airportSchema = {
   type: 'object',
+  required: [
+    'id',
+    'iataCode',
+    'icaoCode',
+    'name',
+    'latitude',
+    'longitude',
+    'timeZone',
+    'iataCountryCode',
+    'cityName',
+    'city',
+  ],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -306,6 +328,8 @@ const airportSchema = {
     cityName: { type: 'string' },
     city: {
       type: ['object', 'null'],
+      required: ['id', 'iataCode', 'iataCountryCode', 'name'],
+      additionalProperties: false,
       properties: {
         id: { type: 'string' },
         iataCode: { type: 'string' },
@@ -318,6 +342,8 @@ const airportSchema = {
 
 const airlineSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
@@ -327,6 +353,8 @@ const airlineSchema = {
 
 const aircraftSchema = {
   type: 'object',
+  required: ['id', 'iataCode', 'name'],
+  additionalProperties: false,
   properties: {
     id: { type: 'string' },
     iataCode: { type: 'string' },
