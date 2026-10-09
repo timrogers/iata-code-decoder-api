@@ -208,6 +208,10 @@ const createPrefixMap = (
   const map = new Map<string, ObjectWithIataCode[]>();
 
   for (const object of objects) {
+    if (!object.iataCode) {
+      continue;
+    }
+
     const code = object.iataCode.toLowerCase();
     for (let i = 1; i <= code.length; i++) {
       const prefix = code.slice(0, i);
@@ -244,6 +248,16 @@ const createPrefixMapGetter = (
 const getAirportsMap = createPrefixMapGetter(getAirports);
 const getAirlinesMap = createPrefixMapGetter(getAirlines);
 const getAircraftMap = createPrefixMapGetter(getAircraft);
+
+// Warm the caches on startup so that the first request doesn't suffer from
+// O(N) loading and indexing time.
+app.addHook('onReady', async () => {
+  app.log.info('Warming up caches...');
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+  app.log.info('Caches warmed up');
+});
 
 /**
  * Filters objects by partial IATA code using a pre-calculated prefix map,
