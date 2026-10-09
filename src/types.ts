@@ -11,10 +11,10 @@ export interface Airport {
   longitude: number;
   latitude: number;
   id: string;
-  icaoCode: string;
+  icaoCode: string | null;
   iataCode: string;
   iataCountryCode: string;
-  cityName: string;
+  cityName: string | null;
   city: City | null;
 }
 
