@@ -6,9 +6,9 @@ const snakeCaseToCamelCase = (string: string): string => {
     return cached;
   }
 
-  const result = string.replace(/(_[a-z])/gi, ($1) =>
-    $1.toUpperCase().replace('-', '').replace('_', ''),
-  );
+  // Optimized to use a single pass regex with capture group.
+  // The replacement function receives the full match (e.g. "_a") and the captured letter ("a").
+  const result = string.replace(/_([a-z])/gi, (_, letter) => letter.toUpperCase());
   memo.set(string, result);
   return result;
 };
