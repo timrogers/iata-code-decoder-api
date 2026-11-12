@@ -1,17 +1,30 @@
-import { Airline, Keyable } from './types.js';
+import { Airline } from './types.js';
 import AIRLINES_DATA from './../data/airlines.json' with { type: 'json' };
-import { cameliseKeys } from './utils.js';
+
+/**
+ * Explicitly maps airline data from snake_case JSON to camelCase TypeScript properties.
+ * This avoids the overhead of generic utility functions like cameliseKeys.
+ */
+const airlineDataToAirline = (airline: Record<string, unknown>): Airline => {
+  return {
+    id: airline.id as string,
+    iataCode: airline.iata_code as string,
+    name: airline.name as string,
+  };
+};
 
 // We want to filter out airlines returned by the Duffel API with no IATA code,
 // since these aren't useful for IATA code decoding
-const hasIataCode = (airline: Keyable): boolean =>
-  airline.iataCode !== undefined && airline.iataCode !== null;
+const hasIataCode = (airline: Record<string, unknown>): boolean =>
+  airline.iata_code !== undefined && airline.iata_code !== null;
 
 let airlines: Airline[] | undefined;
 
 export const getAirlines = (): Airline[] => {
   if (!airlines) {
-    airlines = AIRLINES_DATA.map(cameliseKeys).filter(hasIataCode) as Airline[];
+    airlines = (AIRLINES_DATA as Record<string, unknown>[])
+      .filter(hasIataCode)
+      .map(airlineDataToAirline);
   }
 
   return airlines;
