@@ -3,15 +3,24 @@ import AIRPORTS_DATA from './../data/airports.json' with { type: 'json' };
 import { cameliseKeys } from './utils.js';
 
 const airportDataToAirport = (airport: object): Airport => {
-  const camelisedAirport = cameliseKeys(airport) as Airport;
+  const camelised = cameliseKeys(airport) as Airport & { timeZone?: string };
 
-  if (camelisedAirport.city) {
-    return Object.assign(camelisedAirport, {
-      city: cameliseKeys(camelisedAirport.city),
-    }) as Airport;
-  } else {
-    return camelisedAirport as Airport;
-  }
+  const result: Airport = {
+    id: camelised.id,
+    iataCode: camelised.iataCode,
+    icaoCode: camelised.icaoCode ?? null,
+    name: camelised.name,
+    latitude: camelised.latitude,
+    longitude: camelised.longitude,
+    time_zone: camelised.timeZone || camelised.time_zone,
+    iataCountryCode: camelised.iataCountryCode,
+    cityName: camelised.cityName ?? null,
+    city: camelised.city
+      ? (cameliseKeys(camelised.city) as unknown as Airport['city'])
+      : null,
+  };
+
+  return result;
 };
 
 let airports: Airport[] | undefined;
