@@ -3,7 +3,10 @@ import AIRPORTS_DATA from './../data/airports.json' with { type: 'json' };
 import { cameliseKeys } from './utils.js';
 
 const airportDataToAirport = (airport: object): Airport => {
-  const camelisedAirport = cameliseKeys(airport) as Airport;
+  const camelisedAirport = cameliseKeys(airport) as unknown as Airport;
+
+  // Restore snake_case time_zone for API compatibility
+  camelisedAirport.time_zone = (airport as unknown as Airport).time_zone;
 
   if (camelisedAirport.city) {
     return Object.assign(camelisedAirport, {
