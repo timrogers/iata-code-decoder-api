@@ -6,9 +6,8 @@ const snakeCaseToCamelCase = (string: string): string => {
     return cached;
   }
 
-  const result = string.replace(/(_[a-z])/gi, ($1) =>
-    $1.toUpperCase().replace('-', '').replace('_', ''),
-  );
+  // Optimized regex to directly capture the letter after the underscore
+  const result = string.replace(/_([a-z])/gi, (_, letter) => letter.toUpperCase());
   memo.set(string, result);
   return result;
 };
@@ -22,7 +21,9 @@ export const cameliseKeys = (object: object): object => {
 
   for (const key in object) {
     if (Object.prototype.hasOwnProperty.call(object, key)) {
-      result[snakeCaseToCamelCase(key)] = (object as Record<string, unknown>)[key];
+      // Avoid calling snakeCaseToCamelCase if there's no underscore
+      const camelKey = key.includes('_') ? snakeCaseToCamelCase(key) : key;
+      result[camelKey] = (object as Record<string, unknown>)[key];
     }
   }
 
