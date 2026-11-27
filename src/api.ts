@@ -197,6 +197,16 @@ await app.register(fastifyCors, { origin: '*' });
 // Register compression plugin
 await app.register(fastifyCompress);
 
+// Eagerly warm the prefix map caches at startup to reduce cold-start latency.
+// This shifts the indexing cost (~40ms) from the first user request to the server boot.
+app.addHook('onReady', async () => {
+  app.log.info('Warming prefix map caches...');
+  getAirportsMap();
+  getAirlinesMap();
+  getAircraftMap();
+  app.log.info('Caches warmed successfully.');
+});
+
 /**
  * Creates a Map where keys are all possible non-empty lowercase prefixes of the
  * IATA codes in the provided dataset. This enables O(1) access to the candidate
